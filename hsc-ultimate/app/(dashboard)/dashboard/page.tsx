@@ -14,12 +14,14 @@ import { GamificationSync } from "@/components/gamification/gamification-sync";
 import { UserMenu } from "@/components/layout/user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ThemeCustomizerButton } from "@/components/shared/theme-customizer";
+import { CalculatorHacksDialog } from "@/components/shared/calculator-hacks-dialog";
 import { NotificationBell } from "@/components/layout/notification-bell";
 import { GlobalSearchButton } from "@/components/layout/global-search";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { DashboardCommandHero } from "@/components/dashboard/dashboard-command-hero";
 import { DashboardMetricsV2 } from "@/components/dashboard/dashboard-metrics-v2";
 import { DailyMissionCard, type DailyMissionItem } from "@/components/dashboard/daily-mission-card";
+import { DailyQuestsCard } from "@/components/dashboard/daily-quests-card";
 import { FocusStatusCard } from "@/components/dashboard/focus-status-card";
 import {
   PriorityInsightCard,
@@ -252,6 +254,7 @@ export default async function DashboardPage() {
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="min-w-0 flex-1 sm:max-w-md"><GlobalSearchButton /></div>
+          <CalculatorHacksDialog />
           <NotificationBell />
           <ThemeCustomizerButton />
           <ThemeToggle />
@@ -292,13 +295,14 @@ export default async function DashboardPage() {
         <StreakFreezeCard currentStreak={user.streakCount} />
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5">
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 space-y-4">
             <DailyMissionCard
               planId={todayFocus?.planId ?? null}
               initialItems={dailyItems}
               overdueCount={todayFocus?.overdueCount ?? 0}
               generationStatus={todayFocus?.generationStatus ?? null}
             />
+            <DailyQuestsCard />
           </div>
           <div className="lg:col-span-5">
             <FocusStatusCard

@@ -158,6 +158,14 @@ export default async function PracticePage() {
                   <Zap className="h-4 w-4" />
                   Smart Practice
                 </Button>
+                <Button render={<Link href="/practice/custom" />} size="lg" className="gap-2 bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md shadow-rose-500/20 font-semibold">
+                  <Target className="h-4 w-4" />
+                  কাস্টম এক্সাম মেকার
+                </Button>
+                <Button render={<Link href="/practice/formula-match" />} size="lg" className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/20 font-semibold">
+                  <Flame className="h-4 w-4" />
+                  স্পিড সূত্র ম্যাচ
+                </Button>
                 <Button render={<Link href="/mistake-vault" />} size="lg" variant="outline" className="gap-2 bg-card/60 hover:bg-muted border border-border">
                   <Flame className="h-4 w-4 text-amber-500" />
                   Mistake Vault
@@ -166,9 +174,9 @@ export default async function PracticePage() {
                   <Trophy className="h-4 w-4 text-primary" />
                   মডেল টেস্ট
                 </Button>
-                <Button render={<Link href="/cq-practice" />} size="lg" variant="ghost" className="gap-2">
-                  <FileQuestion className="h-4 w-4 text-primary" />
-                  CQ অনুশীলন
+                <Button render={<Link href="/learn/smart-book" />} size="lg" variant="outline" className="gap-2 bg-card/60 hover:bg-muted border border-border">
+                  <Brain className="h-4 w-4 text-emerald-500" />
+                  স্মার্ট বুক
                 </Button>
               </div>
             </div>
