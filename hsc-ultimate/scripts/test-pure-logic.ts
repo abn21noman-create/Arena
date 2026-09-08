@@ -32,6 +32,8 @@ import {
 import { getCurrentWeekStart, LEAGUE_TIER_ORDER, LEAGUE_TIER_INFO } from "../lib/league";
 import { sfx } from "../lib/sound-effects";
 import { getCachedPracticeSets, savePracticeSetOffline } from "../lib/offline-practice-store";
+import { sanitizeTextForSpeech } from "../lib/voice-reader";
+import { getStreakFreezeTokens, addStreakFreezeToken } from "../lib/streak-freeze";
 import {
   classifyDifficultyBucket,
   getTargetDifficultyForAccuracy,
@@ -459,6 +461,14 @@ const mockSet = {
   ],
 };
 t("offline practice set ডাটা স্ট্রাকচার বৈধ", mockSet.questions.length === 1 && mockSet.questions[0].options.length === 4);
+
+console.log("── Voice Reader & Streak Freeze");
+const rawLatex = "হিসাব করো $\\sqrt{x^2 + y^2} = r$ এবং $E = mc^2$";
+const sanitizedSpeech = sanitizeTextForSpeech(rawLatex);
+t("sanitizeTextForSpeech LaTeX clean করে", !sanitizedSpeech.includes("\\sqrt") && !sanitizedSpeech.includes("$"));
+t("sanitizeTextForSpeech রুট শব্দ রূপান্তর করে", sanitizedSpeech.includes("রুট"));
+t("getStreakFreezeTokens পজিটিভ সংখ্যা দেয়", getStreakFreezeTokens() >= 0);
+t("addStreakFreezeToken সংখ্যা বাড়ায় বা ম্যাক্সিমাম রাখে", addStreakFreezeToken(1) >= 1);
 
 console.log("\n" + "═".repeat(52));
 if (failures.length === 0) {

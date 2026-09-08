@@ -39,6 +39,9 @@ import { OMRSheetDialog } from "@/components/practice/omr-bubble-sheet";
 import { openScientificCalculator } from "@/components/shared/scientific-calculator";
 import { openKeyboardShortcutsGuide } from "@/components/shared/keyboard-shortcuts-dialog";
 import { sfx } from "@/lib/sound-effects";
+import { VoiceReadoutButton } from "@/components/shared/voice-readout-button";
+import { MathSymbolPalette } from "@/components/shared/math-symbol-palette";
+import { useExamHallProctor, ExamHallModeToggle } from "@/components/mock-exam/exam-hall-mode";
 
 interface McqQuestion {
   id: string;
@@ -88,6 +91,22 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
 
   const [submitting, setSubmitting] = useState(false);
   const startTimeRef = useRef<number>(Date.now());
+
+  const {
+    isFullscreen,
+    strikes,
+    maxStrikes,
+    toggleFullscreen,
+  } = useExamHallProctor({
+    enabled: !loading && !error,
+    onAutoSubmit: () => {
+      if (phase === "mcq") {
+        void handleMcqSubmit();
+      } else {
+        void handleCqSubmit();
+      }
+    },
+  });
 
   const loadExam = useCallback(async () => {
     setLoading(true);
@@ -370,6 +389,13 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
           </div>
 
           <div className="flex items-center gap-1.5">
+            <ExamHallModeToggle
+              isFullscreen={isFullscreen}
+              strikes={strikes}
+              maxStrikes={maxStrikes}
+              onToggle={toggleFullscreen}
+            />
+
             <Button
               variant="outline"
               size="sm"
@@ -427,9 +453,12 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
 
         {currentMcq && (
           <Card className="p-5">
-            <h2 className="text-base font-medium mb-5 leading-relaxed">
-              <MathText text={currentMcq.text} />
-            </h2>
+            <div className="flex items-start justify-between gap-3 mb-5">
+              <h2 className="text-base font-medium leading-relaxed flex-1">
+                <MathText text={currentMcq.text} />
+              </h2>
+              <VoiceReadoutButton text={currentMcq.text} />
+            </div>
 
             <div className="space-y-2">
               {(currentMcq.options ?? []).map((option, i) => {
@@ -592,6 +621,9 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
               <MathText text={currentCq.questionA} />
             </Label>
             <div className="flex items-center gap-1.5 shrink-0">
+              <MathSymbolPalette
+                onInsert={(symbol) => updateCqAnswer("a", currentCqAnswer.a + symbol)}
+              />
               <VoiceInputButton
                 onResult={(transcript) => appendCqAnswerFromVoice("a", transcript)}
               />
@@ -615,6 +647,9 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
               <MathText text={currentCq.questionB} />
             </Label>
             <div className="flex items-center gap-1.5 shrink-0">
+              <MathSymbolPalette
+                onInsert={(symbol) => updateCqAnswer("b", currentCqAnswer.b + symbol)}
+              />
               <VoiceInputButton
                 onResult={(transcript) => appendCqAnswerFromVoice("b", transcript)}
               />
@@ -638,6 +673,9 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
               <MathText text={currentCq.questionC} />
             </Label>
             <div className="flex items-center gap-1.5 shrink-0">
+              <MathSymbolPalette
+                onInsert={(symbol) => updateCqAnswer("c", currentCqAnswer.c + symbol)}
+              />
               <VoiceInputButton
                 onResult={(transcript) => appendCqAnswerFromVoice("c", transcript)}
               />
@@ -661,6 +699,9 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
               <MathText text={currentCq.questionD} />
             </Label>
             <div className="flex items-center gap-1.5 shrink-0">
+              <MathSymbolPalette
+                onInsert={(symbol) => updateCqAnswer("d", currentCqAnswer.d + symbol)}
+              />
               <VoiceInputButton
                 onResult={(transcript) => appendCqAnswerFromVoice("d", transcript)}
               />

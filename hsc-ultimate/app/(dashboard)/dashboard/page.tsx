@@ -32,6 +32,9 @@ import {
   type SubjectMasteryItem,
 } from "@/components/dashboard/dashboard-insight-panels";
 import { QuickActions } from "@/components/dashboard/quick-actions";
+import { DailyAIBriefing } from "@/components/dashboard/daily-ai-briefing";
+import { ExamCountdownQuota } from "@/components/dashboard/exam-countdown-quota";
+import { StreakFreezeCard } from "@/components/dashboard/streak-freeze-card";
 
 const quickActions = [
   { href: "/focus", iconKey: "LockKeyhole", title: "Strict Focus", desc: "ডিপ স্টাডি মোড", color: "from-violet-600 to-fuchsia-600" },
@@ -275,6 +278,16 @@ export default async function DashboardPage() {
           masteredTopics={masteredTopics}
           totalTopics={totalTopics}
         />
+
+        <DailyAIBriefing userName={user.name} />
+
+        <ExamCountdownQuota
+          targetExamDate={user.examDate?.toISOString() || "2026-11-01"}
+          streakDays={user.streakCount}
+          streakFreezeTokens={user.streakFreezes}
+        />
+
+        <StreakFreezeCard currentStreak={user.streakCount} />
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5">
           <div className="lg:col-span-7">

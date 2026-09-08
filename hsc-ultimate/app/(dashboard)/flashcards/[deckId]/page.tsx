@@ -12,6 +12,7 @@ import { AIGenerateDialog } from "@/components/flashcards/ai-generate-dialog";
 import { OcrGenerateDialog } from "@/components/flashcards/ocr-generate-dialog";
 import { DeckCardList } from "@/components/flashcards/deck-card-list";
 import { ShareDeckDialog } from "@/components/flashcards/share-deck-dialog";
+import { PrintableFlashcardsDialog } from "@/components/flashcards/printable-flashcards";
 import { Badge } from "@/components/ui/badge";
 import { Globe } from "lucide-react";
 
@@ -69,6 +70,7 @@ export default async function DeckDetailPage({
         <AddCardDialog deckId={deck.id} />
         <AIGenerateDialog deckId={deck.id} />
         <OcrGenerateDialog deckId={deck.id} />
+        <PrintableFlashcardsDialog deckTitle={deck.name} cards={deck.flashcards} />
         <ShareDeckDialog
           deckId={deck.id}
           initialIsPublic={deck.isPublic}

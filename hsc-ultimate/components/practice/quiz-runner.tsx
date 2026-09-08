@@ -35,6 +35,7 @@ import { OMRSheetDialog } from "@/components/practice/omr-bubble-sheet";
 import { openScientificCalculator } from "@/components/shared/scientific-calculator";
 import { openKeyboardShortcutsGuide } from "@/components/shared/keyboard-shortcuts-dialog";
 import { sfx } from "@/lib/sound-effects";
+import { VoiceReadoutButton } from "@/components/shared/voice-readout-button";
 
 interface Question {
   id: string;
@@ -324,9 +325,12 @@ export function QuizRunner({
           </div>
         </div>
 
-        <h2 className="text-base font-medium mb-5 leading-relaxed">
-          <MathText text={currentQuestion.text} />
-        </h2>
+        <div className="flex items-start justify-between gap-3 mb-5">
+          <h2 className="text-base font-medium leading-relaxed flex-1">
+            <MathText text={currentQuestion.text} />
+          </h2>
+          <VoiceReadoutButton text={currentQuestion.text} />
+        </div>
 
         <div className="space-y-2">
           {(currentQuestion.options ?? []).map((option, i) => {
