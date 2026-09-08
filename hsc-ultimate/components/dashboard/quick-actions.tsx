@@ -7,6 +7,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRight, Brain, Target, Layers, BarChart3, CalendarClock, MessageCircle, LockKeyhole,
+  Headphones, Atom, GraduationCap, FileQuestion,
   type LucideIcon,
 } from "lucide-react";
 import { GlassCard } from "@/components/ui/glass-card";
@@ -14,6 +15,7 @@ import { GlassCard } from "@/components/ui/glass-card";
 // Map of icon key → Lucide component (client-side, so we can pass strings from server)
 const ICONS: Record<string, LucideIcon> = {
   Brain, Target, Layers, BarChart3, CalendarClock, MessageCircle, LockKeyhole,
+  Headphones, Atom, GraduationCap, FileQuestion,
 };
 
 interface QuickActionsProps {

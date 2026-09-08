@@ -41,11 +41,11 @@ import { StreakFreezeCard } from "@/components/dashboard/streak-freeze-card";
 
 const quickActions = [
   { href: "/focus", iconKey: "LockKeyhole", title: "Strict Focus", desc: "ডিপ স্টাডি মোড", color: "from-violet-600 to-fuchsia-600" },
-  { href: "/practice", iconKey: "Target", title: "MCQ অনুশীলন", desc: "স্মার্ট ও চ্যাপ্টার প্র্যাকটিস", color: "from-rose-500 to-orange-500" },
-  { href: "/ai-tutor", iconKey: "Brain", title: "AI ডাউট সলভার", desc: "তাত্ক্ষণিক সমাধান ও গাইড", color: "from-cyan-500 to-blue-600" },
-  { href: "/flashcards", iconKey: "Layers", title: "স্মার্ট ফ্ল্যাশকার্ড", desc: "FSRS স্পেসড রিভিশন", color: "from-amber-500 to-orange-500" },
-  { href: "/planner", iconKey: "CalendarClock", title: "স্টাডি প্ল্যানার", desc: "ডেইলি রুটিন ও টাস্ক", color: "from-emerald-500 to-teal-500" },
-  { href: "/analytics", iconKey: "BarChart3", title: "অ্যানালিটিক্স", desc: "পারফরম্যান্স ও প্রেডিক্টেড GPA", color: "from-fuchsia-500 to-violet-600" },
+  { href: "/focus/ambient", iconKey: "Headphones", title: "অ্যাম্বিয়েন্ট সাউন্ড", desc: "বৃষ্টি ও লো-ফাই অডিও", color: "from-cyan-500 to-blue-600" },
+  { href: "/lab/periodic-table", iconKey: "Atom", title: "পর্যায় সারণি ল্যাব", desc: "ইন্টারেক্টিভ কেমিস্ট্রি", color: "from-emerald-500 to-teal-500" },
+  { href: "/analytics/admission-predictor", iconKey: "GraduationCap", title: "চান্স প্রেডিক্টর", desc: "বুয়েট/মেডিকেল/ঢাবি", color: "from-amber-500 to-orange-500" },
+  { href: "/practice/custom", iconKey: "Target", title: "কাস্টম এক্সাম", desc: "মাল্টি-চ্যাপ্টার টেস্ট", color: "from-rose-500 to-orange-500" },
+  { href: "/practice/cq-architect", iconKey: "FileQuestion", title: "CQ আর্কিটেক্ট", desc: "সৃজনশীল ১০/১০ গাইড", color: "from-blue-600 to-indigo-600" },
 ];
 
 export default async function DashboardPage() {

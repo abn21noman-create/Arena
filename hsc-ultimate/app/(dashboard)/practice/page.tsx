@@ -281,14 +281,14 @@ export default async function PracticePage() {
           <h2 className="text-xl sm:text-2xl font-bold mb-4">More Practice Modes</h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {[
-              { href: "/adaptive-practice", icon: Sparkles, title: "Adaptive", desc: "AI picks for you", color: "from-violet-500 to-fuchsia-500" },
-              { href: "/drill", icon: Zap, title: "Timed Drill", desc: "Race the clock", color: "from-amber-500 to-orange-500" },
-              { href: "/quiz-battle", icon: Trophy, title: "Battle", desc: "Multiplayer", color: "from-emerald-500 to-teal-500" },
-              { href: "/duel", icon: Target, title: "Duel", desc: "1v1 Challenge", color: "from-pink-500 to-rose-500" },
-              { href: "/mock-exam", icon: FileQuestion, title: "Mock Exam", desc: "Full simulation", color: "from-indigo-500 to-blue-500" },
-              { href: "/mistake-vault", icon: Brain, title: "Mistakes", desc: "Review errors", color: "from-red-500 to-orange-500" },
-              { href: "/cq-practice", icon: Sparkles, title: "CQ Practice", desc: "Creative Q", color: "from-cyan-500 to-blue-500" },
-              { href: "/adaptive-practice", icon: Target, title: "Weak Topics", desc: "Focus on gaps", color: "from-yellow-500 to-amber-500" },
+              { href: "/practice/custom", icon: Target, title: "Custom Exam", desc: "Multi-chapter blend", color: "from-rose-500 to-amber-500" },
+              { href: "/practice/formula-match", icon: Zap, title: "Speed Match", desc: "60s blitz challenge", color: "from-amber-500 to-orange-500" },
+              { href: "/practice/cq-architect", icon: FileQuestion, title: "CQ Architect", desc: "10/10 Creative Guide", color: "from-blue-500 to-cyan-500" },
+              { href: "/adaptive-practice", icon: Sparkles, title: "Adaptive AI", desc: "Targeted to your level", color: "from-violet-500 to-fuchsia-500" },
+              { href: "/quiz-battle", icon: Trophy, title: "Battle", desc: "Multiplayer 1v1", color: "from-emerald-500 to-teal-500" },
+              { href: "/mock-exam", icon: FileQuestion, title: "Mock Exam", desc: "Full board simulation", color: "from-indigo-500 to-blue-500" },
+              { href: "/mistake-vault", icon: Brain, title: "Mistakes", desc: "Review error vault", color: "from-red-500 to-orange-500" },
+              { href: "/learn/smart-book", icon: Brain, title: "Smart Book", desc: "Highlight & Notes", color: "from-emerald-500 to-teal-500" },
             ].map((mode) => (
               <Link key={mode.title} href={mode.href}>
                 <GlassCard interactive className="p-4 sm:p-5 group h-full">
