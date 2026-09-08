@@ -26,6 +26,8 @@ import { cn } from "@/lib/utils";
 import { MathText } from "@/components/shared/math-text";
 import { ExplainMistakeButton } from "@/components/practice/explain-mistake-button";
 import { AcademicReportButton } from "@/components/shared/academic-report-button";
+import { triggerConfetti } from "@/components/shared/confetti";
+import { sfx } from "@/lib/sound-effects";
 
 interface McqQuestion {
   id: string;
@@ -110,6 +112,10 @@ export function MockExamResult({ attemptId }: { attemptId: string }) {
           return;
         }
         setData(result);
+        if (result.attempt && result.attempt.percentage >= 75) {
+          triggerConfetti();
+          sfx.play("levelUp");
+        }
       } catch {
         setError("নেটওয়ার্ক সমস্যা হয়েছে");
       } finally {

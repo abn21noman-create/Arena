@@ -15,6 +15,7 @@ import { GlobalSearch } from "@/components/layout/global-search";
 import { RouteExperience } from "@/components/layout/route-experience";
 import { ScientificCalculatorDialog } from "@/components/shared/scientific-calculator";
 import { KeyboardShortcutsDialog } from "@/components/shared/keyboard-shortcuts-dialog";
+import { ConfettiCanvas } from "@/components/shared/confetti";
 
 // ═══════════════════════════════════════════════════════════════
 // টাইপোগ্রাফি স্ট্যাক — Inter Variable + Noto Sans Bengali Variable
@@ -254,6 +255,7 @@ export default function RootLayout({
           <GlobalSearch />
           <ScientificCalculatorDialog />
           <KeyboardShortcutsDialog />
+          <ConfettiCanvas />
           <Toaster richColors position="top-center" />
           <CapacitorInit />
           <PWARegister />

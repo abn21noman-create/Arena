@@ -13,6 +13,7 @@ import { getCurrentWeekStart } from "@/lib/league";
 import { GamificationSync } from "@/components/gamification/gamification-sync";
 import { UserMenu } from "@/components/layout/user-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ThemeCustomizerButton } from "@/components/shared/theme-customizer";
 import { NotificationBell } from "@/components/layout/notification-bell";
 import { GlobalSearchButton } from "@/components/layout/global-search";
 import { AuroraBackground } from "@/components/ui/aurora-background";
@@ -252,6 +253,7 @@ export default async function DashboardPage() {
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="min-w-0 flex-1 sm:max-w-md"><GlobalSearchButton /></div>
           <NotificationBell />
+          <ThemeCustomizerButton />
           <ThemeToggle />
           <UserMenu name={user.name} email={user.email} isAdmin={user.role === "ADMIN"} />
         </div>
