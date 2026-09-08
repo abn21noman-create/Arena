@@ -67,8 +67,19 @@ export function PhysicsSimulatorLab() {
         simTimeRef.current += dt;
       }
 
-      const w = canvas.width;
-      const h = canvas.height;
+      const dpr = window.devicePixelRatio || 1;
+      const displayW = 750;
+      const displayH = 380;
+
+      if (canvas.width !== displayW * dpr || canvas.height !== displayH * dpr) {
+        canvas.width = displayW * dpr;
+        canvas.height = displayH * dpr;
+      }
+
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      const w = displayW;
+      const h = displayH;
       ctx.clearRect(0, 0, w, h);
 
       if (simType === "projectile") {
@@ -287,6 +298,7 @@ export function PhysicsSimulatorLab() {
         }
       }
 
+      ctx.restore();
       animFrameRef.current = requestAnimationFrame(render);
     };
 

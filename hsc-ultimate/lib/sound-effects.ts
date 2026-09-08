@@ -8,11 +8,17 @@
 export type SoundEffectType =
   | "correct"
   | "incorrect"
+  | "wrong"
   | "streak"
   | "levelUp"
+  | "level_up"
   | "tick"
   | "warning"
-  | "click";
+  | "click"
+  | "pop"
+  | "start"
+  | "reward_claim"
+  | "game_over";
 
 const STORAGE_KEY = "hsc_sfx_muted";
 
@@ -28,6 +34,21 @@ class SoundEffectsEngine {
       } catch {
         this.isMuted = false;
       }
+    }
+  }
+
+  private triggerHaptic(type: SoundEffectType): void {
+    if (typeof window === "undefined" || !("vibrate" in navigator)) return;
+    try {
+      if (type === "correct" || type === "pop" || type === "click") {
+        navigator.vibrate(10);
+      } else if (type === "incorrect" || type === "wrong" || type === "warning") {
+        navigator.vibrate([20, 40, 20]);
+      } else if (type === "levelUp" || type === "level_up" || type === "reward_claim") {
+        navigator.vibrate([15, 30, 15, 30, 25]);
+      }
+    } catch {
+      // Haptics might be disabled on some OS
     }
   }
 
@@ -66,6 +87,7 @@ class SoundEffectsEngine {
   }
 
   public play(type: SoundEffectType): void {
+    this.triggerHaptic(type);
     if (this.isMuted) return;
     const ctx = this.getContext();
     if (!ctx) return;
@@ -92,7 +114,8 @@ class SoundEffectsEngine {
           break;
         }
 
-        case "incorrect": {
+        case "incorrect":
+        case "wrong": {
           // Soft muted buzz (F3 174Hz to Eb3 155Hz with lowpass filter)
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
@@ -134,7 +157,9 @@ class SoundEffectsEngine {
           break;
         }
 
-        case "levelUp": {
+        case "levelUp":
+        case "level_up":
+        case "reward_claim": {
           // Triumphant Fanfare
           const chords = [
             { freqs: [523.25, 659.25, 783.99], delay: 0.0, dur: 0.15 },
@@ -177,7 +202,8 @@ class SoundEffectsEngine {
           break;
         }
 
-        case "warning": {
+        case "warning":
+        case "game_over": {
           // Urgent double warning ping
           [0, 0.12].forEach((offset) => {
             const osc = ctx.createOscillator();
@@ -195,7 +221,9 @@ class SoundEffectsEngine {
           break;
         }
 
-        case "click": {
+        case "click":
+        case "pop":
+        case "start": {
           // Subtle UI tap
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();

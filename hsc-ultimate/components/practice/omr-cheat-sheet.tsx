@@ -32,11 +32,36 @@ export function OMRCheatSheet() {
     };
   }, [isSubmitted]);
 
-  const handleBubbleClick = (qIndex: number, option: string) => {
-    if (isSubmitted) return;
-    sfx.play("pop");
-    setFilledAnswers((prev) => ({ ...prev, [qIndex]: option }));
-  };
+  // Keyboard listener for PC users
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isSubmitted || activeTab !== "omr") return;
+      const key = e.key.toUpperCase();
+      if (["A", "B", "C", "D"].includes(key)) {
+        // find first unanswered question index
+        let targetIdx = 0;
+        for (let i = 0; i < 25; i++) {
+          if (!filledAnswers[i]) {
+            targetIdx = i;
+            break;
+          }
+        }
+        handleBubbleClick(targetIdx, key);
+      } else if (["1", "2", "3", "4"].includes(key)) {
+        const mapNum: Record<string, string> = { "1": "A", "2": "B", "3": "C", "4": "D" };
+        let targetIdx = 0;
+        for (let i = 0; i < 25; i++) {
+          if (!filledAnswers[i]) {
+            targetIdx = i;
+            break;
+          }
+        }
+        handleBubbleClick(targetIdx, mapNum[key]);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [filledAnswers, isSubmitted, activeTab]);
 
   const handleSubmitOMR = () => {
     sfx.play("correct");
