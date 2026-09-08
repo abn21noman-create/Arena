@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T11:43:00Z",
+  "feature": "production-focus-scheduler-operations",
+  "database": {
+    "migrationsApplied": 24,
+    "migrationsExpected": 24,
+    "newModel": "FocusSchedulerState",
+    "stateRows": 1,
+    "existingContentDeleted": 0
+  },
+  "security": {
+    "authorization": "constant-time-sha256-bearer-comparison",
+    "queryStringSecretsAccepted": false,
+    "responseContainsUserOrSessionIds": false,
+    "crossInstanceLease": true,
+    "defaultLeaseSeconds": 120,
+    "cacheControl": "no-store"
+  },
+  "liveRouteVerification": {
+    "missingAuthorizationHttp": 401,
+    "wrongAuthorizationHttp": 401,
+    "forcedOverlapHttp": 202,
+    "forcedOverlapStatus": "SKIPPED_OVERLAP",
+    "authorizedGetHttp": 200,
+    "authorizedPostHttp": 200,
+    "authorizedStatus": "SUCCESS",
+    "processed": 0,
+    "remindersSent": 0,
+    "leaseReleased": true,
+    "consecutiveFailures": 0
+  },
+  "persistentState": {
+    "lastStatus": "SUCCESS",
+    "lastSource": "CRON",
+    "totalRuns": 3,
+    "overlapSkips": 0,
+    "lastDueCount": 0,
+    "lastProcessedCount": 0,
+    "lastStartedCount": 0,
+    "lastFailedCount": 0,
+    "lastErrorCode": null
+  },
+  "queueAfterVerification": {
+    "focusSchedules": 0,
+    "focusSessions": 0,
+    "focusContracts": 0
+  },
+  "healthVerification": {
+    "localMode": "LAZY_MODE",
+    "localHealthy": true,
+    "simulatedExternalWithoutRecentHeartbeat": "STALE",
+    "externalHealthy": false,
+    "staleAfterSeconds": 180,
+    "staleDetectionVerified": true
+  },
+  "verification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 51,
+    "unitTestsTotal": 51,
+    "pureLogicPassed": 162,
+    "secretShapePassed": 17,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 201,
+    "productionStaticPagesExpected": 201,
+    "productionBuildExitCode": 0,
+    "previewStarted": false
+  },
+  "deploymentTemplates": [
+    "deploy/supabase-focus-cron.sql.example",
+    "deploy/vercel-pro-cron.json.example"
+  ],
+  "externalPending": [
+    "Create a public deployment URL.",
+    "Activate the one-minute Supabase Cron/Vault template or a compatible external scheduler.",
+    "Observe the first production heartbeat in Admin Focus and /api/health."
+  ],
+  "secretsPrinted": false
+}

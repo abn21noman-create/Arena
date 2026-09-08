@@ -1,0 +1,133 @@
+{
+  "suite": "mobile-ui-ux-real-browser",
+  "baseUrl": "http://localhost:3000",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "realDatabase": true,
+  "pages": [
+    "/dashboard",
+    "/learn",
+    "/practice",
+    "/planner",
+    "/focus",
+    "/settings"
+  ],
+  "summary": {
+    "pass": 46,
+    "fail": 0,
+    "total": 46
+  },
+  "failed": [],
+  "results": {
+    "/dashboard": {
+      "overflow": {
+        "doc": 390,
+        "body": 390,
+        "client": 390
+      },
+      "wide": [],
+      "smallTaps": [],
+      "nav": {
+        "top": 787,
+        "height": 57
+      },
+      "covered": [],
+      "title": "ড্যাশবোর্ড | HSC Ultimate",
+      "pageErrors": [],
+      "moreMenu": {
+        "visible": true,
+        "focusMatches": 1,
+        "metrics": {
+          "clientWidth": 390,
+          "scrollWidth": 390,
+          "clientHeight": 314,
+          "scrollHeight": 314
+        }
+      },
+      "globalSearchVisible": true
+    },
+    "/learn": {
+      "overflow": {
+        "doc": 390,
+        "body": 390,
+        "client": 390
+      },
+      "wide": [],
+      "smallTaps": [],
+      "nav": {
+        "top": 787,
+        "height": 57
+      },
+      "covered": [],
+      "title": "পড়াশোনা | HSC Ultimate",
+      "pageErrors": []
+    },
+    "/practice": {
+      "overflow": {
+        "doc": 390,
+        "body": 390,
+        "client": 390
+      },
+      "wide": [],
+      "smallTaps": [],
+      "nav": {
+        "top": 787,
+        "height": 57
+      },
+      "covered": [],
+      "title": "MCQ অনুশীলন | HSC Ultimate",
+      "pageErrors": []
+    },
+    "/planner": {
+      "overflow": {
+        "doc": 390,
+        "body": 390,
+        "client": 390
+      },
+      "wide": [],
+      "smallTaps": [],
+      "nav": {
+        "top": 787,
+        "height": 57
+      },
+      "covered": [],
+      "title": "প্ল্যানার | HSC Ultimate",
+      "pageErrors": []
+    },
+    "/focus": {
+      "overflow": {
+        "doc": 390,
+        "body": 390,
+        "client": 390
+      },
+      "wide": [],
+      "smallTaps": [],
+      "nav": {
+        "top": 787,
+        "height": 57
+      },
+      "covered": [],
+      "title": "Strict Focus | HSC Ultimate",
+      "pageErrors": []
+    },
+    "/settings": {
+      "overflow": {
+        "doc": 390,
+        "body": 390,
+        "client": 390
+      },
+      "wide": [],
+      "smallTaps": [],
+      "nav": {
+        "top": 787,
+        "height": 57
+      },
+      "covered": [],
+      "title": "সেটিংস | HSC Ultimate",
+      "pageErrors": []
+    }
+  },
+  "finalizedAt": "2026-08-05T06:58:21.672341+00:00"
+}

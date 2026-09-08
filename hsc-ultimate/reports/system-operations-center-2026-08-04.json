@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T12:50:00Z",
+  "feature": "admin-system-operations-center-2",
+  "fakeTelemetryRemoval": {
+    "hardCodedUsers1250Removed": true,
+    "hardCodedApiCalls45_2kRemoved": true,
+    "hardCodedQuestions15400Removed": true,
+    "fabricatedLogsRemoved": true,
+    "placeholderXpThreatFlowRemoved": true,
+    "remainingFakeStringMatchesInProductionSource": 0
+  },
+  "security": {
+    "adminRoleRequired": true,
+    "authenticatedSessionRequired": true,
+    "rateLimited": true,
+    "cacheControl": "no-store",
+    "secretValuesReturned": false,
+    "auditMetadataReturned": false,
+    "auditIpReturned": false,
+    "rawNativeTokenReturned": false
+  },
+  "liveReadOnlySnapshot": {
+    "overallStatus": "healthy",
+    "database": {
+      "status": "up",
+      "sampleColdLatencyMs": 1113,
+      "migrationsApplied": 25,
+      "migrationsExpected": 25,
+      "migrationsInSync": true
+    },
+    "content": {
+      "users": 1,
+      "bannedUsers": 0,
+      "subjects": 13,
+      "topics": 185,
+      "coreMcq": 688,
+      "admissionMcq": 220,
+      "cq": 64
+    },
+    "operations": {
+      "activeFocusSessions": 0,
+      "activeFocusSchedules": 0,
+      "nativeDevices": 0,
+      "nativePushDeliveries": 0,
+      "realAuditEventsTotalAtSnapshot": 610
+    },
+    "components": {
+      "rateLimit": { "status": "local", "backend": "memory" },
+      "scheduler": { "status": "LAZY_MODE", "mode": "lazy", "healthy": true },
+      "nativePush": { "status": "unconfigured", "configured": false }
+    }
+  },
+  "localDeploymentReadiness": {
+    "readyCount": 1,
+    "totalChecks": 6,
+    "coreEnvironment": true,
+    "publicUrl": false,
+    "externalScheduler": false,
+    "distributedRateLimit": false,
+    "firebaseAdmin": false,
+    "productionRuntime": false,
+    "secretOrUrlValuesStoredInReport": false
+  },
+  "verification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 59,
+    "unitTestsTotal": 59,
+    "systemOperationsTestsPassed": 5,
+    "pureLogicPassed": 162,
+    "secretShapePassed": 17,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 202,
+    "productionStaticPagesExpected": 202,
+    "productionBuildExitCode": 0,
+    "databaseWritesDuringSnapshot": 0,
+    "previewStarted": false
+  },
+  "secretsPrinted": false
+}

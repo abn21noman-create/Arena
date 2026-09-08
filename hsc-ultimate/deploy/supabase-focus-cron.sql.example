@@ -1,0 +1,52 @@
+-- Run only after the public HSC Ultimate URL exists.
+-- Replace both PLACEHOLDER values before executing in Supabase SQL Editor.
+-- Secrets are stored in Supabase Vault, not inside the cron command.
+
+create extension if not exists pg_cron;
+create extension if not exists pg_net;
+create extension if not exists supabase_vault cascade;
+
+select vault.create_secret(
+  'https://YOUR-HSC-ULTIMATE-DOMAIN.example',
+  'hsc_ultimate_app_url',
+  'Public HSC Ultimate origin for Focus scheduler'
+);
+
+select vault.create_secret(
+  'YOUR_CRON_SECRET',
+  'hsc_ultimate_focus_cron_secret',
+  'Bearer secret for /api/cron/focus-schedules'
+);
+
+select cron.schedule(
+  'hsc-ultimate-focus-schedules-every-minute',
+  '* * * * *',
+  $$
+  select net.http_post(
+    url := (
+      select decrypted_secret
+      from vault.decrypted_secrets
+      where name = 'hsc_ultimate_app_url'
+      limit 1
+    ) || '/api/cron/focus-schedules',
+    headers := jsonb_build_object(
+      'Content-Type', 'application/json',
+      'Authorization', 'Bearer ' || (
+        select decrypted_secret
+        from vault.decrypted_secrets
+        where name = 'hsc_ultimate_focus_cron_secret'
+        limit 1
+      )
+    ),
+    body := '{}'::jsonb,
+    timeout_milliseconds := 50000
+  );
+  $$
+);
+
+-- Verify:
+-- select * from cron.job where jobname = 'hsc-ultimate-focus-schedules-every-minute';
+-- select * from cron.job_run_details order by start_time desc limit 20;
+--
+-- Remove later if needed:
+-- select cron.unschedule('hsc-ultimate-focus-schedules-every-minute');

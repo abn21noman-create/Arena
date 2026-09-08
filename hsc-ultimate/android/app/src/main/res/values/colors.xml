@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- HSC Ultimate Brand Colors -->
+    <color name="colorPrimary">#3b82f6</color>          <!-- Blue 500 -->
+    <color name="colorPrimaryDark">#1e40af</color>     <!-- Blue 800 -->
+    <color name="colorAccent">#6366f1</color>          <!-- Indigo 500 -->
+    <color name="colorBackground">#0a0a0f</color>      <!-- Dark navy -->
+    <color name="colorSurface">#1a1a24</color>         <!-- Slightly lighter -->
+    <color name="colorOnPrimary">#ffffff</color>       <!-- White -->
+    <color name="colorOnBackground">#ffffff</color>
+
+    <!-- Adaptive Icon Background (Android 8+) -->
+    <color name="ic_launcher_background">#3b82f6</color>
+
+    <!-- Splash Background -->
+    <color name="splash_background">#0a0a0f</color>
+
+    <!-- Status bar -->
+    <color name="status_bar_color">#0a0a0f</color>
+</resources>

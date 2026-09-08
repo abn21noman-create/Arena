@@ -1,0 +1,15 @@
+{
+  "suite": "live-student-e2e",
+  "baseUrl": "http://localhost:3000",
+  "realDatabase": true,
+  "summary": {
+    "pass": 46,
+    "fail": 0,
+    "total": 46
+  },
+  "failed": [],
+  "cleanup": {
+    "exactUserOnly": true
+  },
+  "finalizedAt": "2026-08-05T06:58:21.671803+00:00"
+}

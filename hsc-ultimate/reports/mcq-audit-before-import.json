@@ -1,0 +1,466 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T10:21:00.137Z",
+  "mode": "READ_ONLY_AUDIT",
+  "conclusion": {
+    "previouslyReportedDifference": 231,
+    "categoryError": "The old comparison subtracted live core Question rows from a source total that also included AdmissionQuestion rows.",
+    "sourceAllMcqEntities": 908,
+    "sourceCoreMcq": 688,
+    "sourceAdmissionMcq": 220,
+    "liveAllMcqEntities": 897,
+    "liveCoreMcq": 677,
+    "liveAdmissionMcq": 220,
+    "actualMissingCoreMcq": 11
+  },
+  "baseline": {
+    "core": 688,
+    "admission": 220,
+    "all": 908
+  },
+  "sourceByFile": {
+    "prisma/seed-questions.ts": 32,
+    "prisma/seed-questions-2.ts": 94,
+    "prisma/seed-questions-physics-gaps.ts": 20,
+    "prisma/seed-questions-hmath-gaps.ts": 55,
+    "prisma/seed-questions-biology-gaps.ts": 45,
+    "prisma/seed-questions-chem-ict-gaps.ts": 29,
+    "prisma/seed-bangla-english-ict.ts": 77,
+    "prisma/seed-board-questions.ts": 8,
+    "prisma/seed-questions-topic-gaps.ts": 100,
+    "prisma/seed-questions-empty-chapters.ts": 90,
+    "prisma/seed-questions-physics-topic-gaps.ts": 57,
+    "prisma/seed-questions-topic-gaps-2.ts": 81,
+    "prisma/seed-admission-questions.ts": 53,
+    "prisma/seed-admission-questions-2.ts": 167
+  },
+  "quality": {
+    "sourceCoreBlockers": 0,
+    "sourceCoreWarnings": 0,
+    "liveCoreBlockers": 0,
+    "liveCoreWarnings": 0,
+    "missingCoreBlockers": 0,
+    "missingCoreWarnings": 0,
+    "sourceAdmissionBlockers": 0,
+    "liveAdmissionBlockers": 1
+  },
+  "core": {
+    "sourceTotal": 688,
+    "sourceUniqueIdentityCount": 688,
+    "unresolvedTopicReferences": [],
+    "liveTotal": 677,
+    "liveUniqueIdentityCount": 677,
+    "exactMatches": 677,
+    "contentDrifts": [],
+    "missing": [
+      {
+        "fingerprint": "7acca7ef3dd44e3269b2ace4514cf6d576f91a48cc7ebcf0f4f0e33b24c3f9e1",
+        "contentFingerprint": "acdfed11ce4e277322be1f0a617e9f9816261d5d7e93ca7d477afa4a28c0130e",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 278
+        },
+        "topic": "ICT:NONE:নেটওয়ার্কের প্রকারভেদ",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "নেটওয়ার্কের প্রকারভেদ",
+        "text": "নেটওয়ার্ক টপোলজির মধ্যে সবচেয়ে বেশি নির্ভরযোগ্য টপোলজি কোনটি?",
+        "options": [
+          "বাস (Bus)",
+          "স্টার (Star)",
+          "রিং (Ring)",
+          "মেশ (Mesh)"
+        ],
+        "correctAnswer": "মেশ (Mesh)",
+        "explanation": "মেশ টপোলজিতে প্রতিটি ডিভাইস অন্য সব ডিভাইসের সাথে সরাসরি সংযুক্ত থাকে, তাই একটি সংযোগ নষ্ট হলেও বিকল্প পথে যোগাযোগ অব্যাহত থাকে — এটি সবচেয়ে নির্ভরযোগ্য টপোলজি (যদিও ব্যয়বহুল)।",
+        "difficulty": "MEDIUM",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "একটি বাসা বা অফিসের মধ্যে সীমাবদ্ধ নেটওয়ার্ককে কী বলে?",
+          "similarity": 0.2830188679245283,
+          "identityFingerprint": "b2d8879ddee424c545181981ef9a40451acc7d9fa307c590499efd5159b6be71"
+        }
+      },
+      {
+        "fingerprint": "571339f506d52a25d43dcbcce8f652e9b25fb776d4abb6940ff82d017e2c4205",
+        "contentFingerprint": "adf0d0d656ef82143c87db9742bc0e39a45c3ed738f5167c27e72833b14fc7af",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 286
+        },
+        "topic": "ICT:NONE:নেটওয়ার্কের প্রকারভেদ",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "নেটওয়ার্কের প্রকারভেদ",
+        "text": "PAN (Personal Area Network) এর সাধারণ ভৌগোলিক বিস্তৃতি কত?",
+        "options": [
+          "১০ মিটার পর্যন্ত",
+          "১০ কিমি পর্যন্ত",
+          "৫০ কিমি পর্যন্ত",
+          "বিশ্বব্যাপী"
+        ],
+        "correctAnswer": "১০ মিটার পর্যন্ত",
+        "explanation": "HSC ICT পাঠ্যধারা অনুযায়ী PAN একজন ব্যক্তির নিকটবর্তী ডিভাইসগুলোর মধ্যে তৈরি হয় এবং এর বিস্তৃতি সাধারণত সর্বোচ্চ ১০ মিটার; ব্লুটুথ সংযোগ এর পরিচিত উদাহরণ।",
+        "difficulty": "EASY",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "একটি শহর জুড়ে বিস্তৃত নেটওয়ার্ককে কী বলা হয়?",
+          "similarity": 0.12371134020618557,
+          "identityFingerprint": "9651159afae0af92d55b0d44811a9a1f45dd791af5b3437e69b51f070cf1438b"
+        }
+      },
+      {
+        "fingerprint": "5d8f13e7a97db67d98394e9913c22cd19cfd7665a01f1a6f95c3eda5ccd7c630",
+        "contentFingerprint": "f029c5e32abe049b57e7d4e6cfec88976641ec93522ddfa057ffd1c15a65e0f3",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 300
+        },
+        "topic": "ICT:NONE:বুলিয়ান অ্যালজেবরা",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "বুলিয়ান অ্যালজেবরা",
+        "text": "ডি-মরগ্যানের প্রথম উপপাদ্য অনুযায়ী (A+B)' এর সমতুল্য রাশি কোনটি?",
+        "options": [
+          "A'+B'",
+          "A'·B'",
+          "A·B",
+          "A+B"
+        ],
+        "correctAnswer": "A'·B'",
+        "explanation": "ডি-মরগ্যানের প্রথম উপপাদ্য অনুযায়ী (A+B)'=A'·B' — যেকোনো সংখ্যক চলকের যৌক্তিক যোগের পূরক প্রত্যেক চলকের পূরকের যৌক্তিক গুণের সমান।",
+        "difficulty": "MEDIUM",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "বুলিয়ান অ্যালজেবরায় কতটি মৌলিক অপারেশন আছে?",
+          "similarity": 0.06,
+          "identityFingerprint": "f0afff4ecdb4c02aa26e8b63ee942e9162fd3b25e0090c585a9c3edd0c68a53b"
+        }
+      },
+      {
+        "fingerprint": "25d3eb151bd2eab7071f999cbd0ec1dfdacc439902b205a2ec3e11208a8739e5",
+        "contentFingerprint": "ae93ef557468ef91a176f4b72d2031a099a25b031bc25f130d3a7129412a4b05",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 308
+        },
+        "topic": "ICT:NONE:বুলিয়ান অ্যালজেবরা",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "বুলিয়ান অ্যালজেবরা",
+        "text": "NAND গেটকে 'সার্বজনীন গেট' বলা হয় কেন?",
+        "options": [
+          "এটি সবচেয়ে সস্তা গেট",
+          "এই গেট দিয়ে যেকোনো লজিক ফাংশন (AND, OR, NOT ইত্যাদি) তৈরি করা যায়",
+          "এটি শুধু কম্পিউটারে ব্যবহৃত হয়",
+          "এটির কোনো ইনপুট লাগে না"
+        ],
+        "correctAnswer": "এই গেট দিয়ে যেকোনো লজিক ফাংশন (AND, OR, NOT ইত্যাদি) তৈরি করা যায়",
+        "explanation": "NAND (এবং NOR) গেটকে সার্বজনীন গেট বলা হয় কারণ শুধুমাত্র এই একটি গেট ব্যবহার করেই AND, OR, NOT সহ যেকোনো জটিল লজিক ফাংশন তৈরি করা সম্ভব, যা ডিজিটাল সার্কিট ডিজাইনে খুবই গুরুত্বপূর্ণ।",
+        "difficulty": "HARD",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "A AND 0 = ?",
+          "similarity": 0.10810810810810811,
+          "identityFingerprint": "342a194f7e0455c553ceeb19dedff178878ba6ae7ec5249c68554f57808a692f"
+        }
+      },
+      {
+        "fingerprint": "5f5ab6627b488bcc023b393d613c8c9cc5c38a070c7651b1b86c4f91fb4a78ac",
+        "contentFingerprint": "b4b6d191ff7f8c6e2a03ea9ef696cda8258320b2d3b1691e39c590b4804dfd1b",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 327
+        },
+        "topic": "ICT:NONE:HTML ট্যাগ পরিচিতি",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "HTML ট্যাগ পরিচিতি",
+        "text": "HTML টেবিলে একটি সেলকে দুইটি কলাম জুড়ে বিস্তৃত করতে কোন অ্যাট্রিবিউট ব্যবহৃত হয়?",
+        "options": [
+          "rowspan",
+          "colspan",
+          "width",
+          "merge"
+        ],
+        "correctAnswer": "colspan",
+        "explanation": "HTML টেবিলে colspan অ্যাট্রিবিউট ব্যবহার করে একটি সেলকে একাধিক কলাম জুড়ে বিস্তৃত করা যায়, আর rowspan ব্যবহার করে একাধিক সারি জুড়ে বিস্তৃত করা যায়।",
+        "difficulty": "MEDIUM",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "একটি ওয়েব পেজে হাইপারলিংক তৈরি করতে কোন ট্যাগ ব্যবহৃত হয়?",
+          "similarity": 0.3458646616541353,
+          "identityFingerprint": "dabac2a643952cdd75458a6e0bb2dc2556d314135fddfd93afd84f7f45db80ee"
+        }
+      },
+      {
+        "fingerprint": "6cd90b3b466bb62a15f16a4832abfbf81bc5601b4948a1577ae67bed6eabbf26",
+        "contentFingerprint": "519547bc6315cd805671bb4b6ff841d0ef16c98dfc9b86630a392f1765d418c7",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 335
+        },
+        "topic": "ICT:NONE:HTML ট্যাগ পরিচিতি",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "HTML ট্যাগ পরিচিতি",
+        "text": "কোন HTML ট্যাগ দিয়ে অর্ডারড (ক্রমযুক্ত) লিস্ট তৈরি করা হয়?",
+        "options": [
+          "<ul>",
+          "<ol>",
+          "<li>",
+          "<dl>"
+        ],
+        "correctAnswer": "<ol>",
+        "explanation": "<ol> (Ordered List) ট্যাগ দিয়ে ক্রমযুক্ত (নম্বরযুক্ত) লিস্ট তৈরি করা হয়, আর <ul> (Unordered List) দিয়ে বুলেট-পয়েন্ট লিস্ট তৈরি করা হয়। উভয় ক্ষেত্রেই <li> ট্যাগ দিয়ে প্রতিটি আইটেম লেখা হয়।",
+        "difficulty": "EASY",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "একটি ওয়েব পেজে হাইপারলিংক তৈরি করতে কোন ট্যাগ ব্যবহৃত হয়?",
+          "similarity": 0.2882882882882883,
+          "identityFingerprint": "dabac2a643952cdd75458a6e0bb2dc2556d314135fddfd93afd84f7f45db80ee"
+        }
+      },
+      {
+        "fingerprint": "8b1847e08485ebd6e97b636426d1d1ceae7ac45d9364dc49c6f50ff7520f9ac1",
+        "contentFingerprint": "f97a4ef9978dbb922477c357eb7e4782d94a9d1b0224b756106422744e430a9b",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 349
+        },
+        "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "C প্রোগ্রামিং বেসিক",
+        "text": "C ভাষায় for loop এর গঠনে কয়টি প্রধান অংশ থাকে?",
+        "options": [
+          "২টি",
+          "৩টি (initialization, condition, increment/decrement)",
+          "৪টি",
+          "১টি"
+        ],
+        "correctAnswer": "৩টি (initialization, condition, increment/decrement)",
+        "explanation": "C ভাষায় for loop এর গঠন: for(initialization; test_condition; increment/decrement) — এই তিনটি অংশ সেমিকোলন দিয়ে পৃথক করা হয়।",
+        "difficulty": "EASY",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "C ভাষায় একটি লুপ কমপক্ষে একবার চলবেই — এমন লুপ কোনটি?",
+          "similarity": 0.1797752808988764,
+          "identityFingerprint": "19b59b2fca5d728d94666990ec1d65e42a10afe8f2a6f5cf929a6ee186e1cb36"
+        }
+      },
+      {
+        "fingerprint": "7a8efc34a993cefa8c627f5caf4474833a13adb31fa3afd1188cd8ee7419bf4f",
+        "contentFingerprint": "9192b2cbf74d9edb3890ca0c814c46ce840d40c2396e537b2c884d00b87039fa",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 357
+        },
+        "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "C প্রোগ্রামিং বেসিক",
+        "text": "C প্রোগ্রামে while loop ও do-while loop এর মধ্যে মূল পার্থক্য কী?",
+        "options": [
+          "while loop দ্রুত execute হয়",
+          "do-while loop এ শর্ত পরে পরীক্ষা করা হয়, তাই কমপক্ষে একবার body চলে",
+          "উভয়ই সম্পূর্ণ একই",
+          "while loop এ শর্ত ব্যবহার করা যায় না"
+        ],
+        "correctAnswer": "do-while loop এ শর্ত পরে পরীক্ষা করা হয়, তাই কমপক্ষে একবার body চলে",
+        "explanation": "while loop এ শর্ত আগে পরীক্ষা করা হয় (শর্ত মিথ্যা হলে body একবারও নাও চলতে পারে), কিন্তু do-while loop এ শর্ত body চলার পরে পরীক্ষা করা হয়, তাই body কমপক্ষে একবার নিশ্চিতভাবে execute হয়।",
+        "difficulty": "MEDIUM",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "C প্রোগ্রামের execution কোন ফাংশন থেকে শুরু হয়?",
+          "similarity": 0.20618556701030927,
+          "identityFingerprint": "641739b821c42ebeae3aba8511a553938c1345648c26ee9731cda599ce272ad3"
+        }
+      },
+      {
+        "fingerprint": "325e9698b9910ab37ca180517f7f97465a11795ee66eba056b61c4d108e95ac9",
+        "contentFingerprint": "233607f4412d32f1d9e169e10900c827ca066bd1e541a480f327aafbb32e177e",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 370
+        },
+        "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "C প্রোগ্রামিং বেসিক",
+        "text": "নিচের কোনটি C ভাষার একটি সঠিক ডেটা টাইপ?",
+        "options": [
+          "integer",
+          "int",
+          "number",
+          "digit"
+        ],
+        "correctAnswer": "int",
+        "explanation": "C ভাষায় পূর্ণসংখ্যা সংরক্ষণের জন্য সঠিক কীওয়ার্ড হলো int (অন্যান্য মৌলিক ডেটা টাইপ: float, double, char)।",
+        "difficulty": "EASY",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "C ভাষায় একটি লুপ কমপক্ষে একবার চলবেই — এমন লুপ কোনটি?",
+          "similarity": 0.325,
+          "identityFingerprint": "19b59b2fca5d728d94666990ec1d65e42a10afe8f2a6f5cf929a6ee186e1cb36"
+        }
+      },
+      {
+        "fingerprint": "048ad74446e93ad4d79bf14c7ba94eb239183b95e57a9d1b42754cff7adbc537",
+        "contentFingerprint": "8bc45c1faf3b8f97a4a5c23952ba66d5b36a3a1c9e3596ad81be0e1c1505c7aa",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 384
+        },
+        "topic": "ICT:NONE:SQL কুয়েরি",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "SQL কুয়েরি",
+        "text": "একটি টেবিলের বিদ্যমান রেকর্ড সংশোধন করতে কোন SQL কমান্ড ব্যবহৃত হয়?",
+        "options": [
+          "SELECT",
+          "INSERT",
+          "UPDATE",
+          "CREATE"
+        ],
+        "correctAnswer": "UPDATE",
+        "explanation": "UPDATE কমান্ড ব্যবহার করে টেবিলের বিদ্যমান রেকর্ডের মান পরিবর্তন করা হয়: UPDATE table_name SET column=value WHERE condition।",
+        "difficulty": "EASY",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "একটি টেবিলে নতুন ডেটা যোগ করতে কোন SQL কমান্ড ব্যবহৃত হয়?",
+          "similarity": 0.6610169491525424,
+          "identityFingerprint": "574137fe69d38313dc436ce41d8adda2d52247a6dfbd3db4e2982f4d35c43514"
+        }
+      },
+      {
+        "fingerprint": "ed61810041432e81c148d4ad545ca46205fc0bd6cecafd08c3bcae118570352b",
+        "contentFingerprint": "ff1251a28094ed61a12610c25de74b9e3d0e27a5342e627dd485ba0a515ed902",
+        "source": {
+          "file": "prisma/seed-questions-chem-ict-gaps.ts",
+          "line": 392
+        },
+        "topic": "ICT:NONE:SQL কুয়েরি",
+        "subject": "তথ্য ও যোগাযোগ প্রযুক্তি",
+        "topicName": "SQL কুয়েরি",
+        "text": "SQL এর WHERE ক্লজ ছাড়া DELETE কমান্ড চালালে কী ঘটবে?",
+        "options": [
+          "কোনো রেকর্ড ডিলিট হবে না",
+          "টেবিলের সব রেকর্ড ডিলিট হয়ে যাবে",
+          "শুধু প্রথম রেকর্ড ডিলিট হবে",
+          "এরর দেখাবে এবং কিছুই হবে না"
+        ],
+        "correctAnswer": "টেবিলের সব রেকর্ড ডিলিট হয়ে যাবে",
+        "explanation": "WHERE ক্লজ ছাড়া DELETE FROM table_name; চালালে কোনো ফিল্টার শর্ত না থাকায় টেবিলের সব রেকর্ড ডিলিট হয়ে যাবে — এটি অত্যন্ত বিপজ্জনক একটি ভুল, তাই WHERE ক্লজ ব্যবহারে সতর্ক থাকা জরুরি।",
+        "difficulty": "MEDIUM",
+        "boardYear": null,
+        "boardName": null,
+        "qualityIssues": [],
+        "sameTextElsewhere": [],
+        "nearestInTopic": {
+          "text": "একটি টেবিলে নতুন ডেটা যোগ করতে কোন SQL কমান্ড ব্যবহৃত হয়?",
+          "similarity": 0.19230769230769232,
+          "identityFingerprint": "574137fe69d38313dc436ce41d8adda2d52247a6dfbd3db4e2982f4d35c43514"
+        }
+      }
+    ],
+    "liveExtras": [],
+    "sourceIdentityDuplicateGroups": [],
+    "sourceGlobalTextDuplicateGroups": [
+      [
+        {
+          "fingerprint": "0eedb70471775dad227725b20c4c0f794eea311d95af25582f0cbc7250eae2e1",
+          "topic": "PHYSICS:FIRST:শব্দ তরঙ্গ",
+          "text": "শব্দ তরঙ্গ কোন ধরনের তরঙ্গ?",
+          "source": {
+            "file": "prisma/seed-questions-2.ts",
+            "line": 168
+          }
+        },
+        {
+          "fingerprint": "5bc3de0701c9a4db092e62c1c1d125f8cd5dfce03b79cdf189a9ce470e2c8a33",
+          "topic": "PHYSICS:FIRST:তরঙ্গের প্রকারভেদ",
+          "text": "শব্দ তরঙ্গ কোন ধরনের তরঙ্গ?",
+          "source": {
+            "file": "prisma/seed-questions-physics-topic-gaps.ts",
+            "line": 386
+          }
+        }
+      ],
+      [
+        {
+          "fingerprint": "82d471b05158bc9d4691d42d056b421cbccd1c01730ddeab6366f277b1aa30cf",
+          "topic": "HIGHER_MATH:FIRST:ত্রিকোণমিতিক অভেদ",
+          "text": "sin²θ + cos²θ এর মান কত?",
+          "source": {
+            "file": "prisma/seed-questions-hmath-gaps.ts",
+            "line": 95
+          }
+        },
+        {
+          "fingerprint": "929dfd588efec608fe610e2f0ae2ec32cf25da4bb030bd5983beb243bb0e9009",
+          "topic": "HIGHER_MATH:FIRST:ত্রিকোণমিতিক অনুপাতের ধারণা",
+          "text": "sin²θ + cos²θ এর মান কত?",
+          "source": {
+            "file": "prisma/seed-questions-topic-gaps-2.ts",
+            "line": 634
+          }
+        }
+      ]
+    ],
+    "liveIdentityDuplicateGroups": [],
+    "sourceNearDuplicates": []
+  },
+  "admission": {
+    "sourceTotal": 220,
+    "sourceUniqueIdentityCount": 220,
+    "liveTotal": 220,
+    "liveUniqueIdentityCount": 220,
+    "exactMatches": 219,
+    "contentDrifts": [
+      {
+        "fingerprint": "a3ad4e9cad9f619190ba9089011ce7707d6eac5bc34c483d459cb7cc43344e32",
+        "source": {
+          "file": "prisma/seed-admission-questions-2.ts",
+          "line": 1198
+        },
+        "examType": "BUET",
+        "subject": "MATH",
+        "text": "৫ জন থেকে ৩ জন বাছাই করার উপায় কত?",
+        "changedFields": [
+          "explanation"
+        ]
+      }
+    ],
+    "missing": [],
+    "liveExtras": [],
+    "sourceIdentityDuplicateGroups": 0,
+    "liveIdentityDuplicateGroups": 0
+  },
+  "safeguards": [
+    "This command performs read-only SELECT queries.",
+    "No seed script is executed.",
+    "No question is inserted, updated, or deleted.",
+    "Import candidates require a separate reviewed approval manifest and an explicit --apply flag."
+  ]
+}

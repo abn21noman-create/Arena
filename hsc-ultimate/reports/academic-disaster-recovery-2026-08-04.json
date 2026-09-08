@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T14:26:00Z",
+  "feature": "academic-content-disaster-recovery-toolkit",
+  "snapshot": {
+    "snapshotSchemaVersion": 1,
+    "sizeBytes": 2123584,
+    "checksumAlgorithm": "sha256",
+    "checksum": "2b31716b78d17c389bfeaed32a1079af0383c029401f91c3c3006b680810a2f8",
+    "checksumValid": true,
+    "referenceGraphValid": true,
+    "forbiddenSensitiveKeys": 0,
+    "academicItems": 1157,
+    "subjects": 13,
+    "chapters": 89,
+    "topics": 185,
+    "coreMcq": 688,
+    "admissionMcq": 220,
+    "cq": 64,
+    "badges": 14,
+    "contentReviews": 0,
+    "contentReviewRevisions": 0
+  },
+  "sensitiveDataProtection": {
+    "excludedTableCategories": 13,
+    "usersExcluded": true,
+    "passwordsExcluded": true,
+    "authSessionsExcluded": true,
+    "attemptsExcluded": true,
+    "focusSessionsExcluded": true,
+    "nativeTokensExcluded": true,
+    "auditLogsExcluded": true,
+    "chatMessagesExcluded": true,
+    "generatedFilesGitIgnored": true,
+    "exportFileMode": "0600"
+  },
+  "tamperTest": {
+    "fieldModified": "coreMcq[0].text",
+    "checksumMismatchDetected": true,
+    "verificationExitCode": 1,
+    "tamperedSnapshotAccepted": false
+  },
+  "cleanup": {
+    "verificationSnapshotDeleted": true,
+    "tamperedSnapshotDeleted": true,
+    "generatedBackupFilesRemaining": 0,
+    "backupsGitkeepRemaining": true
+  },
+  "restorePolicy": {
+    "automaticRestoreImplemented": false,
+    "automaticApplyImplemented": false,
+    "automaticDeleteImplemented": false,
+    "fullDatabaseBackupIncluded": false,
+    "providerManagedBackupOrPgDumpStillRequired": true
+  },
+  "verification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 76,
+    "unitTestsTotal": 76,
+    "snapshotTestsPassed": 6,
+    "pureLogicPassed": 162,
+    "secretShapePassed": 17,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 206,
+    "productionStaticPagesExpected": 206,
+    "productionBuildExitCode": 0,
+    "previewStarted": false
+  },
+  "secretsPrinted": false
+}

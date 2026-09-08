@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-08T09:17:52.315Z",
+  "status": "LOCAL_COMPLIANCE_READY",
+  "policyVersions": {
+    "privacy": "2026.08.05",
+    "terms": "2026.08.05",
+    "ageAssurance": "2026.08.05"
+  },
+  "inventory": {
+    "dataFlowCategories": 8,
+    "processors": 9,
+    "retentionCategories": 7,
+    "privacyRequiredSections": 16,
+    "termsRequiredSections": 16
+  },
+  "checks": [
+    {
+      "id": "metadata-readiness",
+      "status": "PASS",
+      "detail": "10/10 metadata checks"
+    },
+    {
+      "id": "privacy-required-sections",
+      "status": "PASS",
+      "detail": "16 required sections"
+    },
+    {
+      "id": "terms-required-sections",
+      "status": "PASS",
+      "detail": "16 required sections"
+    },
+    {
+      "id": "public-account-deletion-guide",
+      "status": "PASS",
+      "detail": "web deletion/export instructions and identity-safe fallback"
+    },
+    {
+      "id": "versioned-registration-acceptance",
+      "status": "PASS",
+      "detail": "required UI assurance + atomic account/acceptance write"
+    },
+    {
+      "id": "existing-user-version-control",
+      "status": "PASS",
+      "detail": "Settings current/stale status + idempotent acknowledgement API"
+    },
+    {
+      "id": "public-policy-links",
+      "status": "PASS",
+      "detail": "landing footer and onboarding"
+    },
+    {
+      "id": "portable-export-coverage",
+      "status": "PASS",
+      "detail": "account/learning/AI/PDF/Focus/device/consent export with credential exclusions"
+    },
+    {
+      "id": "deletion-reference-hygiene",
+      "status": "PASS",
+      "detail": "cascade deletion + non-FK cleanup + retained audit de-identification"
+    },
+    {
+      "id": "immutable-policy-model",
+      "status": "PASS",
+      "detail": "version history model and additive migration"
+    },
+    {
+      "id": "focus-consent-version-gate",
+      "status": "PASS",
+      "detail": "stale Focus consent cannot authorize Admin start/schedule"
+    },
+    {
+      "id": "accessibility-minimization",
+      "status": "PASS",
+      "detail": "package-only local access + separate prominent disclosure/affirmative action"
+    },
+    {
+      "id": "ai-provider-inventory",
+      "status": "PASS",
+      "detail": "four configured AI paths disclosed"
+    },
+    {
+      "id": "data-flow-inventory",
+      "status": "PASS",
+      "detail": "8 categories"
+    },
+    {
+      "id": "processor-inventory",
+      "status": "PASS",
+      "detail": "9 processors/services"
+    },
+    {
+      "id": "retention-inventory",
+      "status": "PASS",
+      "detail": "7 retention categories"
+    },
+    {
+      "id": "search-discoverability",
+      "status": "PASS",
+      "detail": "public policies in sitemap/robots allowlist"
+    },
+    {
+      "id": "play-draft-documents",
+      "status": "PASS",
+      "detail": "Data Safety and Accessibility declaration drafts"
+    },
+    {
+      "id": "privacy-contact-template",
+      "status": "PASS",
+      "detail": "verified contact must be configured before public launch"
+    },
+    {
+      "id": "external-legal-contact",
+      "status": "WARN",
+      "detail": "pre-launch: verified operator identity/contact and qualified legal review still external"
+    }
+  ],
+  "summary": {
+    "pass": 19,
+    "warn": 1,
+    "fail": 0
+  },
+  "externalPending": [
+    "publicHttpsUrl",
+    "verifiedOperatorAndPrivacyContact",
+    "qualifiedLegalReview",
+    "PlayConsoleDataSafetySubmission",
+    "PlayAccessibilityDeclarationAndDemoVideo",
+    "physicalAndroidDisclosureTest"
+  ],
+  "playStorePublished": false,
+  "databaseWrites": 0
+}

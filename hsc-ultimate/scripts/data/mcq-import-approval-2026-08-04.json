@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "dataset": "core-question",
+  "reviewedAt": "2026-08-04",
+  "sourceAudit": "reports/mcq-audit-before-import.json",
+  "expectedSourceCoreCount": 688,
+  "reviewScope": [
+    "Static structure and answer-in-options",
+    "Unicode/LaTeX/control-character integrity",
+    "Exact and near-duplicate comparison",
+    "Live topic-note consistency",
+    "Targeted external factual verification"
+  ],
+  "references": [
+    "https://www.prothomalo.com/education/study/p83tr8smid",
+    "https://www.allaboutcircuits.com/textbook/digital/chpt-3/gate-universality/",
+    "https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement/colSpan",
+    "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/ol",
+    "https://en.cppreference.com/w/c/language/for.html",
+    "https://en.cppreference.com/w/c/language/do.html",
+    "https://www.postgresql.org/docs/current/sql-update.html",
+    "https://www.postgresql.org/docs/current/sql-delete.html"
+  ],
+  "approvals": [
+    {
+      "fingerprint": "7acca7ef3dd44e3269b2ace4514cf6d576f91a48cc7ebcf0f4f0e33b24c3f9e1",
+      "contentFingerprint": "acdfed11ce4e277322be1f0a617e9f9816261d5d7e93ca7d477afa4a28c0130e",
+      "topic": "ICT:NONE:নেটওয়ার্কের প্রকারভেদ",
+      "text": "নেটওয়ার্ক টপোলজির মধ্যে সবচেয়ে বেশি নির্ভরযোগ্য টপোলজি কোনটি?",
+      "decision": "APPROVE",
+      "reviewNotes": "Internal ICT note and networking reference agree that full mesh has redundant paths and the highest reliability among the listed topologies."
+    },
+    {
+      "fingerprint": "571339f506d52a25d43dcbcce8f652e9b25fb776d4abb6940ff82d017e2c4205",
+      "contentFingerprint": "adf0d0d656ef82143c87db9742bc0e39a45c3ed738f5167c27e72833b14fc7af",
+      "topic": "ICT:NONE:নেটওয়ার্কের প্রকারভেদ",
+      "text": "PAN (Personal Area Network) এর সাধারণ ভৌগোলিক বিস্তৃতি কত?",
+      "decision": "APPROVE",
+      "reviewNotes": "Corrected before approval from 10–100 m to the HSC curriculum convention of up to 10 m; answer, distractors, explanation, ICT note, and CQ source were aligned."
+    },
+    {
+      "fingerprint": "5d8f13e7a97db67d98394e9913c22cd19cfd7665a01f1a6f95c3eda5ccd7c630",
+      "contentFingerprint": "f029c5e32abe049b57e7d4e6cfec88976641ec93522ddfa057ffd1c15a65e0f3",
+      "topic": "ICT:NONE:বুলিয়ান অ্যালজেবরা",
+      "text": "ডি-মরগ্যানের প্রথম উপপাদ্য অনুযায়ী (A+B)' এর সমতুল্য রাশি কোনটি?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified De Morgan identity: complement of OR equals AND of the complements, (A+B)' = A'·B'."
+    },
+    {
+      "fingerprint": "25d3eb151bd2eab7071f999cbd0ec1dfdacc439902b205a2ec3e11208a8739e5",
+      "contentFingerprint": "ae93ef557468ef91a176f4b72d2031a099a25b031bc25f130d3a7129412a4b05",
+      "topic": "ICT:NONE:বুলিয়ান অ্যালজেবরা",
+      "text": "NAND গেটকে 'সার্বজনীন গেট' বলা হয় কেন?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified that NAND alone can implement NOT, AND, OR, and therefore arbitrary Boolean functions."
+    },
+    {
+      "fingerprint": "5f5ab6627b488bcc023b393d613c8c9cc5c38a070c7651b1b86c4f91fb4a78ac",
+      "contentFingerprint": "b4b6d191ff7f8c6e2a03ea9ef696cda8258320b2d3b1691e39c590b4804dfd1b",
+      "topic": "ICT:NONE:HTML ট্যাগ পরিচিতি",
+      "text": "HTML টেবিলে একটি সেলকে দুইটি কলাম জুড়ে বিস্তৃত করতে কোন অ্যাট্রিবিউট ব্যবহৃত হয়?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified against MDN/WHATWG behavior: colspan controls how many columns a table cell spans."
+    },
+    {
+      "fingerprint": "6cd90b3b466bb62a15f16a4832abfbf81bc5601b4948a1577ae67bed6eabbf26",
+      "contentFingerprint": "519547bc6315cd805671bb4b6ff841d0ef16c98dfc9b86630a392f1765d418c7",
+      "topic": "ICT:NONE:HTML ট্যাগ পরিচিতি",
+      "text": "কোন HTML ট্যাগ দিয়ে অর্ডারড (ক্রমযুক্ত) লিস্ট তৈরি করা হয়?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified against MDN: <ol> represents an ordered list; distractors are distinct HTML list elements."
+    },
+    {
+      "fingerprint": "8b1847e08485ebd6e97b636426d1d1ceae7ac45d9364dc49c6f50ff7520f9ac1",
+      "contentFingerprint": "f97a4ef9978dbb922477c357eb7e4782d94a9d1b0224b756106422744e430a9b",
+      "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+      "text": "C ভাষায় for loop এর গঠনে কয়টি প্রধান অংশ থাকে?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified C for syntax contains init-clause, condition expression, and iteration expression (each may be optional)."
+    },
+    {
+      "fingerprint": "7a8efc34a993cefa8c627f5caf4474833a13adb31fa3afd1188cd8ee7419bf4f",
+      "contentFingerprint": "9192b2cbf74d9edb3890ca0c814c46ce840d40c2396e537b2c884d00b87039fa",
+      "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+      "text": "C প্রোগ্রামে while loop ও do-while loop এর মধ্যে মূল পার্থক্য কী?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified C do-while evaluates the condition after the body, so the body executes at least once."
+    },
+    {
+      "fingerprint": "325e9698b9910ab37ca180517f7f97465a11795ee66eba056b61c4d108e95ac9",
+      "contentFingerprint": "233607f4412d32f1d9e169e10900c827ca066bd1e541a480f327aafbb32e177e",
+      "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+      "text": "নিচের কোনটি C ভাষার একটি সঠিক ডেটা টাইপ?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified int is a C integer type keyword; the other listed words are not C type keywords."
+    },
+    {
+      "fingerprint": "048ad74446e93ad4d79bf14c7ba94eb239183b95e57a9d1b42754cff7adbc537",
+      "contentFingerprint": "8bc45c1faf3b8f97a4a5c23952ba66d5b36a3a1c9e3596ad81be0e1c1505c7aa",
+      "topic": "ICT:NONE:SQL কুয়েরি",
+      "text": "একটি টেবিলের বিদ্যমান রেকর্ড সংশোধন করতে কোন SQL কমান্ড ব্যবহৃত হয়?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified against PostgreSQL documentation: UPDATE changes values in existing rows."
+    },
+    {
+      "fingerprint": "ed61810041432e81c148d4ad545ca46205fc0bd6cecafd08c3bcae118570352b",
+      "contentFingerprint": "ff1251a28094ed61a12610c25de74b9e3d0e27a5342e627dd485ba0a515ed902",
+      "topic": "ICT:NONE:SQL কুয়েরি",
+      "text": "SQL এর WHERE ক্লজ ছাড়া DELETE কমান্ড চালালে কী ঘটবে?",
+      "decision": "APPROVE",
+      "reviewNotes": "Verified against PostgreSQL documentation: DELETE without WHERE removes all rows while leaving the table."
+    }
+  ]
+}

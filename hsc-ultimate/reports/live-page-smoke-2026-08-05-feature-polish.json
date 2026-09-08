@@ -1,0 +1,371 @@
+{
+  "suite": "all-page-live-http-smoke",
+  "baseUrl": "http://localhost:3000",
+  "realDatabase": true,
+  "disposableAdmin": true,
+  "summary": {
+    "total": 89,
+    "ok": 89,
+    "fail": 0,
+    "skipNoOwnedData": 0
+  },
+  "results": {
+    "/": [
+      "OK",
+      "200"
+    ],
+    "/account-deletion": [
+      "OK",
+      "200"
+    ],
+    "/adaptive-practice": [
+      "OK",
+      "200"
+    ],
+    "/adaptive-practice/run": [
+      "OK",
+      "200"
+    ],
+    "/admin": [
+      "OK",
+      "200"
+    ],
+    "/admin/analytics": [
+      "OK",
+      "200"
+    ],
+    "/admin/audit-log": [
+      "OK",
+      "200"
+    ],
+    "/admin/broadcast": [
+      "OK",
+      "200"
+    ],
+    "/admin/chapters/[chapterId]": [
+      "OK",
+      "200"
+    ],
+    "/admin/content-quality": [
+      "OK",
+      "200"
+    ],
+    "/admin/focus": [
+      "OK",
+      "200"
+    ],
+    "/admin/focus/analytics": [
+      "OK",
+      "200"
+    ],
+    "/admin/forum": [
+      "OK",
+      "200"
+    ],
+    "/admin/notifications": [
+      "OK",
+      "200"
+    ],
+    "/admin/reports": [
+      "OK",
+      "200"
+    ],
+    "/admin/subjects": [
+      "OK",
+      "200"
+    ],
+    "/admin/subjects/[subjectId]": [
+      "OK",
+      "200"
+    ],
+    "/admin/system": [
+      "OK",
+      "200"
+    ],
+    "/admin/topics/[topicId]": [
+      "OK",
+      "200"
+    ],
+    "/admin/users": [
+      "OK",
+      "200"
+    ],
+    "/admission": [
+      "OK",
+      "200"
+    ],
+    "/admission/history": [
+      "OK",
+      "200"
+    ],
+    "/admission/result/[attemptId]": [
+      "OK",
+      "200"
+    ],
+    "/admission/run/[attemptId]": [
+      "OK",
+      "200"
+    ],
+    "/ai-tutor": [
+      "OK",
+      "200"
+    ],
+    "/analytics": [
+      "OK",
+      "200"
+    ],
+    "/badges": [
+      "OK",
+      "200"
+    ],
+    "/cq-practice": [
+      "OK",
+      "200"
+    ],
+    "/cq-practice/[subjectId]": [
+      "OK",
+      "200"
+    ],
+    "/cq-practice/[subjectId]/[chapterId]": [
+      "OK",
+      "200"
+    ],
+    "/cq-practice/result/[attemptId]": [
+      "OK",
+      "200"
+    ],
+    "/dashboard": [
+      "OK",
+      "200"
+    ],
+    "/drill": [
+      "OK",
+      "200"
+    ],
+    "/drill/run": [
+      "OK",
+      "200"
+    ],
+    "/duel": [
+      "OK",
+      "200"
+    ],
+    "/duel/[duelId]": [
+      "OK",
+      "200"
+    ],
+    "/duel/history": [
+      "OK",
+      "200"
+    ],
+    "/feature-disabled": [
+      "OK",
+      "200"
+    ],
+    "/flashcards": [
+      "OK",
+      "200"
+    ],
+    "/flashcards/[deckId]": [
+      "OK",
+      "200"
+    ],
+    "/flashcards/[deckId]/review": [
+      "OK",
+      "200"
+    ],
+    "/flashcards/discover": [
+      "OK",
+      "200"
+    ],
+    "/focus": [
+      "OK",
+      "200"
+    ],
+    "/focus/analytics": [
+      "OK",
+      "200"
+    ],
+    "/forgot-password": [
+      "OK",
+      "200"
+    ],
+    "/formula-search": [
+      "OK",
+      "200"
+    ],
+    "/forum": [
+      "OK",
+      "200"
+    ],
+    "/forum/[postId]": [
+      "OK",
+      "200"
+    ],
+    "/forum/new": [
+      "OK",
+      "200"
+    ],
+    "/leaderboard": [
+      "OK",
+      "200"
+    ],
+    "/learn": [
+      "OK",
+      "200"
+    ],
+    "/learn/[subjectId]": [
+      "OK",
+      "200"
+    ],
+    "/learn/[subjectId]/[topicId]": [
+      "OK",
+      "200"
+    ],
+    "/live-exam": [
+      "OK",
+      "200"
+    ],
+    "/live-exam/[sessionId]": [
+      "OK",
+      "200"
+    ],
+    "/live-exam/[sessionId]/result": [
+      "OK",
+      "200"
+    ],
+    "/live-exam/start": [
+      "OK",
+      "200"
+    ],
+    "/login": [
+      "OK",
+      "200"
+    ],
+    "/maintenance": [
+      "OK",
+      "200"
+    ],
+    "/mistake-vault": [
+      "OK",
+      "200"
+    ],
+    "/mistake-vault/run": [
+      "OK",
+      "200"
+    ],
+    "/mock-exam": [
+      "OK",
+      "200"
+    ],
+    "/mock-exam/attempt/[attemptId]": [
+      "OK",
+      "200"
+    ],
+    "/mock-exam/result/[attemptId]": [
+      "OK",
+      "200"
+    ],
+    "/mock-exam/subject/[subjectId]": [
+      "OK",
+      "200"
+    ],
+    "/notifications": [
+      "OK",
+      "200"
+    ],
+    "/onboarding": [
+      "OK",
+      "200"
+    ],
+    "/pdf-chat": [
+      "OK",
+      "200"
+    ],
+    "/pdf-chat/[documentId]": [
+      "OK",
+      "200"
+    ],
+    "/planner": [
+      "OK",
+      "200"
+    ],
+    "/practice": [
+      "OK",
+      "200"
+    ],
+    "/practice/[subjectId]": [
+      "OK",
+      "200"
+    ],
+    "/practice/[subjectId]/[chapterId]": [
+      "OK",
+      "200"
+    ],
+    "/practice/[subjectId]/[chapterId]/pretest": [
+      "OK",
+      "200"
+    ],
+    "/practice/result/[attemptId]": [
+      "OK",
+      "200"
+    ],
+    "/privacy": [
+      "OK",
+      "200"
+    ],
+    "/quiz-battle": [
+      "OK",
+      "200"
+    ],
+    "/quiz-battle/[battleId]": [
+      "OK",
+      "200"
+    ],
+    "/quiz-battle/create": [
+      "OK",
+      "200"
+    ],
+    "/quiz-battle/history": [
+      "OK",
+      "200"
+    ],
+    "/reading-room": [
+      "OK",
+      "200"
+    ],
+    "/reading-room/leaderboard": [
+      "OK",
+      "200"
+    ],
+    "/register": [
+      "OK",
+      "200"
+    ],
+    "/reset-password": [
+      "OK",
+      "200"
+    ],
+    "/saved": [
+      "OK",
+      "200"
+    ],
+    "/settings": [
+      "OK",
+      "200"
+    ],
+    "/study-group": [
+      "OK",
+      "200"
+    ],
+    "/terms": [
+      "OK",
+      "200"
+    ],
+    "/u/[slug]": [
+      "OK",
+      "200"
+    ]
+  },
+  "finalizedAt": "2026-08-05T06:58:21.672149+00:00"
+}

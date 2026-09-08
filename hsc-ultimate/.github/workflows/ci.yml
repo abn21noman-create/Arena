@@ -1,0 +1,265 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Skip if no package.json
+  SKIP_INSTALL: ${{ !hashFiles('package.json') }}
+
+jobs:
+  # ============================================================================
+  # Lint & Type Check
+  # ============================================================================
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: env.SKIP_INSTALL != 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Generate Prisma Client
+        if: env.SKIP_INSTALL != 'true'
+        run: npx prisma generate
+
+      - name: TypeScript type check
+        if: env.SKIP_INSTALL != 'true'
+        run: npm run type-check
+        continue-on-error: false
+
+      - name: ESLint
+        if: env.SKIP_INSTALL != 'true'
+        run: npm run lint
+        continue-on-error: false
+
+  # ============================================================================
+  # Tests
+  # ============================================================================
+  test:
+    name: Unit & Logic Tests
+    runs-on: ubuntu-latest
+    needs: lint
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Generate Prisma Client
+        run: npx prisma generate
+      - name: Unit tests
+        run: npm run test:run
+      - name: Pure logic assertions
+        run: npm run test:logic
+      - name: Seed integrity
+        run: npm run test:seed
+      - name: Offline release preflight
+        run: npm run release:preflight -- --offline --out reports/ci-release-preflight.json
+      - name: Strict API security manifest
+        run: npm run audit:security:strict -- --out reports/ci-api-security.json
+      - name: Strict privacy compliance manifest
+        run: npm run audit:privacy:strict -- --out reports/ci-privacy-compliance.json
+      - name: Strict runtime truth/integrity manifest
+        run: npm run audit:integrity:strict -- --out reports/ci-runtime-integrity.json
+      - name: Upload release/security/privacy/integrity manifests
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-security-manifests
+          path: |
+            reports/ci-release-preflight.json
+            reports/ci-api-security.json
+            reports/ci-privacy-compliance.json
+            reports/ci-runtime-integrity.json
+          if-no-files-found: error
+          retention-days: 14
+
+  # ============================================================================
+  # Build
+  # ============================================================================
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+
+      - name: Build Next.js
+        run: npm run build
+        env:
+          # Dummy env vars for build (not used at runtime, only for type checking)
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+          DIRECT_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+          NEXTAUTH_SECRET: 'placeholder-secret-for-ci-build-only'
+          NEXTAUTH_URL: 'http://localhost:3000'
+          GROQ_API_KEY: 'placeholder'
+          MISTRAL_API_KEY: 'placeholder'
+          CEREBRAS_API_KEY: 'placeholder'
+          OPENROUTER_API_KEY: 'placeholder'
+          RESEND_API_KEY: 'placeholder'
+          NEXT_PUBLIC_VAPID_PUBLIC_KEY: 'placeholder'
+          VAPID_PRIVATE_KEY: 'placeholder'
+          VAPID_SUBJECT: 'mailto:test@test.com'
+
+  # ============================================================================
+  # Android compile check
+  # ============================================================================
+  android:
+    name: Android Debug Build
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android SDK 36
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Android unit tests, debug APK and lint
+        run: npm run android:check
+
+  # ============================================================================
+  # Security Audit
+  # ============================================================================
+  security:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: env.SKIP_INSTALL != 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Run production dependency audit
+        if: env.SKIP_INSTALL != 'true'
+        run: npm audit --omit=dev --audit-level=low
+        continue-on-error: false  # Any production dependency vulnerability blocks CI
+
+  # ============================================================================
+  # Secret Scan
+  # ============================================================================
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: TruffleHog OSS Secret Scan
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: ${{ github.head_ref }}
+          extra_args: --debug --only-verified
+
+  # ============================================================================
+  # Code Quality
+  # ============================================================================
+  quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: env.SKIP_INSTALL != 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Count TypeScript `any` types (should decrease)
+        if: env.SKIP_INSTALL != 'true'
+        run: |
+          COUNT=$(grep -rE ":\s*any\b" --include="*.ts" --include="*.tsx" app components lib 2>/dev/null | wc -l)
+          echo "TypeScript 'any' usage: $COUNT"
+          if [ "$COUNT" -gt 5 ]; then
+            echo "::warning::Found $COUNT 'any' types. Should be 0 or minimal."
+          fi
+
+      - name: Check for TODO/FIXME
+        if: env.SKIP_INSTALL != 'true'
+        run: |
+          TODOS=$(grep -rE "TODO|FIXME|XXX" --include="*.ts" --include="*.tsx" app components lib 2>/dev/null | wc -l)
+          echo "TODO/FIXME count: $TODOS"
+          echo "Note: Some TODOs are legitimate. Review before failing."
+
+# ============================================================================
+# Final release gate — validates CI only; public deployment remains manual/deferred.
+# ============================================================================
+  release-gate:
+    name: Release Gate
+    runs-on: ubuntu-latest
+    needs: [lint, test, build, android, security, secret-scan, quality]
+    timeout-minutes: 5
+    steps:
+      - name: Confirm all required jobs passed
+        run: echo "All required web, Android, security and quality jobs passed. No deployment performed."

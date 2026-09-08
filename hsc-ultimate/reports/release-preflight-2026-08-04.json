@@ -1,0 +1,192 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T18:11:07.368Z",
+  "mode": "LIVE_READ_ONLY",
+  "status": "LOCAL_READY",
+  "strictRequested": false,
+  "application": {
+    "name": "HSC Ultimate",
+    "version": "0.1.0",
+    "node": "v22.23.2",
+    "npm": "npm/10.9.8"
+  },
+  "inventory": {
+    "pages": 86,
+    "apiRoutes": 240,
+    "components": 200,
+    "libraryFiles": 150,
+    "prismaModels": 63,
+    "prismaMigrations": 29
+  },
+  "checks": [
+    {
+      "id": "node",
+      "status": "PASS",
+      "detail": "v22.23.2"
+    },
+    {
+      "id": "package-manager",
+      "status": "PASS",
+      "detail": "npm@10.8.2"
+    },
+    {
+      "id": "single-lockfile",
+      "status": "PASS",
+      "detail": "npm lock only"
+    },
+    {
+      "id": "inventory-pages",
+      "status": "PASS",
+      "detail": "86/86"
+    },
+    {
+      "id": "inventory-apiRoutes",
+      "status": "PASS",
+      "detail": "240/240"
+    },
+    {
+      "id": "inventory-components",
+      "status": "PASS",
+      "detail": "200/200"
+    },
+    {
+      "id": "inventory-libraryFiles",
+      "status": "PASS",
+      "detail": "150/150"
+    },
+    {
+      "id": "inventory-prismaModels",
+      "status": "PASS",
+      "detail": "63/63"
+    },
+    {
+      "id": "inventory-prismaMigrations",
+      "status": "PASS",
+      "detail": "29/29"
+    },
+    {
+      "id": "source-manifest",
+      "status": "PASS",
+      "detail": "883 files"
+    },
+    {
+      "id": "production-audit",
+      "status": "PASS",
+      "detail": "0 vulnerabilities"
+    },
+    {
+      "id": "backup-hygiene",
+      "status": "PASS",
+      "detail": "0 generated files"
+    },
+    {
+      "id": "android-local-path",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "id": "build-artifact",
+      "status": "PASS",
+      "detail": "BUILD_ID present"
+    },
+    {
+      "id": "live-migrations",
+      "status": "PASS",
+      "detail": "29/29"
+    },
+    {
+      "id": "academic-baseline",
+      "status": "PASS",
+      "detail": "1157/1157 reviewable"
+    },
+    {
+      "id": "content-blockers",
+      "status": "PASS",
+      "detail": "0 blockers"
+    },
+    {
+      "id": "stale-reviews",
+      "status": "PASS",
+      "detail": "0 stale"
+    },
+    {
+      "id": "manual-review-backlog",
+      "status": "WARN",
+      "detail": "1157 unreviewed"
+    },
+    {
+      "id": "snapshot-integrity",
+      "status": "PASS",
+      "detail": "2b31716b78d17c389bfeaed32a1079af0383c029401f91c3c3006b680810a2f8"
+    },
+    {
+      "id": "report-secret-shape",
+      "status": "PASS",
+      "detail": "no credential-value fields"
+    }
+  ],
+  "supplyChain": {
+    "fileCount": 883,
+    "aggregateSha256": "8335d7123c1bc87788c5d2cf8b6d3479082dc20da2f86cd8c305048ef5c3a683",
+    "migrationAggregateSha256": "e8c2cd836b3f9112d0e56c22b70bab873021c59cf88de8c4a1acf047076bc5f9",
+    "critical": {
+      ".github/workflows/ci.yml": "5018566714c8213e362f7f00fd443e37fb23af221b938fb79a68e6ef7650445f",
+      "Dockerfile": "6fa1f0b8103b12c3c0f2bc5c0a2461647438bd697afa306c488bb325e7b9c79c",
+      "next.config.ts": "f7b41cfaee9792f4ce92072a2e5fc6033ae3c3bf669ab584f4787d2bcb8a26c9",
+      "package-lock.json": "e4ce0d6d58ffb08ed820332948eceef24b37aacdd75e251cc373952da6884f4c",
+      "package.json": "b3eed74a7f3a62c5bd941de0b618ffb72a29d09203f00dc091911a03862b0848",
+      "prisma/schema.prisma": "475062cb3d1f967ec1a177a1ffe7320b5e3435c7242ba5012766d672417ba25e",
+      "tsconfig.typecheck.json": "91fd2c2a5e587e07a76c2cfb97a90fb3ba6a33bf44c80dc1bfdcdb0b1d7233f7"
+    }
+  },
+  "productionAudit": {
+    "available": true,
+    "total": 0,
+    "exitCode": 0
+  },
+  "live": {
+    "migrationsApplied": 29,
+    "academicCounts": {
+      "subjects": 13,
+      "chapters": 89,
+      "topics": 185,
+      "coreMcq": 688,
+      "admissionMcq": 220,
+      "cq": 64,
+      "badges": 14,
+      "contentReviews": 0,
+      "contentReviewRevisions": 0
+    },
+    "contentQuality": {
+      "total": 1157,
+      "blockers": 0,
+      "warnings": 4,
+      "staleReviews": 0,
+      "unreviewed": 1157
+    },
+    "snapshot": {
+      "checksum": "2b31716b78d17c389bfeaed32a1079af0383c029401f91c3c3006b680810a2f8",
+      "valid": true
+    },
+    "deploymentReadiness": {
+      "readyCount": 1,
+      "totalChecks": 6,
+      "pending": [
+        "publicUrl",
+        "externalScheduler",
+        "distributedRateLimit",
+        "firebaseAdmin",
+        "productionRuntime"
+      ]
+    }
+  },
+  "externalPending": [
+    "publicUrl",
+    "externalScheduler",
+    "distributedRateLimit",
+    "firebaseAdmin",
+    "productionRuntime"
+  ],
+  "reportContainsForbiddenSecretKey": false,
+  "databaseWrites": 0
+}

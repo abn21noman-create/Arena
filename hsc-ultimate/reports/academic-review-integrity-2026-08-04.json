@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T13:53:00Z",
+  "feature": "academic-review-integrity-and-expert-export",
+  "database": {
+    "migrationsApplied": 27,
+    "migrationsExpected": 27,
+    "newModel": "ContentReviewRevision",
+    "currentReviewHashNullableForBackwardCompatibility": true,
+    "newWritesRequireContentHash": true,
+    "reviewRowsAfterTest": 0,
+    "revisionRowsAfterTest": 0,
+    "academicContentRowsModified": 0
+  },
+  "integrity": {
+    "algorithm": "sha256-normalized-key-sorted-content",
+    "hashLength": 64,
+    "nullHashIsStale": true,
+    "mismatchedHashIsStale": true,
+    "staleCountsAsReviewed": false,
+    "staleCountsAsApproved": false,
+    "staleReturnsToUnreviewedQueue": true,
+    "immutableRevisionHistory": true
+  },
+  "liveWorkflowVerification": {
+    "currentReviewCount": 1,
+    "forcedStaleDetected": 1,
+    "staleQueueItems": 1,
+    "reReviewedCurrent": true,
+    "immutableRevisionsCreated": 2,
+    "cascadeCleanupSucceeded": true,
+    "contentModified": false
+  },
+  "expertExport": {
+    "rows": 1157,
+    "validHashes": 1157,
+    "uniqueHashes": 1157,
+    "staleReviewsAtExport": 0,
+    "currentReviewsAtExport": 0,
+    "utf8Bom": true,
+    "quotedCsv": true,
+    "spreadsheetFormulaInjectionProtection": true,
+    "adminOnly": true,
+    "bulkImportImplemented": false,
+    "bulkImportOmissionReason": "Avoid unsafe offline decisions, stale hashes and unaudited reviewer identity."
+  },
+  "verification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 70,
+    "unitTestsTotal": 70,
+    "contentQualityIntegrityTestsPassed": 11,
+    "pureLogicPassed": 162,
+    "secretShapePassed": 17,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 205,
+    "productionStaticPagesExpected": 205,
+    "productionBuildExitCode": 0,
+    "previewStarted": false
+  },
+  "secretsPrinted": false
+}

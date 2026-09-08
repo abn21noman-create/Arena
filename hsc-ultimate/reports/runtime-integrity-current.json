@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-08T09:17:52.710Z",
+  "status": "PASS",
+  "runtimeFilesScanned": 644,
+  "apiRoutesScanned": 213,
+  "checks": [
+    {
+      "id": "no-experimental-singularity-api",
+      "status": "PASS",
+      "detail": "experimental fake/no-op runtime tree absent"
+    },
+    {
+      "id": "no-fake-noop-markers",
+      "status": "PASS",
+      "detail": "0 forbidden markers"
+    },
+    {
+      "id": "truthful-landing",
+      "status": "PASS",
+      "detail": "live DB counts and no fabricated social proof"
+    },
+    {
+      "id": "no-cosmetic-language-toggle",
+      "status": "PASS",
+      "detail": "Bangla-first UI; partial locale toggle not exposed as a complete feature"
+    },
+    {
+      "id": "malformed-json-safe",
+      "status": "PASS",
+      "detail": "213 routes scanned"
+    },
+    {
+      "id": "no-test-credential-fallback",
+      "status": "PASS",
+      "detail": "environment-only test credentials"
+    },
+    {
+      "id": "registration-tests-current",
+      "status": "PASS",
+      "detail": "all registration E2E payloads include current policy assurance"
+    },
+    {
+      "id": "private-navigation-not-cached",
+      "status": "PASS",
+      "detail": "only explicit public policy/landing pages may use HTML cache"
+    },
+    {
+      "id": "accessibility-controls-real",
+      "status": "PASS",
+      "detail": "font scale/contrast/motion wired; no 8–11px text"
+    },
+    {
+      "id": "live-session-authorization",
+      "status": "PASS",
+      "detail": "ban/delete/password/role changes checked against current User row"
+    },
+    {
+      "id": "broadcast-real-channels-only",
+      "status": "PASS",
+      "detail": "in-app/web-push outcome drives delivery counters"
+    },
+    {
+      "id": "multi-ai-approval-evidence",
+      "status": "PASS",
+      "detail": "AI approval requires two providers, exact hash/evidence and transparent reviewer kind"
+    },
+    {
+      "id": "academic-student-report-loop",
+      "status": "PASS",
+      "detail": "student report is exact-hash-bound and visible in Admin-only review queue"
+    },
+    {
+      "id": "feature-kill-switch-covers-api",
+      "status": "PASS",
+      "detail": "disabled modules close student APIs; maintenance pauses mutations"
+    },
+    {
+      "id": "destructive-seeds-guarded",
+      "status": "PASS",
+      "detail": "17 destructive seeds guarded"
+    }
+  ],
+  "summary": {
+    "pass": 15,
+    "fail": 0
+  },
+  "databaseWrites": 0
+}

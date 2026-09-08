@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T17:21:36.249Z",
+  "mode": "LIVE_READ_ONLY",
+  "status": "PASS",
+  "database": {
+    "migrationsExpected": 29,
+    "foreignKeys": 75,
+    "missingForeignKeyIndexes": [],
+    "criticalIndexesExpected": 18,
+    "missingCriticalIndexes": [],
+    "tableStats": [
+      {
+        "table_name": "questions",
+        "live_rows": 688,
+        "seq_scan": 77,
+        "idx_scan": 6376,
+        "total_bytes": 647168
+      },
+      {
+        "table_name": "topics",
+        "live_rows": 185,
+        "seq_scan": 640,
+        "idx_scan": 9406,
+        "total_bytes": 589824
+      },
+      {
+        "table_name": "audit_logs",
+        "live_rows": 610,
+        "seq_scan": 58,
+        "idx_scan": 62,
+        "total_bytes": 425984
+      },
+      {
+        "table_name": "notifications",
+        "live_rows": 3,
+        "seq_scan": 1231,
+        "idx_scan": 417,
+        "total_bytes": 303104
+      },
+      {
+        "table_name": "cq_questions",
+        "live_rows": 64,
+        "seq_scan": 104,
+        "idx_scan": 759,
+        "total_bytes": 286720
+      },
+      {
+        "table_name": "flashcard_decks",
+        "live_rows": 0,
+        "seq_scan": 1555,
+        "idx_scan": 533,
+        "total_bytes": 212992
+      },
+      {
+        "table_name": "tasks",
+        "live_rows": 0,
+        "seq_scan": 613,
+        "idx_scan": 825,
+        "total_bytes": 204800
+      },
+      {
+        "table_name": "admission_questions",
+        "live_rows": 220,
+        "seq_scan": 69,
+        "idx_scan": 52,
+        "total_bytes": 188416
+      },
+      {
+        "table_name": "study_plan_items",
+        "live_rows": 0,
+        "seq_scan": 80,
+        "idx_scan": 558,
+        "total_bytes": 172032
+      },
+      {
+        "table_name": "users",
+        "live_rows": 1,
+        "seq_scan": 10383,
+        "idx_scan": 3054,
+        "total_bytes": 163840
+      },
+      {
+        "table_name": "routine_slots",
+        "live_rows": 1,
+        "seq_scan": 803,
+        "idx_scan": 350,
+        "total_bytes": 163840
+      },
+      {
+        "table_name": "focus_sessions",
+        "live_rows": 0,
+        "seq_scan": 18,
+        "idx_scan": 163,
+        "total_bytes": 147456
+      },
+      {
+        "table_name": "quiz_duels",
+        "live_rows": 0,
+        "seq_scan": 920,
+        "idx_scan": 1562,
+        "total_bytes": 106496
+      },
+      {
+        "table_name": "forum_posts",
+        "live_rows": 0,
+        "seq_scan": 1266,
+        "idx_scan": 107,
+        "total_bytes": 106496
+      },
+      {
+        "table_name": "study_group_members",
+        "live_rows": 0,
+        "seq_scan": 1629,
+        "idx_scan": 1027,
+        "total_bytes": 98304
+      },
+      {
+        "table_name": "native_push_deliveries",
+        "live_rows": 0,
+        "seq_scan": 11,
+        "idx_scan": 4,
+        "total_bytes": 98304
+      },
+      {
+        "table_name": "flashcards",
+        "live_rows": 0,
+        "seq_scan": 396,
+        "idx_scan": 96,
+        "total_bytes": 98304
+      },
+      {
+        "table_name": "reading_room_sessions",
+        "live_rows": 0,
+        "seq_scan": 1749,
+        "idx_scan": 351,
+        "total_bytes": 98304
+      },
+      {
+        "table_name": "chapters",
+        "live_rows": 89,
+        "seq_scan": 769,
+        "idx_scan": 2195,
+        "total_bytes": 90112
+      },
+      {
+        "table_name": "quiz_battles",
+        "live_rows": 0,
+        "seq_scan": 154,
+        "idx_scan": 951,
+        "total_bytes": 90112
+      },
+      {
+        "table_name": "native_devices",
+        "live_rows": 0,
+        "seq_scan": 13,
+        "idx_scan": 6,
+        "total_bytes": 81920
+      },
+      {
+        "table_name": "bookmarks",
+        "live_rows": 0,
+        "seq_scan": 36,
+        "idx_scan": 1170,
+        "total_bytes": 81920
+      },
+      {
+        "table_name": "custom_questions",
+        "live_rows": 0,
+        "seq_scan": 25,
+        "idx_scan": 91,
+        "total_bytes": 81920
+      },
+      {
+        "table_name": "quiz_attempt_answers",
+        "live_rows": 0,
+        "seq_scan": 304,
+        "idx_scan": 1731,
+        "total_bytes": 81920
+      },
+      {
+        "table_name": "pdf_documents",
+        "live_rows": 0,
+        "seq_scan": 637,
+        "idx_scan": 666,
+        "total_bytes": 81920
+      }
+    ],
+    "topStatements": [
+      {
+        "calls": 587,
+        "total_exec_time": 131728.64952400018,
+        "mean_exec_time": 224.4099651175466,
+        "rows": 587,
+        "query": "SELECT id FROM \"users\" WHERE id = $1 FOR UPDATE"
+      },
+      {
+        "calls": 59,
+        "total_exec_time": 9123.251699,
+        "mean_exec_time": 154.63138472881357,
+        "rows": 59,
+        "query": "DELETE FROM \"public\".\"topics\" WHERE (\"public\".\"topics\".\"id\" = $1 AND $2=$3) RETURNING \"public\".\"topics\".\"id\", \"public\".\"topics\".\"chapterId\", \"public\".\"topics\".\"name\", \"public\".\"topics\".\"nameEn\", \"public\".\"topics\".\"order\", \"public\".\"topics\"."
+      },
+      {
+        "calls": 146,
+        "total_exec_time": 3198.413255,
+        "mean_exec_time": 21.906940102739725,
+        "rows": 92,
+        "query": "UPDATE \"public\".\"reading_room_sessions\" SET \"endedAt\" = $1 WHERE (\"public\".\"reading_room_sessions\".\"id\" = $2 AND \"public\".\"reading_room_sessions\".\"endedAt\" IS NULL)"
+      },
+      {
+        "calls": 285,
+        "total_exec_time": 2101.3751139999995,
+        "mean_exec_time": 7.373246014035085,
+        "rows": 277,
+        "query": "DELETE FROM \"public\".\"users\" WHERE \"public\".\"users\".\"id\" = $1"
+      },
+      {
+        "calls": 615,
+        "total_exec_time": 1791.779770000001,
+        "mean_exec_time": 2.913463040650408,
+        "rows": 607,
+        "query": "DELETE FROM \"public\".\"users\" WHERE (\"public\".\"users\".\"id\" = $1 AND $2=$3) RETURNING \"public\".\"users\".\"id\", \"public\".\"users\".\"name\", \"public\".\"users\".\"email\", \"public\".\"users\".\"passwordHash\", \"public\".\"users\".\"image\", \"public\".\"users\".\"role\""
+      },
+      {
+        "calls": 56,
+        "total_exec_time": 1302.0974689999998,
+        "mean_exec_time": 23.251740517857144,
+        "rows": 56,
+        "query": "UPDATE \"public\".\"reading_room_sessions\" SET \"lastHeartbeatAt\" = $1, \"totalFocusSec\" = (\"public\".\"reading_room_sessions\".\"totalFocusSec\" + $2) WHERE (\"public\".\"reading_room_sessions\".\"id\" = $3 AND $4=$5) RETURNING \"public\".\"reading_room_sess"
+      },
+      {
+        "calls": 66,
+        "total_exec_time": 1210.3908629999999,
+        "mean_exec_time": 18.339255499999993,
+        "rows": 12210,
+        "query": "SELECT \"public\".\"topics\".\"id\", \"public\".\"topics\".\"chapterId\", \"public\".\"topics\".\"name\", \"public\".\"topics\".\"nameEn\", \"public\".\"topics\".\"order\", \"public\".\"topics\".\"isImportant\", \"public\".\"topics\".\"videoUrl\", \"public\".\"topics\".\"notesMarkdown\","
+      },
+      {
+        "calls": 19,
+        "total_exec_time": 1042.7787239999998,
+        "mean_exec_time": 54.8830907368421,
+        "rows": 6,
+        "query": "UPDATE \"public\".\"flashcard_decks\" SET \"isPublic\" = $1, \"updatedAt\" = $2 WHERE (\"public\".\"flashcard_decks\".\"id\" = $3 AND $4=$5) RETURNING \"public\".\"flashcard_decks\".\"id\", \"public\".\"flashcard_decks\".\"userId\", \"public\".\"flashcard_decks\".\"name\""
+      },
+      {
+        "calls": 55,
+        "total_exec_time": 956.1724069999999,
+        "mean_exec_time": 17.384952854545457,
+        "rows": 43,
+        "query": "UPDATE \"public\".\"flashcard_decks\" SET \"isPublic\" = $1, \"updatedAt\" = $2 WHERE (\"public\".\"flashcard_decks\".\"id\" = $3 AND \"public\".\"flashcard_decks\".\"userId\" = $4)"
+      },
+      {
+        "calls": 147,
+        "total_exec_time": 846.9158600000001,
+        "mean_exec_time": 5.761332380952384,
+        "rows": 147,
+        "query": "SELECT COUNT(*) AS \"_count$_all\" FROM (SELECT \"public\".\"questions\".\"id\" FROM \"public\".\"questions\" WHERE $2=$3 OFFSET $1) AS \"sub\""
+      },
+      {
+        "calls": 55,
+        "total_exec_time": 803.9594079999999,
+        "mean_exec_time": 14.61744378181818,
+        "rows": 51,
+        "query": "UPDATE \"public\".\"study_plan_items\" SET \"isCompleted\" = $1 WHERE (\"public\".\"study_plan_items\".\"id\" = $2 AND $3=$4) RETURNING \"public\".\"study_plan_items\".\"id\", \"public\".\"study_plan_items\".\"studyPlanId\", \"public\".\"study_plan_items\".\"date\", \"pu"
+      },
+      {
+        "calls": 15,
+        "total_exec_time": 776.321668,
+        "mean_exec_time": 51.754777866666664,
+        "rows": 15,
+        "query": "DELETE FROM \"public\".\"routine_slots\" WHERE (\"public\".\"routine_slots\".\"id\" = $1 AND $2=$3) RETURNING \"public\".\"routine_slots\".\"id\", \"public\".\"routine_slots\".\"userId\", \"public\".\"routine_slots\".\"dayOfWeek\", \"public\".\"routine_slots\".\"startTime\""
+      }
+    ],
+    "plans": [
+      {
+        "name": "questions-by-topic",
+        "nodeType": "Limit",
+        "indexes": [
+          "questions_topicId_idx"
+        ],
+        "planningMs": 0.491,
+        "executionMs": 0.688,
+        "actualRows": 3
+      },
+      {
+        "name": "recent-audit",
+        "nodeType": "Limit",
+        "indexes": [
+          "audit_logs_createdAt_idx"
+        ],
+        "planningMs": 0.117,
+        "executionMs": 0.254,
+        "actualRows": 20
+      },
+      {
+        "name": "active-users-window",
+        "nodeType": "Aggregate",
+        "indexes": [],
+        "planningMs": 0.926,
+        "executionMs": 0.42,
+        "actualRows": 1
+      }
+    ],
+    "roundTripMs": {
+      "questionsByTopic": {
+        "min": 477.24,
+        "p50": 478.4,
+        "p95": 1437.39,
+        "max": 1437.39
+      },
+      "recentAudit": {
+        "min": 478.79,
+        "p50": 479.54,
+        "p95": 975.42,
+        "max": 975.42
+      },
+      "activeUsersWindow": {
+        "min": 494.91,
+        "p50": 495.65,
+        "p95": 496.59,
+        "max": 496.59
+      },
+      "note": "Round-trip includes sandbox-to-Supabase network; EXPLAIN executionMs isolates PostgreSQL work."
+    }
+  },
+  "source": {
+    "totalFindMany": 234,
+    "bounded": 48,
+    "intentionalFullRead": 40,
+    "scopedUnbounded": 131,
+    "globalUnbounded": 13,
+    "dynamicArgument": 2,
+    "highRisk": [],
+    "globalUnboundedSamples": [
+      {
+        "file": "app/(dashboard)/badges/page.tsx",
+        "line": 18,
+        "model": "badge",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/cq-practice/page.tsx",
+        "line": 15,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/dashboard/page.tsx",
+        "line": 115,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/duel/page.tsx",
+        "line": 21,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/learn/page.tsx",
+        "line": 31,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/live-exam/start/page.tsx",
+        "line": 26,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/mock-exam/page.tsx",
+        "line": 15,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/practice/page.tsx",
+        "line": 47,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/(dashboard)/quiz-battle/create/page.tsx",
+        "line": 20,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/admin/subjects/page.tsx",
+        "line": 8,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/api/admin/broadcast/templates/route.ts",
+        "line": 17,
+        "model": "broadcastTemplate",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/api/admin/subjects/route.ts",
+        "line": 14,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      },
+      {
+        "file": "app/api/drill/subjects/route.ts",
+        "line": 15,
+        "model": "subject",
+        "classification": "GLOBAL_UNBOUNDED"
+      }
+    ]
+  },
+  "improvements": {
+    "reverseForeignKeyIndexesAdded": 11,
+    "criticalReadIndexesAdded": 7,
+    "adminAnalyticsAggregationMovedToDatabase": true,
+    "forumFeedPaginationAdded": true,
+    "forumVoteAggregationMovedToDatabase": true,
+    "adminReportsPaginationAdded": true
+  },
+  "blockers": [],
+  "databaseWrites": 0,
+  "previewStarted": false,
+  "verification": {
+    "migrationsApplied": 29,
+    "unitTestsPassed": 86,
+    "performanceTestsPassed": 5,
+    "pureLogicPassed": 162,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 206,
+    "productionStaticPagesExpected": 206,
+    "productionBuildExitCode": 0,
+    "previewStarted": false
+  }
+}

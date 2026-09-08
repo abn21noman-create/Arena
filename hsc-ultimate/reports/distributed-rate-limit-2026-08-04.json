@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T11:19:26Z",
+  "feature": "distributed-rate-limiting",
+  "implementation": {
+    "defaultMode": "auto",
+    "currentBackend": "memory",
+    "currentStatus": "local",
+    "distributedConfigured": false,
+    "redisAlgorithm": "atomic-lua-sorted-set-sliding-window",
+    "identifierStorage": "sha256-hashed",
+    "memoryBucketCap": 50000,
+    "failureFallback": "bounded-per-instance-memory",
+    "circuitBreaker": {
+      "failureThreshold": 3,
+      "openMilliseconds": 30000
+    },
+    "directEnforcementCalls": 10,
+    "sharedProtectedRouteCalls": 39,
+    "totalProtectedCallSites": 49,
+    "newRuntimeDependency": false
+  },
+  "verification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 42,
+    "unitTestsTotal": 42,
+    "rateLimitTestsPassed": 9,
+    "pureLogicPassed": 162,
+    "seedCoreMcq": 688,
+    "seedAdmissionMcq": 220,
+    "seedCq": 64,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 201,
+    "productionStaticPagesExpected": 201,
+    "productionBuildExitCode": 0,
+    "healthHttpStatus": 200,
+    "healthDatabase": "up",
+    "healthRateLimitStatus": "local"
+  },
+  "testedScenarios": [
+    "local allow and block",
+    "identifier isolation",
+    "validated IPv4 and IPv6 proxy addresses",
+    "auto mode without credentials",
+    "mocked Redis atomic allow",
+    "mocked Redis retry decision",
+    "raw identifier absent from Redis payload",
+    "network failure memory fallback",
+    "three-failure circuit breaker",
+    "partial configuration detection",
+    "explicit memory override",
+    "secret-free runtime status"
+  ],
+  "externalPending": [
+    "Set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN in the production secret manager to activate distributed mode.",
+    "Run a real multi-instance network test after deployment credentials and a public deployment exist."
+  ],
+  "secretsPrinted": false,
+  "previewStarted": false
+}

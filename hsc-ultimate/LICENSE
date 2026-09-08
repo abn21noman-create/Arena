@@ -1,0 +1,71 @@
+MIT License
+
+Copyright (c) 2026 HSC Ultimate Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project uses the following open-source packages (full license texts in node_modules):
+
+### Production Dependencies
+- **Next.js 16** — MIT License (https://github.com/vercel/next.js)
+- **React 19** — MIT License (https://github.com/facebook/react)
+- **Prisma 6** — Apache 2.0 (https://github.com/prisma/prisma)
+- **NextAuth.js v5** — ISC License (https://github.com/nextauthjs/next-auth)
+- **Tailwind CSS 4** — MIT License (https://github.com/tailwindlabs/tailwindcss)
+- **shadcn/ui** — MIT License (https://github.com/shadcn-ui/ui)
+- **@base-ui/react** — MIT License
+- **bcryptjs** — MIT License
+- **zod** — MIT License
+- **recharts** — MIT License
+- **framer-motion** — MIT License
+- **lucide-react** — ISC License
+- **sonner** — MIT License
+- **katex** — MIT License
+- **@react-pdf/renderer** — MIT License
+- **web-push** — MIT License
+- **resend** — MIT License
+- **ts-fsrs** — MIT License
+- **pdf-parse** — MIT License
+
+### Database
+- **PostgreSQL** — PostgreSQL License
+- **Supabase** — Apache 2.0
+
+### AI Services (External APIs)
+- **Groq** — Terms of Service
+- **Mistral AI** — Apache 2.0 (Mistral models)
+- **Cerebras** — Terms of Service
+- **OpenRouter** — Terms of Service
+
+---
+
+## Notes
+
+This project is intended for educational use. The data, content, and MCQ
+questions are sourced from:
+- NCTB (National Curriculum and Textbook Board) Bangladesh syllabus
+- Previous-year HSC board examination questions (publicly available)
+- Community-contributed content under MIT-compatible terms
+
+Users are responsible for ensuring their use complies with applicable
+copyright laws in their jurisdiction.
