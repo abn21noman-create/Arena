@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HSC Ultimate</string>
+    <string name="title_activity_main">HSC Ultimate</string>
+    <string name="package_name">com.hscultimate.app</string>
+    <string name="custom_url_scheme">com.hscultimate.app</string>
+    <string name="strict_focus_service_name">HSC Ultimate Strict Focus</string>
+    <string name="strict_focus_accessibility_description">Strict Focus শুধুমাত্র active, consent দেওয়া timer চলাকালে সামনে খোলা app-এর package name device-এ transientভাবে শনাক্ত করে এবং নির্বাচিত distracting app থেকে HSC Ultimate-এ ফিরিয়ে আনে। Window content retrieval বন্ধ; এটি screen text, message, password, image, keystroke বা browsing content পড়ে, সংরক্ষণ করে বা server-এ পাঠায় না। Phone, emergency dialer, keyboard এবং alarm সবসময় চালু থাকে।</string>
+    <string name="strict_focus_data_use_statement">Data-use disclosure v2026.08.05: foreground package name কেবল local enforcement-এর জন্য device-এ ব্যবহৃত হয় এবং server-এ পাঠানো হয় না। Server-এ user consent version, focus timing/status, accessibility-enabled boolean, FCM device token এবং command receipt থাকতে পারে। Permission optional, যেকোনো সময় বন্ধ করা যায়, এবং emergency exit সবসময় থাকে।</string>
+</resources>

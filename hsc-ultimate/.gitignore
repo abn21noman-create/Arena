@@ -1,0 +1,66 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing / local verification caches
+/coverage
+/.cache
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+*.keystore
+*.jks
+android/key.properties
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+/lib/generated/prisma
+
+# SQLite database files (local dev)
+*.db
+*.db-journal
+prisma/dev.db*
+
+# স্ক্রিনশট/অডিট আউটপুট (scripts/take-screenshots*.py দিয়ে পুনরায় জেনারেট করা যায়)
+/screenshots/*
+!/screenshots/.gitkeep
+
+# লাইভ টেস্ট স্ক্রিপ্টের dev server লগ ও অস্থায়ী ফাইল
+dev.log
+logs/
+scripts/tmp/
+
+# Academic content snapshots may contain full copyrighted curriculum content.
+# Store encrypted/offsite; never commit generated backup files.
+/backups/*
+!/backups/.gitkeep

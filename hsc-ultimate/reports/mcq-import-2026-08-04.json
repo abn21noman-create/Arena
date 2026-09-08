@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T10:22:54.411Z",
+  "mode": "APPLY",
+  "approvalManifest": "scripts/data/mcq-import-approval-2026-08-04.json",
+  "reviewedAt": "2026-08-04",
+  "before": {
+    "sourceCore": 688,
+    "liveCore": 677,
+    "missingCore": 11,
+    "liveExtras": 0,
+    "contentDrifts": 0
+  },
+  "plan": {
+    "approvedMissing": 11,
+    "unapprovedMissing": 0,
+    "approvedFingerprints": [
+      "7acca7ef3dd44e3269b2ace4514cf6d576f91a48cc7ebcf0f4f0e33b24c3f9e1",
+      "571339f506d52a25d43dcbcce8f652e9b25fb776d4abb6940ff82d017e2c4205",
+      "5d8f13e7a97db67d98394e9913c22cd19cfd7665a01f1a6f95c3eda5ccd7c630",
+      "25d3eb151bd2eab7071f999cbd0ec1dfdacc439902b205a2ec3e11208a8739e5",
+      "5f5ab6627b488bcc023b393d613c8c9cc5c38a070c7651b1b86c4f91fb4a78ac",
+      "6cd90b3b466bb62a15f16a4832abfbf81bc5601b4948a1577ae67bed6eabbf26",
+      "8b1847e08485ebd6e97b636426d1d1ceae7ac45d9364dc49c6f50ff7520f9ac1",
+      "7a8efc34a993cefa8c627f5caf4474833a13adb31fa3afd1188cd8ee7419bf4f",
+      "325e9698b9910ab37ca180517f7f97465a11795ee66eba056b61c4d108e95ac9",
+      "048ad74446e93ad4d79bf14c7ba94eb239183b95e57a9d1b42754cff7adbc537",
+      "ed61810041432e81c148d4ad545ca46205fc0bd6cecafd08c3bcae118570352b"
+    ],
+    "unapprovedFingerprints": []
+  },
+  "outcome": {
+    "inserted": 11,
+    "skippedAlreadyPresent": 0,
+    "updates": 0,
+    "deletes": 0,
+    "created": [
+      {
+        "fingerprint": "7acca7ef3dd44e3269b2ace4514cf6d576f91a48cc7ebcf0f4f0e33b24c3f9e1",
+        "topic": "ICT:NONE:নেটওয়ার্কের প্রকারভেদ",
+        "text": "নেটওয়ার্ক টপোলজির মধ্যে সবচেয়ে বেশি নির্ভরযোগ্য টপোলজি কোনটি?"
+      },
+      {
+        "fingerprint": "571339f506d52a25d43dcbcce8f652e9b25fb776d4abb6940ff82d017e2c4205",
+        "topic": "ICT:NONE:নেটওয়ার্কের প্রকারভেদ",
+        "text": "PAN (Personal Area Network) এর সাধারণ ভৌগোলিক বিস্তৃতি কত?"
+      },
+      {
+        "fingerprint": "5d8f13e7a97db67d98394e9913c22cd19cfd7665a01f1a6f95c3eda5ccd7c630",
+        "topic": "ICT:NONE:বুলিয়ান অ্যালজেবরা",
+        "text": "ডি-মরগ্যানের প্রথম উপপাদ্য অনুযায়ী (A+B)' এর সমতুল্য রাশি কোনটি?"
+      },
+      {
+        "fingerprint": "25d3eb151bd2eab7071f999cbd0ec1dfdacc439902b205a2ec3e11208a8739e5",
+        "topic": "ICT:NONE:বুলিয়ান অ্যালজেবরা",
+        "text": "NAND গেটকে 'সার্বজনীন গেট' বলা হয় কেন?"
+      },
+      {
+        "fingerprint": "5f5ab6627b488bcc023b393d613c8c9cc5c38a070c7651b1b86c4f91fb4a78ac",
+        "topic": "ICT:NONE:HTML ট্যাগ পরিচিতি",
+        "text": "HTML টেবিলে একটি সেলকে দুইটি কলাম জুড়ে বিস্তৃত করতে কোন অ্যাট্রিবিউট ব্যবহৃত হয়?"
+      },
+      {
+        "fingerprint": "6cd90b3b466bb62a15f16a4832abfbf81bc5601b4948a1577ae67bed6eabbf26",
+        "topic": "ICT:NONE:HTML ট্যাগ পরিচিতি",
+        "text": "কোন HTML ট্যাগ দিয়ে অর্ডারড (ক্রমযুক্ত) লিস্ট তৈরি করা হয়?"
+      },
+      {
+        "fingerprint": "8b1847e08485ebd6e97b636426d1d1ceae7ac45d9364dc49c6f50ff7520f9ac1",
+        "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+        "text": "C ভাষায় for loop এর গঠনে কয়টি প্রধান অংশ থাকে?"
+      },
+      {
+        "fingerprint": "7a8efc34a993cefa8c627f5caf4474833a13adb31fa3afd1188cd8ee7419bf4f",
+        "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+        "text": "C প্রোগ্রামে while loop ও do-while loop এর মধ্যে মূল পার্থক্য কী?"
+      },
+      {
+        "fingerprint": "325e9698b9910ab37ca180517f7f97465a11795ee66eba056b61c4d108e95ac9",
+        "topic": "ICT:NONE:C প্রোগ্রামিং বেসিক",
+        "text": "নিচের কোনটি C ভাষার একটি সঠিক ডেটা টাইপ?"
+      },
+      {
+        "fingerprint": "048ad74446e93ad4d79bf14c7ba94eb239183b95e57a9d1b42754cff7adbc537",
+        "topic": "ICT:NONE:SQL কুয়েরি",
+        "text": "একটি টেবিলের বিদ্যমান রেকর্ড সংশোধন করতে কোন SQL কমান্ড ব্যবহৃত হয়?"
+      },
+      {
+        "fingerprint": "ed61810041432e81c148d4ad545ca46205fc0bd6cecafd08c3bcae118570352b",
+        "topic": "ICT:NONE:SQL কুয়েরি",
+        "text": "SQL এর WHERE ক্লজ ছাড়া DELETE কমান্ড চালালে কী ঘটবে?"
+      }
+    ],
+    "skipped": []
+  },
+  "after": {
+    "sourceCore": 688,
+    "liveCore": 688,
+    "missingCore": 0,
+    "liveExtras": 0,
+    "contentDrifts": 0,
+    "identityDuplicateGroups": 0,
+    "qualityBlockers": 0
+  },
+  "transaction": {
+    "isolation": "Serializable",
+    "advisoryLock": 2026080401,
+    "appendOnly": true
+  }
+}

@@ -1,0 +1,2521 @@
+// ===================================================================
+// HSC Ultimate — Prisma Schema (Phase 0)
+// শুধুমাত্র Science Group এর জন্য ডিজাইন করা হয়েছে
+// (Bangla, English, ICT + Physics, Chemistry, Biology, Higher Math)
+// ===================================================================
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// -------------------------------------------------------------
+// ENUMS
+// -------------------------------------------------------------
+
+enum SubjectCode {
+  BANGLA
+  ENGLISH
+  ICT
+  PHYSICS
+  CHEMISTRY
+  BIOLOGY
+  HIGHER_MATH
+}
+
+enum PaperNumber {
+  FIRST
+  SECOND
+  NONE // ICT-এর মতো এক পেপার বিশিষ্ট সাবজেক্টের জন্য
+}
+
+enum QuestionType {
+  MCQ
+  CQ // Creative Question
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum MasteryStatus {
+  NOT_STARTED
+  LEARNING
+  PRACTICING
+  MASTERED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum StudySessionType {
+  POMODORO
+  READING
+  PRACTICE
+  FLASHCARD_REVIEW
+}
+
+// Live Study Leaderboard এ "এখন কে কী করছে" দেখানোর জন্য — কোন
+// মডিউলে একটিভ থাকলে ইউজারের `currentActivityType` এই মান নেয়
+enum LiveActivityType {
+  PRACTICE // MCQ Practice/Smart Practice/Timed Drill
+  CQ // CQ Practice
+  FLASHCARD // Flashcard Review
+  POMODORO // Planner Pomodoro Timer
+  READING_ROOM // Reading Room (ইতিমধ্যে নিজস্ব heartbeat আছে, একই ইভেন্টে sync করা হয়)
+  MOCK_EXAM // Mock Exam/Live Exam/Admission Mock
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+// Duolingo-স্টাইল সাপ্তাহিক League Tier (নিচ থেকে উপরে)
+enum LeagueTier {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  DIAMOND
+}
+
+// AI Tutor এর উত্তর দেওয়ার ধরন — Khanmigo-অনুপ্রাণিত Socratic mode বনাম সরাসরি উত্তর
+enum AiTutorMode {
+  DIRECT // সরাসরি সম্পূর্ণ সমাধান/উত্তর দেয় (আগের ডিফল্ট আচরণ)
+  SOCRATIC // সরাসরি উত্তর না দিয়ে গাইডিং প্রশ্ন করে, ছাত্রকে নিজে চিন্তা করতে সাহায্য করে
+}
+
+// Study Pet Evolution Stage — Forest/Study Bunny-স্টাইল ভার্চুয়াল সঙ্গী,
+// carePoints অনুযায়ী ধাপে ধাপে বেড়ে ওঠে (lib/study-pet.ts এ থ্রেশহোল্ড লজিক)
+enum PetStage {
+  EGG // ডিম (শুরুর অবস্থা)
+  HATCHLING // ছোট বাচ্চা পেঁচা
+  OWLET // কিশোর পেঁচা
+  ADULT // পূর্ণবয়স্ক জ্ঞানী পেঁচা
+  SAGE // ঋষি পেঁচা (সর্বোচ্চ ধাপ)
+}
+
+// -------------------------------------------------------------
+// USER & AUTH
+// -------------------------------------------------------------
+
+model User {
+  id           String  @id @default(cuid())
+  name         String
+  email        String  @unique
+  passwordHash String?
+  image        String?
+  role         Role    @default(STUDENT)
+  // Incremented on password/role/ban changes so older JWT sessions are rejected.
+  authVersion  Int     @default(0)
+
+  // HSC-specific profile info
+  hscBatch Int       @default(2028) // পরীক্ষার বছর
+  board    String? // Dhaka, Rajshahi, Chattogram ইত্যাদি
+  examDate DateTime? // HSC পরীক্ষা শুরুর তারিখ (কাস্টম সেট করতে পারবে, না দিলে estimate ব্যবহার হবে)
+
+  // Language Preference — UI/content language (bn, en, banglish)
+  // Default: "banglish" (HSC students' popular mixed)
+  // Persisted to DB for multi-device sync, localStorage for instant load
+  // See lib/i18n.ts for locale definitions
+  preferredLanguage String @default("banglish")
+
+  // Personal Goal Setting (GPA Target) — MASTER_PLAN.md এর মূল ভিশনের
+  // "Goal Setting (weekly/monthly targets, GPA target)" আইটেম। ইউজার
+  // নিজের টার্গেট GPA সেট করতে পারবে (Settings/Analytics থেকে), Predicted
+  // GPA Card এ target-vs-actual comparison দেখানো হবে। null মানে টার্গেট
+  // সেট করা হয়নি (UI তে prompt দেখানো হবে সেট করার জন্য)।
+  targetGpa Float?
+
+  // Gamification stats
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  streakCount   Int       @default(0)
+  longestStreak Int       @default(0)
+  lastActiveAt  DateTime?
+
+  // Streak Freeze — Duolingo-স্টাইল "মিস হয়ে গেলেও স্ট্রিক বাঁচানোর" আইটেম।
+  // প্রতি সপ্তাহে auto-refill হয় (max ২টা জমা রাখা যায়), streakCount 0 হওয়া
+  // ঠেকাতে ব্যবহৃত হয় (lib/streak.ts এ লজিক আছে)।
+  streakFreezes      Int      @default(2)
+  lastFreezeRefillAt DateTime @default(now())
+
+  // Weekly League — Duolingo-স্টাইল সাপ্তাহিক XP-ভিত্তিক গ্রুপ প্রতিযোগিতা
+  leagueTier    LeagueTier @default(BRONZE)
+  weeklyXp      Int        @default(0) // চলতি সপ্তাহের XP (রবিবার রাতে রিসেট হয়)
+  weekStartDate DateTime   @default(now()) // বর্তমান লিগ-সপ্তাহ কবে শুরু হয়েছে তার ট্র্যাক
+
+  // AI Tutor পছন্দ — DIRECT (সরাসরি উত্তর) বা SOCRATIC (Khanmigo-স্টাইল গাইডেড প্রশ্ন)
+  aiTutorMode AiTutorMode @default(DIRECT)
+
+  // Public Profile/Portfolio — নিজের badge/streak/XP শেয়ারযোগ্য লিংকে
+  // দেখানোর ফিচার (Seesaw-অনুপ্রাণিত)। ডিফল্টে বন্ধ (privacy-first),
+  // ইউজার নিজে চালু করলে এবং একটা ইউনিক slug সেট করলে তবেই
+  // "/u/[slug]" পাবলিক পেজ কাজ করবে।
+  publicProfileEnabled Boolean @default(false)
+  profileSlug          String? @unique // যেমন "rafi-hsc28" — শুধু [a-z0-9-] অনুমোদিত
+
+  // Notification Digest — Weekly Email Summary (Resend দিয়ে সাপ্তাহিক
+  // প্রগ্রেস রিক্যাপ)। ডিফল্টে চালু (opt-out), ইউজার Settings থেকে বন্ধ
+  // করতে পারবে। lastDigestSentAt দিয়ে ট্র্যাক করা হয় যাতে একই সপ্তাহে
+  // দুইবার না পাঠানো হয় (cron/manual trigger বহুবার চাপলেও)।
+  emailDigestEnabled Boolean   @default(true)
+  lastDigestSentAt   DateTime?
+
+  // Admin Panel Power-up — Ban/Suspend সিস্টেম (student-only platform,
+  // কোনো Teacher/Parent role না — শুধু owner/admin এর জন্য moderation
+  // টুল)। Ban করা হলে ইউজার আর login করতে পারবে না (lib/auth.ts এর
+  // authorize() এ চেক), কিন্তু ডেটা মুছে ফেলা হয় না (soft — ভুলবশত ban
+  // হলে unban করলেই সব ফিরে আসে, hard delete এর মতো ধ্বংসাত্মক না)।
+  isBanned  Boolean   @default(false)
+  banReason String?
+  bannedAt  DateTime?
+  bannedBy  String? // যে admin ban করেছে তার userId (রেফারেন্স না, শুধু audit trail — admin ডিলিট হলেও ban রেকর্ড অক্ষত থাকা উচিত)
+
+  // Live Study Presence — "এখন কে কে পড়ছে" (Live Study Leaderboard)
+  // ফিচারের জন্য lightweight heartbeat। কোনো ভারী session-tracking
+  // মডেল না বানিয়ে established `lastActiveAt` (day-level streak) এর
+  // থেকে আলাদা একটা মিনিট-লেভেল timestamp — Practice/Drill/CQ/
+  // Flashcard Review/Pomodoro/Reading Room এর যেকোনো একটায় active
+  // থাকলেই আপডেট হয় (lib/live-activity.ts এর markUserActive())।
+  // `currentActivityAt` LIVE_PRESENCE_STALE_SEC (২ মিনিট) এর বেশি
+  // পুরনো হলে "অফলাইন" গণ্য হয় — কোনো cron/cleanup job লাগে না,
+  // read-time এ query তেই stale চেক করা হয়।
+  currentActivityAt   DateTime?
+  currentActivityType LiveActivityType?
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  quizAttempts             QuizAttempt[]
+  cqAttempts               CQAttempt[]
+  mockExamAttempts         MockExamAttempt[]
+  flashcardDecks           FlashcardDeck[]
+  tasks                    Task[]
+  studySessions            StudySession[]
+  userBadges               UserBadge[]
+  notifications            Notification[]
+  routineSlots             RoutineSlot[]
+  studyPlans               StudyPlan[]
+  bookmarks                Bookmark[]
+  bookmarkFolders          BookmarkFolder[]
+  notes                    Note[]
+  topicProgress            TopicProgress[]
+  chatMessages             ChatMessage[]
+  forumPosts               ForumPost[]
+  forumReplies             ForumReply[]
+  forumVotes               ForumVote[]
+  contentReports           ContentReport[]
+  academicReports          AcademicContentReport[]  @relation("AcademicReportAuthor")
+  reviewedAcademicReports  AcademicContentReport[]  @relation("AcademicReportReviewer")
+  initiatedAIReviewBatches AIReviewBatch[]           @relation("AIReviewBatchInitiator")
+  studyPet                 StudyPet?
+  studyGroupMember         StudyGroupMember?
+  readingRoomSessions      ReadingRoomSession[]
+  duelsAsChallenger        QuizDuel[]              @relation("DuelChallenger")
+  duelsAsOpponent          QuizDuel[]              @relation("DuelOpponent")
+  pdfDocuments             PdfDocument[]
+  customQuestionSets       CustomQuestionSet[]
+  liveExamSessions         LiveExamSession[]
+  quizBattlesOwned         QuizBattle[]            @relation("BattleOwner")
+  quizBattleParticipations QuizBattleParticipant[]
+  admissionMockAttempts    AdmissionMockAttempt[]
+  habits                   Habit[]
+  noteHelpfulVotes         NoteHelpfulVote[]
+  pushSubscriptions        PushSubscription[]
+  examChecklistItems       ExamChecklistItem[]
+  focusContract            FocusContract?
+  focusSessions            FocusSession[]           @relation("FocusSessionTarget")
+  initiatedFocusSessions   FocusSession[]           @relation("FocusSessionInitiator")
+  focusSchedules           FocusSchedule[]          @relation("FocusScheduleTarget")
+  createdFocusSchedules    FocusSchedule[]          @relation("FocusScheduleCreator")
+  nativeDevices            NativeDevice[]
+  contentReviews           ContentReview[]          @relation("ContentReviewReviewer")
+  contentReviewRevisions   ContentReviewRevision[]  @relation("ContentReviewRevisionReviewer")
+  policyAcceptances        PolicyAcceptance[]
+
+  @@index([leagueTier, weeklyXp])
+  @@index([currentActivityAt])
+  @@index([lastActiveAt])
+  @@index([createdAt])
+  @@map("users")
+}
+
+// Versioned acknowledgement of the public Privacy Notice, Terms and the
+// age/guardian assurance shown at registration or Settings. This is not a
+// blanket consent for optional processing: Focus, Accessibility, push, public
+// profile and analytics continue to use their own controls. Rows are immutable
+// through the application and cascade-delete with the account.
+model PolicyAcceptance {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  privacyVersion      String   @db.VarChar(32)
+  termsVersion        String   @db.VarChar(32)
+  ageAssuranceVersion String   @db.VarChar(32)
+  source              String   @default("REGISTRATION") @db.VarChar(32)
+  acceptedAt          DateTime @default(now())
+
+  @@unique([userId, privacyVersion, termsVersion, ageAssuranceVersion], map: "policy_acceptance_versions_key")
+  @@index([userId, acceptedAt])
+  @@map("policy_acceptances")
+}
+
+// Study Group এ ইউজারের ভূমিকা — OWNER গ্রুপ তৈরি করেছে (delete/rename করতে পারবে),
+// MEMBER সাধারণ সদস্য
+enum GroupMemberRole {
+  OWNER
+  MEMBER
+}
+
+// Peer Quiz Duel এর অবস্থা — Kahoot-স্টাইল ১-বনাম-১ প্রতিযোগিতা
+enum QuizDuelStatus {
+  WAITING // চ্যালেঞ্জার তৈরি করেছে, প্রতিপক্ষের অপেক্ষায় (public lobby তে দৃশ্যমান)
+  ACTIVE // দুইজনই যোগ দিয়েছে, উভয়ে উত্তর দিচ্ছে
+  COMPLETED // উভয়ে জমা দিয়েছে, ফলাফল নির্ধারিত হয়েছে
+  EXPIRED // অনেকক্ষণ কেউ যোগ দেয়নি (lobby ছেড়ে যাওয়ার মতো)
+}
+
+// -------------------------------------------------------------
+// STUDY PET (Virtual Pet Pomodoro Gamification — Forest/Study Bunny-স্টাইল)
+// -------------------------------------------------------------
+
+model StudyPet {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name          String   @default("বুদ্ধি") // ইউজার কাস্টম নাম দিতে পারবে
+  stage         PetStage @default(EGG)
+  carePoints    Int      @default(0) // প্রতি সম্পূর্ণ পোমোডোরো সেশনে বাড়ে, evolution এর ভিত্তি
+  happiness     Int      @default(100) // ০-১০০, প্রতিদিন একটু কমে, session দিলে বাড়ে (fully offline-safe হিসাব: lastCareAt থেকে হিসাব করা হয়)
+  totalSessions Int      @default(0) // এই পেটের জীবনে মোট সম্পূর্ণ পোমোডোরো সেশন সংখ্যা
+  lastCareAt    DateTime @default(now()) // সর্বশেষ কবে সেশন দিয়ে পেটের যত্ন নেওয়া হয়েছে (happiness decay হিসাবের জন্য)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("study_pets")
+}
+
+// -------------------------------------------------------------
+// STUDY GROUP / PARTY SYSTEM (Habitica-অনুপ্রাণিত)
+// -------------------------------------------------------------
+// ডিজাইন: একজন ইউজার একসাথে সর্বোচ্চ ১টা গ্রুপে থাকতে পারবে (সরলতার জন্য —
+// Habitica এ multi-party সাপোর্ট থাকলেও HSC Ultimate এর স্কেলে single-group
+// যথেষ্ট)। প্রতি সপ্তাহে গ্রুপের সবার weeklyXp যোগ করে একটা "সাপ্তাহিক লক্ষ্য"
+// (Weekly Goal) থাকে — লক্ষ্য পূরণ হলে সবাই বোনাস XP পায় (accountability
+// mechanic — কারো কম পারফরম্যান্স পুরো গ্রুপকে প্রভাবিত করে, Habitica এর
+// party boss battle এর simplified version)।
+
+model StudyGroup {
+  id           String  @id @default(cuid())
+  name         String
+  description  String?
+  inviteCode   String  @unique @default(cuid()) // শেয়ারযোগ্য কোড, নতুন সদস্য যোগ দিতে ব্যবহার করবে
+  weeklyGoalXp Int     @default(500) // গ্রুপের সাপ্তাহিক সম্মিলিত XP লক্ষ্য
+  maxMembers   Int     @default(10)
+
+  // 🐛 বাগ ফিক্স (প্রোঅ্যাক্টিভ XP-double-award অডিটে আবিষ্কৃত থিওরিটিক্যাল
+  // race condition): আগে `contributeGroupXp()` এ read-then-write প্যাটার্ন
+  // (beforeTotal fetch করে পরে compare) ছিল — কোনো atomic lock/transaction
+  // ছাড়া, তাই দুইজন সদস্য প্রায় একই মুহূর্তে XP contribute করলে উভয়েই
+  // independently থ্রেশহোল্ড ক্রস করা দেখতে পারতো এবং bonus দুইবার দেওয়া
+  // হতে পারতো (যদিও লাইভ টেস্টে বহুবার চেষ্টা করেও reproduce করা যায়নি,
+  // race window খুবই ছোট)। এই ফিল্ডটা atomic claim mechanism এর জন্য —
+  // `updateMany({ where: { weeklyBonusWeekStart: { not: currentWeekStart } }, ... })`
+  // দিয়ে DB-level row lock ব্যবহার করে নিশ্চিত করা হয় ঠিক একজনই bonus
+  // "claim" করতে পারবে প্রতি সপ্তাহে, race condition সম্পূর্ণভাবে দূর করা।
+  weeklyBonusWeekStart DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members StudyGroupMember[]
+
+  @@map("study_groups")
+}
+
+model StudyGroupMember {
+  id      String     @id @default(cuid())
+  groupId String
+  group   StudyGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId  String     @unique // একজন ইউজার একসাথে সর্বোচ্চ ১টা গ্রুপে থাকতে পারবে
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  role                GroupMemberRole @default(MEMBER)
+  weeklyXpContributed Int             @default(0) // এই সপ্তাহে এই সদস্য গ্রুপে কত XP যোগ করেছে
+  weekStartDate       DateTime        @default(now()) // lazy weekly reset এর জন্য (lib/league.ts এর প্যাটার্ন অনুসরণ করে)
+
+  joinedAt DateTime @default(now())
+
+  // Performance: study-group.ts/reading-room.ts এর member list/capacity
+  // count/weekly-bonus query সবই groupId দিয়ে ফিল্টার করে (প্রতিটা গ্রুপ
+  // পেজ ভিজিট+heartbeat এ চলে) — Postgres FK কলামে automatic index নেই
+  @@index([groupId])
+  @@map("study_group_members")
+}
+
+// -------------------------------------------------------------
+// READING ROOM (Virtual Study Room / Body Doubling — StudyClock/
+// Prodpod + বাংলাদেশী readingroombd.com থেকে গভীর research করে
+// অনুপ্রাণিত, docs/RESEARCH_UI_UX_READING_ROOM.md এ বিস্তারিত)
+// -------------------------------------------------------------
+// ডিজাইন দর্শন: camera/video/audio call ছাড়া টেক্সট+প্রেজেন্স-ভিত্তিক
+// "body doubling" — ৫টা প্রি-সেট থিমড রুমে (কোড-লেভেলে সংজ্ঞায়িত, DB তে
+// রুম মডেল নেই যাতে schema সরল থাকে) ইউজার "join" করে নিজের activity
+// (Self Study/Class/Break) সিলেক্ট করে, ঐচ্ছিক goal caption লেখে, এবং
+// অন্য যারা একই রুমে আছে তাদের দেখতে পায় (readingroombd.com এর
+// "বর্তমানে কে কী করছেন" থেকে অনুপ্রাণিত)। Polling-based heartbeat
+// (Quiz Battle/Duel এ প্রমাণিত প্যাটার্ন) দিয়ে presence বজায় থাকে —
+// heartbeat miss হলে (৯০ সেকেন্ডের বেশি) presence list থেকে বাদ পড়ে
+// (client সাইড হিসাবেই বন্ধ ট্যাব/নেটওয়ার্ক বিচ্ছিন্নতা handle হয়)।
+//
+// Gaming-প্রতিরোধ (readingroombd.com এর "অতিরিক্ত সময় বাদ দিন" ফিচার
+// থেকে শেখা শিক্ষা): totalFocusSec শুধু heartbeat call এর সময়ই বাড়ে,
+// এবং প্রতি heartbeat এ সর্বোচ্চ MAX_CREDIT_PER_HEARTBEAT_SEC (lib তে
+// সংজ্ঞায়িত) পর্যন্ত credit দেওয়া হয় — কেউ ট্যাব খুলে রেখে ল্যাপটপ বন্ধ
+// করলে বা অনেকক্ষণ পরে ফিরে এসে heartbeat পাঠালে পুরো gap টাইম credit
+// পাবে না। এছাড়া MAX_SESSION_DURATION_SEC পার হলে সার্ভার নিজে থেকেই
+// সেশন auto-end করে দেয়।
+// -------------------------------------------------------------
+
+// প্রি-সেট থিমড রুম — কোড-লেভেলে lib/reading-room.ts এ বিস্তারিত তথ্য
+// (নাম/emoji/বর্ণনা/ambient sound type) সংজ্ঞায়িত আছে, এখানে শুধু enum
+enum ReadingRoomTheme {
+  LOFI_CAFE // 🎧 Lo-fi ক্যাফে
+  DARK_ACADEMIA // 🕯️ ডার্ক একাডেমিয়া লাইব্রেরি
+  COZY_LIBRARY // 📚 কোজি লাইব্রেরি কর্নার
+  RAINY_WINDOW // 🌧️ বৃষ্টিভেজা জানালা
+  SILENT_HALL // 🤫 সাইলেন্ট স্টাডি হল (কোনো ambient sound না)
+}
+
+// readingroombd.com এর Self Tracker থেকে অনুপ্রাণিত activity ক্যাটাগরি,
+// কিন্তু সরলীকৃত (Prayer/Food/Sleep/Mobile বাদ দেওয়া হয়েছে — scope
+// অনুযায়ী শুধু পড়াশোনা-সম্পর্কিত অবস্থা ট্র্যাক করা হচ্ছে)
+enum ReadingRoomActivity {
+  SELF_STUDY
+  CLASS
+  BREAK
+}
+
+model ReadingRoomSession {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  room     ReadingRoomTheme
+  activity ReadingRoomActivity @default(SELF_STUDY)
+  goal     String? // ঐচ্ছিক caption, যেমন "পদার্থবিজ্ঞান অধ্যায় ৩ শেষ করব" (সর্বোচ্চ ১০০ ক্যারেক্টার)
+
+  startedAt       DateTime  @default(now())
+  lastHeartbeatAt DateTime  @default(now()) // প্রেজেন্স "লাইভ" কিনা যাচাইয়ের ভিত্তি (৯০s এর বেশি পুরনো হলে অফলাইন গণ্য)
+  endedAt         DateTime? // null মানে এখনো active (leave/timeout না হওয়া পর্যন্ত)
+  totalFocusSec   Int       @default(0) // gaming-প্রতিরোধ ক্যাপ সহ accumulate করা মোট ফোকাস সময়
+
+  createdAt DateTime @default(now())
+
+  // একই সময়ে একজন ইউজারের একাধিক active সেশন (endedAt: null) থাকা উচিত
+  // না — অ্যাপ-লেভেল লজিকে (lib/reading-room.ts) joinRoom() করার আগে
+  // পুরনো active সেশন থাকলে auto-end করে দেওয়া হয়।
+  @@index([room, endedAt, lastHeartbeatAt])
+  @@index([userId, endedAt])
+  @@map("reading_room_sessions")
+}
+
+// -------------------------------------------------------------
+// PEER QUIZ DUEL (Kahoot-অনুপ্রাণিত ১-বনাম-১ প্রতিযোগিতা)
+// -------------------------------------------------------------
+// ডিজাইন: WebSocket ছাড়া polling-based approach — চ্যালেঞ্জার একটা duel
+// তৈরি করে (WAITING, public lobby তে দৃশ্যমান), অন্য কেউ lobby থেকে সেটা
+// accept করলে ACTIVE হয়ে যায় ও উভয়ে একই ১০টা MCQ প্রশ্নের উত্তর দেয়।
+// উভয়ে জমা দিলে (বা টাইমার শেষ হলে) COMPLETED হয়ে বিজয়ী নির্ধারিত হয়
+// (স্কোর বেশি যার, সমান হলে কম সময় নেওয়া জন যেতে)।
+
+model QuizDuel {
+  id        String   @id @default(cuid())
+  // 🔧 সম্প্রসারণ (এই সেশনে, Smart Live Exam ভিশনের ধারাবাহিকতায়):
+  // আগে subjectId বাধ্যতামূলক ছিল (শুধু Subject question bank থেকেই
+  // Duel বানানো যেত)। এখন Quiz Battle/Live Exam এর established
+  // প্যাটার্ন অনুসরণ করে subjectId ঐচ্ছিক করা হয়েছে ও customSetId যোগ
+  // হয়েছে — ছবি থেকে AI-জেনারেটেড নিজের CustomQuestionSet (MCQ) দিয়েও
+  // এখন Duel চ্যালেঞ্জ তৈরি করা যায়। ঠিক দুটোর একটাই সেট থাকবে (app-level
+  // validation, DB constraint না — CustomQuestionSet এর মতোই raw string
+  // ID, কোনো @relation না, কারণ প্রশ্নের উৎস দুই রকম হতে পারে)।
+  subjectId String?
+  subject   Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  customSetId String? // CustomQuestionSet থেকে হলে সেট করা, না হলে null (Quiz Battle এর প্যাটার্ন)
+
+  challengerId String
+  challenger   User    @relation("DuelChallenger", fields: [challengerId], references: [id], onDelete: Cascade)
+  opponentId   String?
+  opponent     User?   @relation("DuelOpponent", fields: [opponentId], references: [id], onDelete: Cascade)
+
+  questionIds Json // এলোমেলোভাবে বাছাই করা ১০টা Question আইডি (pickRandom() দিয়ে)
+
+  challengerAnswers Json? // { questionId: userAnswer }
+  opponentAnswers   Json?
+  challengerScore   Int   @default(0)
+  opponentScore     Int   @default(0)
+  challengerTimeSec Int? // চ্যালেঞ্জার কত সেকেন্ডে জমা দিয়েছে
+  opponentTimeSec   Int?
+
+  winnerId String? // null হলে ড্র, না হলে বিজয়ীর userId
+  status   QuizDuelStatus @default(WAITING)
+
+  createdAt   DateTime  @default(now())
+  startedAt   DateTime? // opponent যোগ দেওয়ার সময়
+  completedAt DateTime?
+
+  // Performance: /api/duel ও getMyDuelHistory() উভয়ই "status + OR
+  // (challengerId, opponentId)" প্যাটার্নে query করে (প্রতিটা Duel পেজ
+  // ভিজিট+POST এ চলে) — Postgres FK কলামে automatic index নেই, OR
+  // condition এ দুই কলামেই আলাদা index থাকলে bitmap OR scan ব্যবহার করতে পারে
+  @@index([status, subjectId])
+  @@index([subjectId])
+  @@index([challengerId])
+  @@index([opponentId])
+  @@map("quiz_duels")
+}
+
+// -------------------------------------------------------------
+// LEARNING HUB: Subject → Chapter → Topic
+// -------------------------------------------------------------
+
+model Subject {
+  id       String      @id @default(cuid())
+  code     SubjectCode
+  name     String // "পদার্থবিজ্ঞান", "রসায়ন" ইত্যাদি
+  nameEn   String // "Physics", "Chemistry"
+  paper    PaperNumber @default(NONE)
+  colorHex String      @default("#6366f1") // UI card এর রঙ
+  order    Int         @default(0)
+
+  chapters         Chapter[]
+  mockExamAttempts MockExamAttempt[]
+  quizDuels        QuizDuel[]
+  quizBattles      QuizBattle[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([code, paper])
+  @@map("subjects")
+}
+
+model Chapter {
+  id        String  @id @default(cuid())
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  name   String
+  nameEn String
+  order  Int    @default(0)
+
+  topics Topic[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Learning Hub/Practice Hub এর Subject Detail পেজ প্রতিবার
+  // subjectId দিয়ে chapters নিয়ে আসে (nested include, খুবই ঘন ঘন hit হয়)
+  @@index([subjectId])
+  @@map("chapters")
+}
+
+model Topic {
+  id        String  @id @default(cuid())
+  chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  name        String
+  nameEn      String
+  order       Int     @default(0)
+  isImportant Boolean @default(false) // বোর্ড পরীক্ষায় গুরুত্বপূর্ণ কিনা
+
+  videoUrl      String?
+  notesMarkdown String? @db.Text
+  formulaSheet  String? @db.Text
+
+  // Mind Map ফিচার — AI-জেনারেটেড hierarchical concept tree (JSON, cache
+  // করা) — Topic নোট থেকে বানানো হয়, NotebookLM এর "Mind Map" ফিচার থেকে
+  // অনুপ্রাণিত
+  mindMap            Json?
+  mindMapGeneratedAt DateTime?
+
+  questions     Question[]
+  cqQuestions   CQQuestion[]
+  bookmarks     Bookmark[]
+  notes         Note[]
+  topicProgress TopicProgress[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Chapter Detail পেজ chapterId দিয়ে topics নিয়ে আসে
+  @@index([chapterId])
+  @@map("topics")
+}
+
+// -------------------------------------------------------------
+// CQ (সৃজনশীল প্রশ্ন) PRACTICE
+// -------------------------------------------------------------
+// বোর্ড পরীক্ষার স্টাইলে উদ্দীপক + ৪টা ধাপ (জ্ঞানমূলক/অনুধাবনমূলক/
+// প্রয়োগ/উচ্চতর দক্ষতা) বিশিষ্ট প্রশ্ন। ইউজার টেক্সট আকারে উত্তর লেখে,
+// AI সেটা মূল্যায়ন করে নম্বর ও ফিডব্যাক দেয়।
+
+model CQQuestion {
+  id      String @id @default(cuid())
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  stimulus String @db.Text // উদ্দীপক (context/scenario)
+
+  questionA String @db.Text // ক. জ্ঞানমূলক (১ নম্বর)
+  questionB String @db.Text // খ. অনুধাবনমূলক (২ নম্বর)
+  questionC String @db.Text // গ. প্রয়োগ (৩ নম্বর)
+  questionD String @db.Text // ঘ. উচ্চতর দক্ষতা (৪ নম্বর)
+
+  modelAnswerA String? @db.Text
+  modelAnswerB String? @db.Text
+  modelAnswerC String? @db.Text
+  modelAnswerD String? @db.Text
+
+  boardYear Int?
+  boardName String?
+
+  // Misconception Tagging CQ-তে সম্প্রসারণ (আগে শুধু MCQ Question মডেলে
+  // ছিল) — CQ এর evaluation AI-graded/subjective হওয়ায় "ভুল উত্তর" এর
+  // ধারণা MCQ এর মতো binary না, তাই এখানে "দুর্বল উত্তর" (weak attempt)
+  // সংজ্ঞায়িত করা হয়েছে totalScore একটা থ্রেশহোল্ডের নিচে থাকলে
+  // (দেখো lib/analytics.ts এর CQ_WEAK_ATTEMPT_THRESHOLD_PCT)। একই
+  // free-text ট্যাগ MCQ Question.misconceptionTag এর সাথে মিলিয়ে ব্যবহার
+  // করা যায় (Analytics এ দুই সোর্স থেকেই merge করে দেখানো হয়)।
+  misconceptionTag String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  attempts CQAttempt[]
+
+  // Performance: CQ Practice এ topicId দিয়ে প্রশ্ন লিস্ট আনা হয়
+  @@index([topicId])
+  @@map("cq_questions")
+}
+
+model CQAttempt {
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cqQuestionId String
+  cqQuestion   CQQuestion @relation(fields: [cqQuestionId], references: [id], onDelete: Cascade)
+
+  answerA String @db.Text
+  answerB String @db.Text
+  answerC String @db.Text
+  answerD String @db.Text
+
+  // AI মূল্যায়ন ফলাফল (প্রতিটা অংশের জন্য প্রাপ্ত নম্বর ও ফিডব্যাক)
+  scoreA     Int     @default(0) // সর্বোচ্চ ১
+  scoreB     Int     @default(0) // সর্বোচ্চ ২
+  scoreC     Int     @default(0) // সর্বোচ্চ ৩
+  scoreD     Int     @default(0) // সর্বোচ্চ ৪
+  totalScore Int     @default(0) // সর্বোচ্চ ১০
+  feedback   String? @db.Text // AI এর সামগ্রিক ফিডব্যাক (বাংলায়)
+  aiProvider String?
+
+  createdAt DateTime @default(now())
+
+  // Performance: gpa-predictor.ts প্রতিটা Predicted GPA কার্ড লোডে
+  // findMany({where:{userId}}) চালায়
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@index([cqQuestionId])
+  @@map("cq_attempts")
+}
+
+// প্রতিটা ইউজারের প্রতিটা টপিকে mastery progress ট্র্যাক করার জন্য
+model TopicProgress {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  status       MasteryStatus @default(NOT_STARTED)
+  completedPct Int           @default(0) // 0-100
+
+  // 🐛 বাগ ফিক্স (Task/StudyPlanItem এর একই xpAwarded প্যাটার্ন এখানেও
+  // প্রয়োগ করা হয়েছে, প্রোঅ্যাক্টিভ XP-double-award অডিটে আবিষ্কৃত):
+  // আগে MASTERED স্ট্যাটাসে POST করলেই (আগের state চেক না করে)
+  // প্রতিবার ২০ XP দেওয়া হতো — LEARNING↔MASTERED বার বার টগল করে
+  // অসীম XP farming সম্ভব ছিল (লাইভ টেস্টে ৩ বার MASTERED করিয়ে
+  // ৬০ XP পাওয়া গেছে প্রমাণ হিসেবে, প্রত্যাশিত ছিল ২০)। এই ফ্ল্যাগ
+  // পুরো টপিক-প্রোগ্রেসের জীবনচক্রে "একবার XP দেওয়া হয়েছে কিনা"
+  // ট্র্যাক করে — একবার true হয়ে গেলে ভবিষ্যতে যতবারই status
+  // পরিবর্তন হোক না কেন, আর কখনো XP দেওয়া হবে না।
+  xpAwarded Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, topicId])
+  @@index([topicId])
+  @@map("topic_progress")
+}
+
+// -------------------------------------------------------------
+// PRACTICE & ASSESSMENT ENGINE
+// -------------------------------------------------------------
+
+model Question {
+  id      String @id @default(cuid())
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  type          QuestionType @default(MCQ)
+  text          String       @db.Text
+  options       Json? // MCQ এর জন্য: ["ক", "খ", "গ", "ঘ"]
+  correctAnswer String // MCQ: "ক" / CQ: model answer summary
+  explanation   String?      @db.Text
+  difficulty    Difficulty   @default(MEDIUM)
+
+  // Wrong-Answer Misconception Tagging (FEATURE_RESEARCH_V3.md Tier ১,
+  // আইটেম ৪) — Admin ঐচ্ছিকভাবে এই প্রশ্নে ভুল করলে সাধারণত কোন
+  // misconception এর কারণে হয় তা ট্যাগ করতে পারবে (যেমন "চিহ্ন ভুল",
+  // "সূত্র গুলিয়ে ফেলা")। Analytics Dashboard এ ইউজারের ভুল উত্তরগুলো এই
+  // ট্যাগ অনুযায়ী গ্রুপ করে "তুমি বারবার এই ধরনের ভুল করছো" প্যাটার্ন
+  // দেখানো হয়। null থাকলে সেই প্রশ্নের ভুল উত্তর কোনো গ্রুপে পড়বে না।
+  misconceptionTag String?
+
+  boardYear Int? // যেমন 2023, 2024
+  boardName String? // Dhaka Board, Rajshahi Board ইত্যাদি
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  quizAttemptAnswers QuizAttemptAnswer[]
+
+  // Performance: Practice/Mock Exam এ topicId দিয়ে randomly প্রশ্ন বাছাই
+  // করা হয় (findMany({where:{topicId}}))
+  @@index([topicId])
+  @@map("questions")
+}
+
+model QuizAttempt {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // কোন সাবজেক্ট/চ্যাপ্টারের উপর প্র্যাকটিস হয়েছে (analytics এর জন্য দরকার)
+  subjectId String?
+  chapterId String?
+  quizType  String  @default("practice") // "practice" | "model_test"
+
+  score          Int @default(0)
+  totalMarks     Int @default(0)
+  totalQuestions Int @default(0)
+  timeTakenSec   Int @default(0)
+
+  answers QuizAttemptAnswer[]
+
+  createdAt DateTime @default(now())
+
+  // Performance: analytics.ts, gpa-predictor.ts, gamification.ts প্রতিটা
+  // ইউজারের নিজের attempt history বার বার findMany({where:{userId}}) দিয়ে
+  // আনে (প্রতিটা প্র্যাকটিস সেশনের পরে hit হয়) — Postgres এ Prisma foreign
+  // key কলামে automatic index তৈরি করে না, তাই ম্যানুয়ালি যোগ করা হলো
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@index([subjectId])
+  @@map("quiz_attempts")
+}
+
+model QuizAttemptAnswer {
+  id            String      @id @default(cuid())
+  quizAttemptId String
+  quizAttempt   QuizAttempt @relation(fields: [quizAttemptId], references: [id], onDelete: Cascade)
+  questionId    String
+  question      Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  userAnswer String
+  isCorrect  Boolean
+
+  // Confidence-Based Answering (FEATURE_RESEARCH_V3.md Tier ২, আইটেম ৭,
+  // Brainscape থেকে অনুপ্রাণিত) — MCQ উত্তর দেওয়ার সময় ইউজার ঐচ্ছিকভাবে
+  // "কতটা নিশ্চিত?" বেছে নিতে পারবে: "SURE" (নিশ্চিত) বা "NOT_SURE"
+  // (অনুমান করে উত্তর দিয়েছে)। SURE দিয়ে ভুল করলে সেটা সত্যিকারের
+  // misconception (guess না) — Analytics এ আলাদাভাবে হাইলাইট করা হয়।
+  // ঐচ্ছিক (plain String, enum না — DB তে আগে থেকেই এই কলাম ছিল সাদাসিধা
+  // TEXT হিসেবে, তাই সেই টাইপের সাথে সামঞ্জস্য রাখা হয়েছে), না দিলে null
+  // থাকবে (backward compatible, পুরনো সব attempt এ null থাকবে)।
+  confidence String?
+
+  // Performance: getWeakTopics() এ quizAttempt:{userId} relation filter দিয়ে
+  // join হয় (Weak Topic Detection, Analytics Dashboard এর মূল ফিচার) —
+  // quizAttemptId ইনডেক্স ছাড়া প্রতিটা কল টেবিল স্ক্যান করত
+  @@index([quizAttemptId])
+  @@index([questionId])
+  @@map("quiz_attempt_answers")
+}
+
+// -------------------------------------------------------------
+// FLASHCARDS & SPACED REPETITION (SM-2 Algorithm)
+// -------------------------------------------------------------
+
+model FlashcardDeck {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name        String
+  subjectCode SubjectCode?
+
+  // Community Shared Deck (AnkiWeb-অনুপ্রাণিত) — ইউজার চাইলে নিজের ডেক
+  // পাবলিক করে অন্যরা "Discover" পেজ থেকে দেখে নিজের একাউন্টে ক্লোন
+  // (import) করতে পারবে। ডিফল্টে বন্ধ (private), description ঐচ্ছিক
+  // (ডেকের বিষয়বস্তু নিয়ে সংক্ষিপ্ত বিবরণ, discover পেজে দেখানো হয়)।
+  isPublic    Boolean @default(false)
+  description String? @db.Text
+  importCount Int     @default(0) // কতবার অন্য ইউজার এই ডেক ক্লোন করেছে (জনপ্রিয়তা নির্দেশক)
+
+  flashcards Flashcard[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Discover পেজ isPublic+subjectCode দিয়ে ফিল্টার করে,
+  // importCount দিয়ে জনপ্রিয়তা অনুযায়ী sort করে
+  @@index([userId])
+  @@index([isPublic, subjectCode])
+  @@map("flashcard_decks")
+}
+
+// FSRS Algorithm Upgrade (SM-2 থেকে) — কোন algorithm কার্ডে ব্যবহার হচ্ছে
+// তার জন্য enum। বিদ্যমান (migration-এর আগের) কার্ড SM2 তেই থাকবে, নতুন
+// তৈরি হওয়া কার্ড FSRS পাবে (backward-compatible, non-breaking approach)।
+enum SrsAlgorithm {
+  SM2
+  FSRS
+}
+
+// FSRS card state — New (কখনো review হয়নি), Learning (শেখার ধাপে),
+// Review (normal spaced review চক্রে), Relearning (ভুলে যাওয়ার পর আবার শেখা)
+enum FsrsCardState {
+  NEW
+  LEARNING
+  REVIEW
+  RELEARNING
+}
+
+// Flashcard এর ধরন — BASIC (সাধারণ প্রশ্ন-উত্তর), CLOZE (Anki-অনুপ্রাণিত
+// ফাঁকা-পূরণ কার্ড, "{{উত্তর}}" সিনট্যাক্স দিয়ে টেক্সটের মাঝে ফাঁকা তৈরি করা),
+// অথবা IMAGE_OCCLUSION (ছবির নির্দিষ্ট অংশ ঢেকে মুখস্থ করা — ডায়াগ্রাম/
+// ম্যাপ/গ্রাফের লেবেল মুখস্থ করার জন্য উপযোগী, Anki-অনুপ্রাণিত)।
+// সরলীকরণ: Anki এর c1/c2 আলাদা নাম্বারিং সিস্টেম ব্যবহার না করে, একটা
+// CLOZE/IMAGE_OCCLUSION কার্ডের সব ফাঁকা/বক্স একসাথেই রিভিউ এর সময়
+// reveal হয় (একটা কার্ড = একটা রিভিউ ইউনিট, HSC ছাত্রদের জন্য সহজবোধ্য
+// রাখতে, এবং বিদ্যমান FSRS/SM-2 SRS ইনফ্রাস্ট্রাকচার অপরিবর্তিত রাখতে)।
+enum FlashcardType {
+  BASIC
+  CLOZE
+  IMAGE_OCCLUSION
+}
+
+model Flashcard {
+  id     String        @id @default(cuid())
+  deckId String
+  deck   FlashcardDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+
+  cardType FlashcardType @default(BASIC)
+
+  front    String  @db.Text
+  back     String  @db.Text
+  imageUrl String? // Image occlusion এর মূল ছবি (data URL হিসেবে সংরক্ষিত, বিদ্যমান OCR ফ্লো এর মতো)
+
+  // Image Occlusion এর ঢাকা অংশগুলোর কো-অর্ডিনেট — শতাংশ-ভিত্তিক (0-100)
+  // যাতে যেকোনো স্ক্রিন সাইজে সঠিকভাবে render হয়। ফরম্যাট:
+  // [{ x, y, width, height, label? }, ...] — শুধু IMAGE_OCCLUSION কার্ডে ব্যবহৃত
+  occlusionBoxes Json?
+
+  // কোন algorithm এই কার্ডে ব্যবহার হচ্ছে (নতুন কার্ড ডিফল্টে FSRS পাবে)
+  srsAlgorithm SrsAlgorithm @default(FSRS)
+
+  // SM-2 algorithm fields (পুরনো কার্ডের জন্য, backward compatibility)
+  easeFactor   Float     @default(2.5)
+  intervalDays Int       @default(0)
+  repetitions  Int       @default(0)
+  dueDate      DateTime  @default(now())
+  lastReviewed DateTime?
+
+  // FSRS algorithm fields (নতুন, শুধু srsAlgorithm=FSRS কার্ডে ব্যবহৃত)
+  fsrsStability     Float?
+  fsrsDifficulty    Float?
+  fsrsScheduledDays Int?          @default(0)
+  fsrsReps          Int?          @default(0)
+  fsrsLapses        Int?          @default(0)
+  fsrsState         FsrsCardState @default(NEW)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Deck Detail পেজ ও Due Cards API প্রতিবার deckId দিয়ে
+  // ফিল্টার করে (findMany({where:{deckId}})), এবং dueDate দিয়ে sort/filter
+  // হয় Review Runner এ — composite index দুটোই কভার করে
+  @@index([deckId])
+  @@index([deckId, dueDate])
+  @@map("flashcards")
+}
+
+// -------------------------------------------------------------
+// PLANNER & PRODUCTIVITY
+// -------------------------------------------------------------
+
+model Task {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  description String?      @db.Text
+  dueDate     DateTime?
+  priority    TaskPriority @default(MEDIUM)
+  status      TaskStatus   @default(TODO)
+  subjectCode SubjectCode?
+
+  // 🐛 বাগ ফিক্স (Documentation Debt এ known limitation হিসেবে চিহ্নিত
+  // ছিল): আগে শুধু "আগের status DONE ছিল কিনা" চেক করে XP দেওয়া হতো,
+  // কিন্তু TODO→DONE→TODO→DONE এভাবে বার বার toggle করলে প্রতিবারই
+  // "আগে DONE ছিল না" শর্ত সত্যি হয়ে যেত, ফলে প্রতিবার XP পাওয়া যেত
+  // (XP farming সম্ভব ছিল)। এই ফ্ল্যাগ পুরো টাস্কের জীবনচক্রে "এই
+  // টাস্কের জন্য XP ইতিমধ্যে একবার দেওয়া হয়েছে কিনা" ট্র্যাক করে —
+  // একবার true হয়ে গেলে ভবিষ্যতে যতবারই DONE করা হোক না কেন, আর কখনো
+  // XP দেওয়া হবে না।
+  xpAwarded Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("tasks")
+}
+
+model StudySession {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  subjectCode SubjectCode?
+  type        StudySessionType @default(POMODORO)
+  startTime   DateTime
+  endTime     DateTime?
+  durationSec Int              @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([userId, createdAt])
+  @@map("study_sessions")
+}
+
+// -------------------------------------------------------------
+// GAMIFICATION
+// -------------------------------------------------------------
+
+model Badge {
+  id          String @id @default(cuid())
+  code        String @unique // প্রোগ্রামেটিক্যালি চেক করার জন্য stable identifier
+  name        String
+  nameEn      String
+  description String
+  iconEmoji   String @default("🏆")
+  criteria    String // human-readable, e.g. "৭ দিন স্ট্রিক সম্পন্ন করলে"
+
+  userBadges UserBadge[]
+
+  createdAt DateTime @default(now())
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId String
+  badge   Badge  @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+  @@index([badgeId])
+  @@map("user_badges")
+}
+
+// -------------------------------------------------------------
+// AI CHAT (Doubt Solver)
+// -------------------------------------------------------------
+
+model ChatMessage {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  role      String // "user" | "assistant"
+  content   String       @db.Text
+  imageUrl  String? // ইউজার ছবি আপলোড করলে (data URL হিসেবে সংরক্ষিত)
+  provider  String? // কোন AI provider দিয়ে উত্তর এসেছে (groq/mistral/cerebras/openrouter)
+  tutorMode AiTutorMode? // assistant মেসেজের ক্ষেত্রে কোন মোডে (DIRECT/SOCRATIC) উত্তর তৈরি হয়েছে
+
+  createdAt DateTime @default(now())
+
+  // Performance: AI Doubt Solver পেজ লোডের সময় (GET) ও প্রতিটা নতুন
+  // মেসেজের সময় (POST, context history আনতে) — দুটোতেই userId+orderBy
+  // createdAt দিয়ে কোয়েরি হয়, এটা সবচেয়ে ঘন ঘন hit হওয়া টেবিলগুলোর একটা
+  @@index([userId, createdAt])
+  @@map("chat_messages")
+}
+
+// -------------------------------------------------------------
+// NOTIFICATIONS, BOOKMARKS, NOTES
+// -------------------------------------------------------------
+
+model Notification {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title String
+  body  String
+  link  String? // ক্লিক করলে কোথায় নিয়ে যাবে (যেমন /forum/postId, /badges)
+  read  Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId, read])
+  @@index([userId, read, createdAt])
+  @@map("notifications")
+}
+
+// -------------------------------------------------------------
+// PUSH NOTIFICATION (Web Push API, VAPID) — MASTER_PLAN.md মূল ভিশনের
+// একটা অসম্পূর্ণ আইটেম: "Push Notification (browser push, streak/exam
+// reminder)"
+// -------------------------------------------------------------
+// একটা ব্রাউজার/ডিভাইসের push subscription (endpoint + encryption keys)
+// সংরক্ষণ করে। ইউজার একাধিক ডিভাইস/ব্রাউজার থেকে subscribe করতে পারবে
+// (যেমন ফোন + ল্যাপটপ দুটোতেই) — তাই একটা user এর একাধিক
+// PushSubscription থাকতে পারে, endpoint ইউনিক (একই ডিভাইস দুইবার
+// subscribe করলে upsert হয়)।
+model PushSubscription {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  endpoint String @unique @db.Text // Push service URL (FCM/Mozilla/ইত্যাদি)
+  p256dh   String @db.Text // Encryption public key
+  auth     String @db.Text // Encryption auth secret
+
+  createdAt DateTime @default(now())
+
+  // Performance: createNotification() প্রতিটা নোটিফিকেশনে userId দিয়ে
+  // সব সাবস্ক্রিপশন খুঁজে push পাঠায় (ঘন ঘন কল হয়)
+  @@index([userId])
+  @@map("push_subscriptions")
+}
+
+model Bookmark {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  // Bookmark Collections/Folders — ইউজার এখন টপিক বুকমার্ক গুলো কাস্টম
+  // ফোল্ডারে গুছিয়ে রাখতে পারবে (যেমন "পরীক্ষার আগে রিভিশন", "দুর্বল
+  // টপিক")। null মানে "সব"/unorganized (কোনো ফোল্ডারে নেই) — folder
+  // ডিলিট হলেও bookmark নিজে মুছে যায় না, শুধু folderId null হয়ে যায়
+  // (onDelete: SetNull, ডেটা হারানো ঠেকাতে)।
+  folderId String?
+  folder   BookmarkFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, topicId])
+  // Performance: Saved Topics পেজে folderId দিয়ে গ্রুপ/ফিল্টার করা হয়
+  @@index([userId, folderId])
+  // Reverse FK/cascade lookups are not covered by userId-leading indexes.
+  @@index([topicId])
+  @@index([folderId])
+  @@map("bookmarks")
+}
+
+// Bookmark Collections/Folders — MASTER_PLAN.md এর নতুন ফিচার আইডিয়া
+// (ইউজারকে ৩টা অপশন দেওয়া হয়েছিল, "নিজে সিদ্ধান্ত নিব" বেছে নিয়েছেন,
+// এই ফিচার বেছে নেওয়া হয়েছে) — established Habit/RoutineSlot এর মতোই
+// per-user simple resource, কোনো জটিল nested-folder সাপোর্ট নেই
+// (flat structure, HSC ছাত্রদের জন্য যথেষ্ট)।
+model BookmarkFolder {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name     String
+  colorHex String @default("#6366f1")
+  order    Int    @default(0)
+
+  bookmarks Bookmark[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Saved Topics পেজে userId দিয়ে ফোল্ডার লিস্ট আনা হয়
+  @@index([userId])
+  @@map("bookmark_folders")
+}
+
+model Note {
+  id      String @id @default(cuid())
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topicId String
+  topic   Topic  @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  content String @db.Text
+
+  // Peer Note Sharing (MASTER_PLAN.md মূল ভিশনের অসম্পূর্ণ আইটেম) —
+  // Community Shared Flashcard Deck এর একই প্যাটার্ন অনুসরণ করে টপিক
+  // নোটেও প্রসারিত করা হয়েছে। ডিফল্টে বন্ধ (private), ইউজার চাইলে
+  // পাবলিশ করে সহপাঠীদের সাথে শেয়ার করতে পারবে।
+  isPublic     Boolean @default(false)
+  helpfulCount Int     @default(0) // অন্য ইউজাররা "উপকারী" ভোট দিলে বাড়ে
+
+  helpfulVotes NoteHelpfulVote[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, topicId])
+  // Performance: একই টপিকের সব পাবলিক নোট (নিজেরটা বাদে) খুঁজে বের করা
+  // + helpfulCount দিয়ে sort করা (Peer Note ব্রাউজিং এর মূল কোয়েরি)
+  @@index([topicId, isPublic])
+  @@map("notes")
+}
+
+// Peer Note Sharing — "উপকারী" ভোট (per-user, টগল করা যায়, ডাবল ভোট
+// আটকাতে @@unique ব্যবহার করা হয়েছে)
+model NoteHelpfulVote {
+  id     String @id @default(cuid())
+  noteId String
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([noteId, userId])
+  @@index([userId])
+  @@map("note_helpful_votes")
+}
+
+// -------------------------------------------------------------
+// COMMUNITY / DISCUSSION FORUM
+// -------------------------------------------------------------
+// সাবজেক্ট-ভিত্তিক প্রশ্নোত্তর ফোরাম — শিক্ষার্থীরা প্রশ্ন করবে, একে
+// অপরকে সাহায্য করবে (Stack Overflow / Reddit স্টাইল), upvote/downvote
+// দিয়ে সেরা উত্তর উপরে উঠে আসবে।
+
+enum PostCategory {
+  QUESTION // কারো একটা নির্দিষ্ট প্রশ্ন আছে, সাহায্য দরকার
+  DISCUSSION // সাধারণ আলোচনা
+  NOTE_SHARE // নোট/রিসোর্স শেয়ার
+  ANNOUNCEMENT // গুরুত্বপূর্ণ ঘোষণা (সাধারণত admin/mentor দের জন্য)
+}
+
+model ForumPost {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title       String
+  content     String       @db.Text
+  category    PostCategory @default(QUESTION)
+  subjectCode SubjectCode? // কোন সাবজেক্ট নিয়ে পোস্ট (ঐচ্ছিক, না দিলে "সাধারণ")
+
+  isPinned   Boolean @default(false) // Admin দিয়ে পিন করা পোস্ট উপরে থাকবে
+  isResolved Boolean @default(false) // প্রশ্নের সমাধান হয়ে গেলে ইউজার নিজে মার্ক করতে পারবে
+  viewCount  Int     @default(0)
+
+  replies ForumReply[]
+  votes   ForumVote[]
+  reports ContentReport[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Forum লিস্ট পেজ category/subjectCode দিয়ে ফিল্টার এবং
+  // isPinned+createdAt দিয়ে sort করে (প্রতিটা /forum পেজ ভিজিটে চলে)
+  @@index([category])
+  @@index([subjectCode])
+  @@index([isPinned, createdAt])
+  @@index([userId])
+  @@map("forum_posts")
+}
+
+model ForumReply {
+  id     String    @id @default(cuid())
+  postId String
+  post   ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId String
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  content      String  @db.Text
+  isBestAnswer Boolean @default(false) // পোস্টের মালিক এই রিপ্লাইকে সেরা উত্তর হিসেবে মার্ক করতে পারবে
+
+  // 🐛 বাগ ফিক্স (XP-Double-Award প্যাটার্ন, Task/StudyPlanItem/TopicProgress
+  // এর একই সমাধান): শুধু `isBestAnswer=false` চেক করলে toggle-cycling
+  // এড়ানো যায় না — Reply A কে mark, Reply B কে mark (A এর isBestAnswer
+  // স্বাভাবিকভাবেই false হয়ে যায়), আবার Reply A কে mark করলে সেটা
+  // "isBestAnswer=false থেকে নতুন selection" হিসেবে বৈধ দেখায় এবং আবার
+  // XP দিয়ে ফেলে। তাই একটা স্থায়ী, কখনো reset না হওয়া ফ্ল্যাগ দরকার যা
+  // "এই reply এর জন্য owner ইতিমধ্যে কখনো best-answer XP নিয়েছে কিনা"
+  // ট্র্যাক করে (isBestAnswer টগলিং থেকে সম্পূর্ণ স্বাধীন)।
+  bestAnswerXpAwarded Boolean @default(false)
+
+  votes   ForumVote[]
+  reports ContentReport[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Post Detail পেজে postId দিয়ে সব reply নিয়ে আসা হয় (nested
+  // include, প্রতিটা পোস্ট ভিউতে চলে)
+  @@index([postId])
+  @@index([userId])
+  @@map("forum_replies")
+}
+
+// একটা vote হয় Post এর উপর, নয়তো Reply এর উপর (দুটোর একটা হবে, দুটোই না)
+model ForumVote {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId  String?
+  post    ForumPost?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  replyId String?
+  reply   ForumReply? @relation(fields: [replyId], references: [id], onDelete: Cascade)
+
+  value Int // +1 (upvote) অথবা -1 (downvote)
+
+  createdAt DateTime @default(now())
+
+  // Performance: vote route এ voteScore হিসাব করতে সরাসরি findMany({where:
+  // {postId}}) / findMany({where:{replyId}}) চলে — composite unique এ
+  // userId leftmost থাকায় postId/replyId দিয়ে একা ফিল্টার করলে সেই ইনডেক্স
+  // ব্যবহার হয় না, তাই আলাদা single-column ইনডেক্স দরকার
+  @@unique([userId, postId])
+  @@unique([userId, replyId])
+  @@index([postId])
+  @@index([replyId])
+  @@map("forum_votes")
+}
+
+// ===================================================================
+// Content Report / Flagging System — ইউজাররা Forum Post/Reply রিপোর্ট
+// করতে পারবে (স্প্যাম, অশ্লীল ভাষা, ভুল তথ্য ইত্যাদি), Admin Panel এ
+// আলাদা "Reports" ট্যাবে সব pending রিপোর্ট রিভিউ করে resolve/dismiss
+// করা যায়। বিদ্যমান Forum Moderation (pin/delete) এর পাশাপাশি একটা নতুন
+// স্তর — এখন admin কে সব পোস্ট ম্যানুয়ালি স্ক্যান করতে হবে না, ইউজাররাই
+// সমস্যাযুক্ত কন্টেন্ট চিহ্নিত করে দেবে।
+// -------------------------------------------------------------------
+// একটা রিপোর্ট হয় Post এর উপর, নয়তো Reply এর উপর (ForumVote এর প্যাটার্ন
+// অনুসরণ করা হয়েছে — দুটোর একটা optional foreign key নন-নাল থাকবে)।
+// ===================================================================
+enum ContentReportReason {
+  SPAM // অপ্রাসঙ্গিক বিজ্ঞাপন/বারবার পোস্ট
+  OFFENSIVE // অশ্লীল/আপত্তিকর ভাষা
+  MISINFORMATION // ভুল/বিভ্রান্তিকর তথ্য (একাডেমিক ভুল)
+  HARASSMENT // অন্য ইউজারকে হয়রানি/ব্যক্তিগত আক্রমণ
+  OTHER // অন্য কোনো কারণ (details এ লেখা থাকবে)
+}
+
+enum ContentReportStatus {
+  PENDING // এখনো admin রিভিউ করেনি
+  RESOLVED // admin অ্যাকশন নিয়েছে (যেমন পোস্ট ডিলিট করেছে)
+  DISMISSED // admin রিভিউ করে দেখেছে সমস্যা নেই, খারিজ করেছে
+}
+
+// Final review decisions come only from an authenticated ADMIN or the explicit
+// two-provider AI consensus engine. Structural scanners alone never approve.
+enum ContentReviewTargetType {
+  CORE_MCQ
+  ADMISSION_MCQ
+  CQ
+  TOPIC_NOTE
+}
+
+enum ContentReviewStatus {
+  APPROVED
+  NEEDS_CORRECTION
+  REJECTED
+  AI_CONFLICT
+  SOURCE_REQUIRED
+}
+
+enum ContentReviewerKind {
+  ADMIN
+  AI
+}
+
+enum AIReviewVerdict {
+  APPROVE
+  NEEDS_CORRECTION
+  SOURCE_REQUIRED
+  CONFLICT
+  ERROR
+}
+
+enum AIReviewBatchStatus {
+  RUNNING
+  COMPLETED
+  PARTIAL
+  FAILED
+}
+
+enum AcademicReportReason {
+  WRONG_ANSWER
+  FACTUAL_ERROR
+  EXPLANATION_ERROR
+  TYPO_FORMATTING
+  OUTDATED_SOURCE
+  DUPLICATE
+  NOTE_FORMULA_ERROR
+  OTHER
+}
+
+model ContentReport {
+  id     String @id @default(cuid())
+  userId String // যে ইউজার রিপোর্ট করেছে
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  postId  String?
+  post    ForumPost?  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  replyId String?
+  reply   ForumReply? @relation(fields: [replyId], references: [id], onDelete: Cascade)
+
+  reason  ContentReportReason
+  details String?             @db.Text // ঐচ্ছিক, "OTHER" রিজনে প্রায়ই দরকার হয়
+  status  ContentReportStatus @default(PENDING)
+
+  reviewedById String? // কোন admin রিভিউ করেছে (ঐচ্ছিক, ট্র্যাকিং এর জন্য)
+  reviewedAt   DateTime?
+
+  createdAt DateTime @default(now())
+
+  // Performance: Admin Reports প্যানেল status অনুযায়ী ফিল্টার করে
+  // (PENDING সবার আগে দেখায়), এবং একই ইউজার একই পোস্ট/রিপ্লাই বারবার
+  // রিপোর্ট করতে পারবে না (spam-report প্রতিরোধ)
+  @@unique([userId, postId])
+  @@unique([userId, replyId])
+  @@index([status, createdAt])
+  @@index([postId])
+  @@index([replyId])
+  @@map("content_reports")
+}
+
+// Student-reported academic issue bound to the exact content hash that was
+// visible when the report was filed. A later content edit makes the report
+// historical/stale but never rewrites the original evidence.
+model AcademicContentReport {
+  id         String                  @id @default(cuid())
+  userId     String
+  user       User                    @relation("AcademicReportAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  targetType ContentReviewTargetType
+  targetId   String
+  contentHash String                 @db.VarChar(64)
+  reason     AcademicReportReason
+  details    String?                 @db.Text
+  status     ContentReportStatus     @default(PENDING)
+
+  reviewedById String?
+  reviewedBy   User?    @relation("AcademicReportReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+  resolutionNote String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, targetType, targetId, contentHash, reason], map: "academic_report_exact_issue_key")
+  @@index([status, createdAt])
+  @@index([targetType, targetId, status])
+  @@index([userId, createdAt])
+  @@index([reviewedById, reviewedAt])
+  @@map("academic_content_reports")
+}
+
+model ContentReview {
+  id         String                  @id @default(cuid())
+  targetType ContentReviewTargetType
+  targetId   String
+  status     ContentReviewStatus
+
+  reviewerId   String?
+  reviewer     User?               @relation("ContentReviewReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  reviewerKind ContentReviewerKind @default(ADMIN)
+
+  reviewNote         String? @db.Text
+  sourceUrl          String? @db.VarChar(2048)
+  aiConfidence       Float?
+  aiEvidence         Json?
+  reviewMethodVersion String? @db.VarChar(64)
+  // Hash of the exact content reviewed. A mismatch means the review is stale
+  // and must never count as a current approval.
+  contentHash String? @db.VarChar(64)
+  reviewedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  revisions ContentReviewRevision[]
+
+  @@unique([targetType, targetId])
+  @@index([status, updatedAt])
+  @@index([reviewerId, updatedAt])
+  @@map("content_reviews")
+}
+
+// Immutable evidence/history for every human review decision. The current
+// ContentReview row is convenient for filtering; revisions preserve history.
+model ContentReviewRevision {
+  id       String        @id @default(cuid())
+  reviewId String
+  review   ContentReview @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  status      ContentReviewStatus
+  contentHash String              @db.VarChar(64)
+  reviewNote  String?             @db.Text
+  sourceUrl           String?             @db.VarChar(2048)
+  reviewerId          String?
+  reviewer            User?               @relation("ContentReviewRevisionReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  reviewerKind        ContentReviewerKind @default(ADMIN)
+  aiConfidence        Float?
+  aiEvidence          Json?
+  reviewMethodVersion String?             @db.VarChar(64)
+  createdAt           DateTime            @default(now())
+
+  @@index([reviewId, createdAt])
+  @@index([reviewerId, createdAt])
+  @@map("content_review_revisions")
+}
+
+model AIReviewBatch {
+  id        String              @id @default(cuid())
+  status    AIReviewBatchStatus @default(RUNNING)
+  targetType ContentReviewTargetType?
+  requestedCount Int
+  processedCount Int @default(0)
+  approvedCount Int @default(0)
+  flaggedCount Int @default(0)
+  conflictCount Int @default(0)
+  errorCount Int @default(0)
+  methodVersion String @db.VarChar(64)
+  providers Json
+  confidenceThreshold Float
+  lastErrorCode String? @db.VarChar(100)
+
+  initiatedById String?
+  initiatedBy User? @relation("AIReviewBatchInitiator", fields: [initiatedById], references: [id], onDelete: SetNull)
+  runs AIContentReviewRun[]
+
+  startedAt DateTime @default(now())
+  completedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([initiatedById, createdAt])
+  @@map("ai_review_batches")
+}
+
+model AIContentReviewRun {
+  id String @id @default(cuid())
+  batchId String
+  batch AIReviewBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+
+  targetType ContentReviewTargetType
+  targetId String
+  contentHash String @db.VarChar(64)
+  provider String @db.VarChar(40)
+  model String @db.VarChar(120)
+  verdict AIReviewVerdict
+  confidence Float
+  answerFingerprint String? @db.VarChar(512)
+  rationale String @db.Text
+  issues Json?
+  sourceRequired Boolean @default(false)
+  responseHash String @db.VarChar(64)
+  createdAt DateTime @default(now())
+
+  @@unique([batchId, targetType, targetId, provider], map: "ai_review_run_provider_key")
+  @@index([targetType, targetId, contentHash])
+  @@index([verdict, createdAt])
+  @@map("ai_content_review_runs")
+}
+
+// ===================================================================
+// Forgot Password — ইমেইলে পাঠানো রিসেট টোকেন (Resend দিয়ে পাঠানো হয়)
+// ===================================================================
+// ===================================================================
+// Full Mock Exam — বাস্তব HSC পরীক্ষার ফরম্যাট সিমুলেশন
+// -------------------------------------------------------------------
+// Physics/Chemistry/Biology/Higher Math প্রতি পত্রে: MCQ ২৫টি (২৫ নম্বর)
+// + CQ ৮টি থেকে ৫টি উত্তর (৫০ নম্বর) = থিওরি ৭৫ নম্বর (verified board
+// format অনুযায়ী)। Practical অংশ (২৫ নম্বর) অনলাইনে সিমুলেট করা সম্ভব
+// না, তাই GPA calculator এ ইউজার নিজে practical marks ইনপুট দিতে পারবে।
+// ===================================================================
+model MockExamAttempt {
+  id        String  @id @default(cuid())
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subjectId String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  mode MockExamMode @default(FULL) // FULL = পূর্ণ বোর্ড সময়, QUICK = সংক্ষিপ্ত প্র্যাকটিস
+
+  mcqQuestionIds Json // এলোমেলোভাবে বাছাই করা Question আইডিসমূহ (ক্রম ঠিক রাখতে array)
+  mcqUserAnswers Json? // { questionId: userAnswer } — রিভিউ পেজে দেখানোর জন্য
+  mcqScore       Int   @default(0)
+  mcqTotal       Int   @default(0)
+
+  cqQuestionIds Json // এলোমেলোভাবে বাছাই করা CQQuestion আইডিসমূহ
+  cqScore       Int  @default(0)
+  cqTotal       Int  @default(0)
+
+  status       MockExamStatus @default(IN_PROGRESS)
+  timeTakenSec Int            @default(0)
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  // Performance: percentile.ts (subjectId+mode+status দিয়ে সব ইউজারের সেরা
+  // স্কোর বের করে র‍্যাংক হিসাব) ও gpa-predictor.ts (userId+status দিয়ে)
+  // প্রতিটা Mock Exam Result পেজে/Analytics এ hit হয়
+  @@index([subjectId, mode, status])
+  @@index([userId, status])
+  @@map("mock_exam_attempts")
+}
+
+enum MockExamMode {
+  FULL // বোর্ড সময় অনুযায়ী (MCQ ২৫ মিনিট + CQ আড়াই ঘণ্টা)
+  QUICK // সংক্ষিপ্ত প্র্যাকটিস মোড (কম সময়ে)
+}
+
+enum MockExamStatus {
+  IN_PROGRESS
+  MCQ_DONE // MCQ শেষ, CQ চলছে
+  COMPLETED
+}
+
+// ===================================================================
+// PDF Chat (RAG) — নিজের নোট/বইয়ের PDF আপলোড করে AI-কে প্রশ্ন করা
+// -------------------------------------------------------------------
+// Deep Research এ চিহ্নিত gap: প্রায় কোনো HSC প্ল্যাটফর্মেই ছাত্র নিজের
+// বই/নোট আপলোড করে সেটার উপর ভিত্তি করে AI এর সাথে কথা বলতে পারে না।
+// RAG (Retrieval-Augmented Generation) আর্কিটেকচার: PDF → টেক্সট এক্সট্রাক্ট
+// → chunk এ ভাগ → Mistral Embeddings (mistral-embed, 1024-dim) → Supabase
+// pgvector এ সংরক্ষণ → প্রশ্নের সময় সবচেয়ে প্রাসঙ্গিক chunk খুঁজে বের করে
+// (cosine similarity) → AI কে শুধু সেই context দিয়ে উত্তর দিতে বলা হয়
+// (hallucination কমানোর জন্য, PDF এ না থাকলে AI স্পষ্ট করে বলবে)।
+// ===================================================================
+enum PdfDocumentStatus {
+  PROCESSING // আপলোড হয়েছে, টেক্সট এক্সট্রাক্ট+এমবেডিং চলছে
+  READY // চ্যাট করার জন্য প্রস্তুত
+  FAILED // এক্সট্রাকশন/এমবেডিং ব্যর্থ হয়েছে
+}
+
+model PdfDocument {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title            String // ইউজার-প্রদত্ত বা ফাইলনেম থেকে নেওয়া টাইটেল
+  originalFileName String
+  pageCount        Int               @default(0)
+  totalChunks      Int               @default(0)
+  status           PdfDocumentStatus @default(PROCESSING)
+  errorMessage     String?           @db.Text // FAILED হলে কারণ
+
+  // Audio Overview ফিচার — AI-জেনারেটেড সারাংশ (cache করা, বার বার AI কল
+  // এড়াতে), ইউজার চাইলে "রিজেনারেট" করে নতুন করে বানাতে পারবে
+  summary            String?   @db.Text
+  summaryGeneratedAt DateTime?
+
+  // Mind Map ফিচার — AI-জেনারেটেড hierarchical concept tree (JSON, cache
+  // করা), NotebookLM এর "Mind Map" ফিচার থেকে অনুপ্রাণিত
+  mindMap            Json?
+  mindMapGeneratedAt DateTime?
+
+  chunks       PdfChunk[]
+  chatMessages PdfChatMessage[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, createdAt])
+  @@map("pdf_documents")
+}
+
+model PdfChunk {
+  id         String      @id @default(cuid())
+  documentId String
+  document   PdfDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  chunkIndex Int // ডকুমেন্টে chunk এর ক্রম
+  pageNumber Int? // কোন পাতা থেকে এসেছে (citation দেখানোর জন্য)
+  content    String @db.Text
+
+  // pgvector কলাম — Prisma Client এ এক্সপোজ হয় না (Unsupported type), raw SQL
+  // দিয়ে insert/query করা হয় (lib/pdf-chat.ts এ $executeRaw/$queryRaw ব্যবহার)
+  embedding Unsupported("vector(1024)")?
+
+  createdAt DateTime @default(now())
+
+  @@index([documentId, chunkIndex])
+  @@map("pdf_chunks")
+}
+
+model PdfChatMessage {
+  id         String      @id @default(cuid())
+  documentId String
+  document   PdfDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  role       String // "user" | "assistant"
+  content    String  @db.Text
+  citedPages String? // কমা-সেপারেটেড পাতা নম্বর (assistant মেসেজে, থাকলে)
+  provider   String?
+
+  createdAt DateTime @default(now())
+
+  @@index([documentId, createdAt])
+  @@map("pdf_chat_messages")
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  email     String
+  token     String    @unique
+  expiresAt DateTime // ১ ঘণ্টা মেয়াদ
+  usedAt    DateTime? // একবার ব্যবহার হলে আর কাজ করবে না
+
+  createdAt DateTime @default(now())
+
+  @@index([email])
+  @@map("password_reset_tokens")
+}
+
+// ===================================================================
+// Class Routine — সাপ্তাহিক ক্লাস/পড়াশোনার রুটিন (নিজে বানানো, স্থায়ী)
+// -------------------------------------------------------------------
+// প্রতিটা স্লট একটা নির্দিষ্ট বার (dayOfWeek: 0=রবি...6=শনি) ও সময়ে
+// একটা সাবজেক্ট পড়ার জন্য নির্ধারিত। রিকারিং — প্রতি সপ্তাহে একই থাকে।
+// ===================================================================
+model RoutineSlot {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  dayOfWeek   Int // 0=রবিবার, 1=সোমবার, ... 6=শনিবার
+  startTime   String // "16:00" ফরম্যাটে (24hr)
+  endTime     String // "17:00" ফরম্যাটে
+  subjectCode SubjectCode?
+  label       String // "পদার্থবিজ্ঞান" বা কাস্টম লেবেল যেমন "কোচিং", "বিশ্রাম"
+  colorHex    String       @default("#6366f1")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, dayOfWeek])
+  @@map("routine_slots")
+}
+
+// ===================================================================
+// Auto Study Plan — AI জেনারেটেড দৈনিক পড়াশোনার পরিকল্পনা
+// -------------------------------------------------------------------
+// exam countdown ও weak topics বিশ্লেষণ করে AI প্রতিটা দিনের জন্য কোন
+// সাবজেক্ট/টপিক কতক্ষণ পড়তে হবে তার একটা প্ল্যান বানিয়ে দেয়। ইউজার
+// পুরনো প্ল্যান রিফ্রেশ করে নতুন প্ল্যান জেনারেট করতে পারবে।
+//
+// 🆕 নমনীয় Duration (১/৭/৩০/৩৬৫ দিন, ইউজারের অনুরোধ অনুযায়ী) —
+// আগে ফিক্সড ৭ দিন ছিল। ৩০ দিনের বেশি duration এর জন্য AI দিয়ে
+// একবারে পুরোটা জেনারেট করা সম্ভব না (token limit + AI hallucination
+// ঝুঁকি বেশি বড় JSON এ) — তাই ৩০-দিনের "chunk" এ ভাগ করে ধাপে ধাপে
+// ব্যাকগ্রাউন্ডে জেনারেট করা হয় (custom-question-gen.ts এর
+// fire-and-forget প্যাটার্ন অনুসরণ করে)। generationStatus/Progress
+// দিয়ে ফ্রন্টএন্ড পোলিং করে "কতদূর জেনারেট হয়েছে" দেখাতে পারে।
+// ===================================================================
+enum StudyPlanGenerationStatus {
+  GENERATING // প্রথম chunk রেডি, বাকি chunk ব্যাকগ্রাউন্ডে জেনারেট হচ্ছে
+  READY // সব chunk জেনারেট শেষ, পুরো প্ল্যান সম্পূর্ণ
+  FAILED // কোনো chunk জেনারেট করতে ব্যর্থ হয়েছে (যা আগে জেনারেট হয়েছে তা অক্ষত থাকে)
+}
+
+model StudyPlan {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  startDate     DateTime // প্ল্যানের প্রথম দিন
+  endDate       DateTime // প্ল্যানের শেষ দিন (durationDays অনুযায়ী)
+  durationDays  Int      @default(7) // ইউজার যত দিনের প্ল্যান চেয়েছে (১/৭/৩০/৩৬৫/কাস্টম)
+  daysUntilExam Int // জেনারেট করার সময় exam পর্যন্ত কতদিন বাকি ছিল
+  aiProvider    String? // কোন AI provider দিয়ে বানানো হয়েছে (সর্বশেষ chunk এর)
+
+  // ব্যাকগ্রাউন্ড chunked generation ট্র্যাকিং (durationDays > ৩০ হলে প্রযোজ্য,
+  // ছোট প্ল্যানে সরাসরি READY হয়ে যায়)
+  generationStatus StudyPlanGenerationStatus @default(READY)
+  daysGenerated    Int                       @default(0) // এখন পর্যন্ত কতদিনের আইটেম জেনারেট হয়েছে
+  generationError  String? // FAILED হলে কারণ (ইউজারকে দেখানোর জন্য)
+
+  // Study Plan Agent — continuous monitoring (lazy-check, cron ছাড়া)।
+  // প্ল্যানের মেয়াদ শেষ হয়ে গেলে বা নতুন গুরুতর দুর্বল টপিক পাওয়া গেলে
+  // একবার নোটিফিকেশন পাঠানো হয় — renewalSuggested দিয়ে duplicate notification
+  // আটকানো হয় (নতুন প্ল্যান জেনারেট না করা পর্যন্ত আবার পাঠানো হয় না)।
+  renewalSuggested Boolean @default(false)
+
+  items StudyPlanItem[]
+
+  createdAt DateTime @default(now())
+
+  // Performance: /api/study-plan প্রতিবার findFirst({where:{userId},
+  // orderBy:{createdAt}}) দিয়ে সাম্প্রতিক প্ল্যান খোঁজে (Planner পেজ লোডে)
+  @@index([userId, createdAt])
+  @@map("study_plans")
+}
+
+model StudyPlanItem {
+  id          String    @id @default(cuid())
+  studyPlanId String
+  studyPlan   StudyPlan @relation(fields: [studyPlanId], references: [id], onDelete: Cascade)
+
+  date            DateTime // কোন দিনের জন্য এই আইটেম
+  subjectCode     SubjectCode
+  topicName       String? // নির্দিষ্ট টপিক (থাকলে), না থাকলে সাধারণ রিভিশন
+  taskDescription String       @db.Text // "নিউটনের গতিসূত্র অধ্যায় রিভিশন করো ও ১০টা MCQ প্র্যাকটিস করো"
+  durationMinutes Int          @default(45)
+  priority        TaskPriority @default(MEDIUM)
+  isCompleted     Boolean      @default(false)
+
+  // 🐛 বাগ ফিক্স (Task এর একই xpAwarded প্যাটার্ন এখানেও প্রয়োগ করা
+  // হয়েছে) — আগে isCompleted=true পাঠালেই (আগের state চেক না করেই)
+  // প্রতিবার XP দেওয়া হতো, যা Task এর বাগের চেয়েও গুরুতর ছিল। এখন এই
+  // ফ্ল্যাগ পুরো আইটেমের জীবনচক্রে "একবার XP দেওয়া হয়েছে কিনা"
+  // ট্র্যাক করে।
+  xpAwarded Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([studyPlanId, date])
+  @@map("study_plan_items")
+}
+
+// ===================================================================
+// Admin Action Audit Logging
+// -------------------------------------------------------------------
+// প্রতিটা destructive/sensitive admin action (role change, content delete,
+// notification broadcast ইত্যাদি) DB তে লগ রাখা হয়, যাতে পরে কোনো ভুল/
+// অপব্যবহার হলে ট্র্যাক করা যায় ("কে, কখন, কী করেছে")।
+// ===================================================================
+model AuditLog {
+  id         String  @id @default(cuid())
+  actorId    String? // যে ইউজার একশনটা করেছে (admin), null হলে সিস্টেম-জেনারেটেড
+  actorName  String?
+  actorEmail String?
+  action     String // যেমন "USER_ROLE_CHANGE", "QUESTION_DELETE", "NOTIFICATION_BROADCAST"
+  targetType String? // যেমন "User", "Question", "ForumPost"
+  targetId   String?
+  metadata   Json? // অতিরিক্ত প্রাসঙ্গিক তথ্য (before/after value ইত্যাদি)
+  ipAddress  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+// ===================================================================
+// Custom Question Set — বইয়ের পাতার ছবি থেকে AI দিয়ে জেনারেট করা প্রশ্ন
+// -------------------------------------------------------------------
+// ছাত্র নিজের বইয়ের পাতা/নোটের ছবি আপলোড করলে OCR (বিদ্যমান getVisionResponse
+// পুনর্ব্যবহার) দিয়ে টেক্সট বের করে, তারপর AI দিয়ে MCQ অথবা CQ প্রশ্ন
+// জেনারেট করা হয়। এই সেট পরে Solo Live Exam বা Quiz Battle এ ব্যবহার
+// করা যায় (Question/CQQuestion মূল ব্যাংক থেকে সম্পূর্ণ স্বতন্ত্র —
+// admin-curated কন্টেন্টের সাথে মিশে যাবে না)।
+// ===================================================================
+enum CustomQuestionSetStatus {
+  PROCESSING // ছবি থেকে প্রশ্ন জেনারেট হচ্ছে
+  READY
+  FAILED
+}
+
+model CustomQuestionSet {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title        String
+  questionType QuestionType // MCQ অথবা CQ (পুরো সেট একই টাইপ, মিশ্রিত না)
+  status       CustomQuestionSetStatus @default(PROCESSING)
+  errorMessage String?
+
+  questions CustomQuestion[]
+
+  createdAt DateTime @default(now())
+
+  // Performance: My Sets লিস্ট পেজে userId দিয়ে findMany (Learning Hub এর
+  // মতো hot path)
+  @@index([userId, createdAt])
+  @@map("custom_question_sets")
+}
+
+model CustomQuestion {
+  id    String            @id @default(cuid())
+  setId String
+  set   CustomQuestionSet @relation(fields: [setId], references: [id], onDelete: Cascade)
+
+  // MCQ ফিল্ড (questionType=MCQ হলে ব্যবহৃত)
+  text          String? @db.Text
+  options       Json? // ["ক","খ","গ","ঘ"]
+  correctAnswer String? // MCQ এর সঠিক অপশন
+
+  // CQ ফিল্ড (questionType=CQ হলে ব্যবহৃত) — CQQuestion মডেলের মতো একই কাঠামো
+  stimulus     String? @db.Text
+  questionA    String? @db.Text
+  questionB    String? @db.Text
+  questionC    String? @db.Text
+  questionD    String? @db.Text
+  modelAnswerA String? @db.Text
+  modelAnswerB String? @db.Text
+  modelAnswerC String? @db.Text
+  modelAnswerD String? @db.Text
+
+  order Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([setId])
+  @@map("custom_questions")
+}
+
+// ===================================================================
+// Live Exam Session — Custom Question Set অথবা Subject Question Bank
+// দিয়ে একা (solo) live exam দেওয়ার সেশন
+// -------------------------------------------------------------------
+// Mock Exam এর থেকে আলাদা কারণ এটা AI-generated custom প্রশ্ন দিয়েও চলতে
+// পারে, এবং board-format সময়সীমা না মেনে ছাত্র নিজে duration ঠিক করে।
+// ===================================================================
+enum LiveExamStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+model LiveExamSession {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  customSetId String? // CustomQuestionSet থেকে হলে সেট করা, না হলে null
+  questionIds Json // ব্যবহৃত প্রশ্নের আইডি (CustomQuestion/Question/CQQuestion, orderedList)
+  sourceType  String // "custom" | "question_bank"
+
+  // 🔧 সম্প্রসারণ (এই সেশনে, Smart Live Exam ভিশনের ধারাবাহিকতায়): আগে
+  // Live Exam এ শুধু MCQ সাপোর্ট ছিল (design decision, server-side
+  // auto-scoring সহজ রাখতে)। এখন CQ সাপোর্টও যোগ হয়েছে — AI-evaluate
+  // ভিত্তিক scoring, established `lib/cq-evaluator.ts`/Mock Exam CQ
+  // ফ্লো পুনর্ব্যবহার করে।
+  questionType QuestionType @default(MCQ)
+
+  durationMinutes Int // ছাত্র নিজে সেট করা সময়সীমা
+
+  // MCQ ফিল্ড (questionType=MCQ হলে ব্যবহৃত)
+  userAnswers    Json? // { questionId: answer }
+  score          Int   @default(0)
+  totalQuestions Int   @default(0)
+
+  // CQ ফিল্ড (questionType=CQ হলে ব্যবহৃত) — established Mock Exam CQ
+  // ফ্লো এর মতো AI দিয়ে evaluate করা হয়, কিন্তু আলাদা CQAttempt row
+  // তৈরি না করে সরাসরি এই সেশনেই JSON আকারে সংরক্ষণ করা হয় (established
+  // MCQ Live Exam এর self-contained ডিজাইনের সাথে সামঞ্জস্যপূর্ণ —
+  // Analytics/GPA Predictor এ Live Exam এর কোনো integration নেই,
+  // established শুধু CQ Practice/Mock Exam এর CQAttempt integrated)
+  cqAnswers     Json? // { questionId: { answerA, answerB, answerC, answerD } }
+  cqEvaluations Json? // { questionId: { scoreA, scoreB, scoreC, scoreD, totalScore, feedback, aiProvider } }
+  cqScore       Int   @default(0) // মোট প্রাপ্ত নম্বর (সব প্রশ্নের totalScore যোগফল)
+  cqTotalMarks  Int   @default(0) // সর্বোচ্চ সম্ভাব্য নম্বর (প্রশ্ন সংখ্যা × ১০)
+
+  status      LiveExamStatus @default(IN_PROGRESS)
+  createdAt   DateTime       @default(now())
+  completedAt DateTime?
+
+  @@index([userId, createdAt])
+  @@map("live_exam_sessions")
+}
+
+// ===================================================================
+// Quiz Battle — Room code দিয়ে multi-person (৩০+ জন পর্যন্ত) self-paced
+// MCQ প্রতিযোগিতা
+// -------------------------------------------------------------------
+// বিদ্যমান ১-বনাম-১ QuizDuel এর থেকে ভিন্ন মডেল দরকার কারণ Duel এ ফিক্সড
+// challengerId/opponentId কলাম আছে যা N-জনের জন্য generalize করা যায় না।
+// এখানে room owner room তৈরি করে (subject question bank অথবা নিজের
+// CustomQuestionSet থেকে MCQ বেছে), room code শেয়ার করে, participant রা
+// code দিয়ে যোগ দেয়। Self-paced — প্রতিটা অংশগ্রহণকারী নিজের মতো এগোয়,
+// সবাই জমা দেওয়ার অপেক্ষা করতে হয় না, leaderboard live update হয়
+// (polling-ভিত্তিক, বিদ্যমান Duel প্যাটার্ন অনুসরণ করে)।
+// ===================================================================
+enum QuizBattleStatus {
+  WAITING // room খোলা আছে, অংশগ্রহণকারীরা যোগ দিচ্ছে
+  ACTIVE // battle শুরু হয়ে গেছে, participant রা উত্তর দিচ্ছে
+  COMPLETED // owner শেষ করে দিয়েছে অথবা সবাই জমা দিয়েছে
+}
+
+model QuizBattle {
+  id      String @id @default(cuid())
+  ownerId String
+  owner   User   @relation("BattleOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  roomCode String @unique // ৬-অক্ষরের শেয়ারযোগ্য কোড (সহজে বলা/টাইপ করা যায়)
+  title    String
+
+  // প্রশ্নের উৎস: হয় Subject question bank, নয় নিজের CustomQuestionSet
+  subjectId   String?
+  subject     Subject? @relation(fields: [subjectId], references: [id], onDelete: SetNull)
+  customSetId String?
+
+  questionIds Json // এলোমেলোভাবে বাছাই করা MCQ প্রশ্নের আইডি
+  maxPlayers  Int  @default(30)
+
+  status      QuizBattleStatus @default(WAITING)
+  createdAt   DateTime         @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+
+  participants QuizBattleParticipant[]
+
+  @@index([roomCode])
+  @@index([ownerId, createdAt])
+  @@index([subjectId])
+  @@map("quiz_battles")
+}
+
+model QuizBattleParticipant {
+  id       String     @id @default(cuid())
+  battleId String
+  battle   QuizBattle @relation(fields: [battleId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  answers      Json? // { questionId: userAnswer } — self-paced, নিজের মতো জমা দেয়
+  score        Int       @default(0)
+  timeTakenSec Int?
+  submittedAt  DateTime?
+
+  joinedAt DateTime @default(now())
+
+  // একজন ইউজার একই battle এ একবারই যোগ দিতে পারবে
+  @@unique([battleId, userId])
+  @@index([battleId, score])
+  @@index([userId])
+  @@map("quiz_battle_participants")
+}
+
+// ===================================================================
+// ADMISSION PREP — HSC পরের ভর্তি পরীক্ষার প্রস্তুতি (Medical/BUET/DU)
+// -------------------------------------------------------------------
+// এটা মূল HSC Practice/Question ব্যাংক থেকে সম্পূর্ণ স্বতন্ত্র একটা
+// সাব-সিস্টেম (ব্যবহারকারীর স্পষ্ট নির্দেশ: "আলাদা একটা জায়গা")।
+// মূল কারণ ভিন্ন রাখার: (১) এই প্রশ্নগুলো ভর্তি পরীক্ষার actual প্রশ্ন/
+// প্যাটার্ন অনুসরণ করে যা HSC বোর্ড প্রশ্নের চেয়ে ভিন্ন কঠিনতা/স্টাইলের
+// হতে পারে, (২) নেগেটিভ মার্কিং শুধু এখানেই প্রযোজ্য (HSC বোর্ড পরীক্ষায়
+// নেগেটিভ মার্কিং নেই — Deep Research এ ভেরিফাইড), (৩) GENERAL_KNOWLEDGE
+// এর মতো সাবজেক্ট যা মূল HSC SubjectCode enum এ নেই।
+// ===================================================================
+
+// কোন ভর্তি পরীক্ষার জন্য প্রস্তুতি — প্রতিটার নিজস্ব marking scheme ও
+// সাবজেক্ট-ভিত্তিক নম্বর বণ্টন থাকে (lib/admission.ts এ কনফিগার করা)
+enum AdmissionExamType {
+  MEDICAL // MBBS/BDS ভর্তি পরীক্ষা — ১০০% MCQ, নেগেটিভ মার্কিং -0.25
+  DU_A_UNIT // ঢাকা বিশ্ববিদ্যালয় বিজ্ঞান ('ক') ইউনিট — MCQ+Written মিশ্র, এখানে শুধু MCQ অংশ, নেগেটিভ -0.25
+  BUET // বুয়েট — ⚠️ ২০২৫-২৬ থেকে সম্পূর্ণ লিখিত/সাংখ্যিক পরীক্ষা (আসলে MCQ না),
+  // এখানে concept-practice/numerical-MCQ মোড হিসেবে রাখা হয়েছে, স্পষ্ট
+  // ডিসক্লেইমার সহ UI তে (student যেন বিভ্রান্ত না হয়)
+}
+
+// Admission প্রশ্নের সাবজেক্ট — HSC এর SubjectCode থেকে ইচ্ছাকৃতভাবে
+// আলাদা enum (GENERAL_KNOWLEDGE এর মতো ভর্তি-পরীক্ষা-নির্দিষ্ট সাবজেক্ট
+// আছে, এবং MATH এখানে "সাধারণ গণিত" বোঝায় HSC এর আলাদা ১ম/২য় পত্র থেকে)
+enum AdmissionSubject {
+  PHYSICS
+  CHEMISTRY
+  BIOLOGY
+  MATH
+  ENGLISH
+  GENERAL_KNOWLEDGE
+}
+
+model AdmissionQuestion {
+  id       String            @id @default(cuid())
+  examType AdmissionExamType
+  subject  AdmissionSubject
+
+  text          String     @db.Text
+  options       Json // ["ক", "খ", "গ", "ঘ"]
+  correctAnswer String
+  explanation   String?    @db.Text
+  difficulty    Difficulty @default(MEDIUM)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: Mock Test শুরু করার সময় examType+subject দিয়ে ফিল্টার
+  // করে randomly প্রশ্ন বাছাই করা হয়
+  @@index([examType, subject])
+  @@map("admission_questions")
+}
+
+enum AdmissionAttemptStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+// -------------------------------------------------------------
+// HABIT TRACKER (MASTER_PLAN.md মূল ভিশনের একটা অসম্পূর্ণ আইটেম:
+// "Habit Tracker (ডেইলি স্টাডি habit যেমন 'আজ ২ ঘন্টা পড়া')")
+// -------------------------------------------------------------
+// Deep Research এ verify করা প্যাটার্ন (Streaks/Loop Habit Tracker/
+// Habitica): কাস্টম habit ডিফাইন করা যায়, প্রতিদিন এক-ক্লিকে
+// চেক-ইন/টগল করা যায়, streak গণনা হয়, সাম্প্রতিক দিনগুলোর ভিজুয়াল
+// history দেখা যায়। Daily Streak (lib/streak.ts) থেকে ইচ্ছাকৃতভাবে
+// আলাদা — সেটা platform-wide "কোনো একটা একটিভিটি করেছি কিনা", আর এটা
+// ইউজারের নিজের ডিফাইন করা কাস্টম habit (যেমন "প্রতিদিন ২ ঘন্টা পড়া",
+// "সকালে রুটিন মেনে চলা")।
+model Habit {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name       String // যেমন: "প্রতিদিন ২ ঘন্টা পড়া"
+  emoji      String  @default("✅") // ভিজুয়াল আইডেন্টিফায়ার (ইউজার বেছে নেয়)
+  isArchived Boolean @default(false) // ডিলিট না করে বন্ধ রাখার অপশন (history হারাবে না)
+  order      Int     @default(0)
+
+  // Streak গণনা (lib/streak.ts এর একই gap-day লজিক পুনর্ব্যবহার করা
+  // হয়েছে, কিন্তু প্রতিটা habit এর নিজস্ব আলাদা streak — কোনো Freeze
+  // mechanic নেই এখানে, সিম্পল রাখা হয়েছে)
+  currentStreak Int       @default(0)
+  longestStreak Int       @default(0)
+  lastLoggedAt  DateTime?
+
+  logs HabitLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: ইউজারের নিজের সব habit লিস্ট বার বার findMany({where:{userId}})
+  @@index([userId])
+  @@map("habits")
+}
+
+// ===================================================================
+// Exam Day Checklist Mode — HSC পরীক্ষার আগের রাত ও পরীক্ষার দিনের
+// জন্য চেকলিস্ট (Admit Card, কলম/পেন্সিল, calculator, breathing
+// exercise reminder ইত্যাদি) — established Habit Tracker এর মতোই
+// per-user simple resource, কিন্তু এখানে প্রতিটা আইটেম শুধু
+// checked/unchecked টগল করা যায় (কোনো streak/history লাগে না,
+// কারণ HSC পরীক্ষা একাধিক দিন ধরে চলে — প্রতিদিন সকালে ইউজার
+// "রিসেট" করে পরের দিনের জন্য আবার ব্যবহার করতে পারবে)।
+// -------------------------------------------------------------------
+// ডিফল্ট আইটেম (NIGHT_BEFORE + EXAM_DAY) প্রথমবার এই ফিচার ব্যবহার
+// করার সময় lazily seed করা হয় (lib/exam-checklist.ts এ তালিকা),
+// ইউজার নিজের কাস্টম আইটেমও যোগ করতে পারবে (isCustom=true)।
+// ===================================================================
+enum ExamChecklistCategory {
+  NIGHT_BEFORE // পরীক্ষার আগের রাতে করণীয়
+  EXAM_DAY // পরীক্ষার দিন সকালে/কেন্দ্রে করণীয়
+}
+
+model ExamChecklistItem {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  category  ExamChecklistCategory
+  label     String
+  isChecked Boolean               @default(false)
+  isCustom  Boolean               @default(false) // ইউজার নিজে যোগ করেছে (true) নাকি ডিফল্ট সিড আইটেম (false)
+  order     Int                   @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Performance: ইউজারের নিজের checklist বার বার findMany({where:{userId}})
+  @@index([userId, category])
+  @@map("exam_checklist_items")
+}
+
+model HabitLog {
+  id      String @id @default(cuid())
+
+  habitId String
+  habit   Habit  @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+  // শুধু তারিখ (সময় বাদ, মধ্যরাত UTC এ normalize করা) — একই দিনে
+  // দুইবার লগ হওয়া আটকাতে @@unique ব্যবহার করা হয়েছে
+  date DateTime
+
+  createdAt DateTime @default(now())
+
+  @@unique([habitId, date])
+  // Performance: ৭-দিনের history/ক্যালেন্ডার ভিউ এর জন্য habitId+date
+  // রেঞ্জ কোয়েরি ঘন ঘন হয়
+  @@index([habitId, date])
+  @@map("habit_logs")
+}
+
+model AdmissionMockAttempt {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  examType AdmissionExamType
+  status   AdmissionAttemptStatus @default(IN_PROGRESS)
+
+  questionIds  Json // ব্যবহৃত প্রশ্নের ID লিস্ট (ক্রম অনুযায়ী)
+  userAnswers  Json? // { questionId: userAnswer }
+  totalCount   Int
+  correctCount Int   @default(0)
+  wrongCount   Int   @default(0)
+  skippedCount Int   @default(0)
+
+  // নেগেটিভ মার্কিং প্রয়োগের পরের চূড়ান্ত স্কোর (ঋণাত্মকও হতে পারে,
+  // বাস্তব ভর্তি পরীক্ষার simulation এর জন্য Float — যেমন medical এ
+  // 0.25 কাটা যায় প্রতি ভুল উত্তরে)
+  rawScore     Float?
+  maxScore     Int // সর্বোচ্চ সম্ভাব্য স্কোর (totalCount এর সমান, প্রতি প্রশ্ন ১ নম্বর করে)
+  timeTakenSec Int?
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  // Performance: ইউজারের নিজের সব attempt history দেখানো + examType
+  // অনুযায়ী ফিল্টার করা (Progress ট্র্যাকিং পেজে)
+  @@index([userId, examType, createdAt])
+  @@map("admission_mock_attempts")
+}
+
+// ===================================================================
+// BROADCAST NOTIFICATIONS — Admin real-time push to all/many users
+// -------------------------------------------------------------------
+// Admin Panel Power-up ফিচার। Admin নিজে কাস্টম broadcast notification
+// পাঠাতে পারবে (study reminder, exam alert, new feature ইত্যাদি)।
+// Targeting: ALL_USERS (সব student), BY_ROLE, BY_SUBJECT (একটা নির্দিষ্ট
+// subject এর টপিকে bookmark করা), BY_STREAK (যাদের streak >= N), BY_HSC_BATCH
+// (HSC 2028, 2027, ইত্যাদি)।
+// ===================================================================
+enum BroadcastTargetType {
+  ALL_USERS // সব student
+  BY_ROLE // একটা role (সাধারণত STUDENT, তবে ADMIN কেও পাঠানো যায়)
+  BY_SUBJECT // নির্দিষ্ট subject (যেমন Physics 1st paper) — বুকমার্ক/প্র্যাকটিস হিস্ট্রি দেখে
+  BY_STREAK // যাদের streak >= N দিন
+  BY_HSC_BATCH // নির্দিষ্ট batch (2028, 2027...)
+}
+
+enum BroadcastStatus {
+  DRAFT // এডমিন এখনো ড্রাফটে রেখেছে, পাঠায়নি
+  SENDING // পাঠানো হচ্ছে (background job চলছে)
+  COMPLETED // সব রিসিপিয়েন্টে পৌঁছানো হয়েছে
+  FAILED // কোনো কারণে ব্যর্থ
+}
+
+model BroadcastCampaign {
+  id String @id @default(cuid())
+
+  // কে পাঠিয়েছে
+  sentById String? // admin userId, nullable (system broadcast হলে)
+
+  // ব্রডকাস্টের বিষয়বস্তু
+  title String
+  body  String
+  link  String? // ক্লিক করলে কোথায় যাবে (যেমন /forum/postId, /practice)
+  icon  String? // ঐচ্ছিক emoji/icon, e.g. "📚", "🎉"
+
+  // Targeting
+  targetType   BroadcastTargetType
+  targetFilter Json? // extra filter (e.g. { "hscBatch": 2028, "streakMin": 3, "subjectCode": "PHYSICS" })
+
+  // Channel: in-app (Notification table), web push (VAPID/FCM), email
+  sendInApp     Boolean @default(true) // সবসময় true (in-app notification)
+  sendPush      Boolean @default(true) // Web Push (browser)
+  sendEmail     Boolean @default(false) // Resend email (digest এর মতো)
+  sendNativePush Boolean @default(false) // FCM native push (Capacitor Android)
+
+  // Delivery stats (real-time update)
+  status        BroadcastStatus   @default(DRAFT)
+  totalRecipients Int @default(0) // estimated
+  sentCount     Int               @default(0) // successfully delivered
+  failedCount   Int               @default(0)
+  readCount     Int               @default(0) // in-app notification opened
+
+  // Schedule
+  scheduledFor DateTime? // null মানে "এখনই পাঠাও"
+  startedAt    DateTime?
+  completedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Individual recipient records (delivery log)
+  recipients BroadcastRecipient[]
+
+  // Performance: Admin Broadcast History page (status অনুযায়ী sort, recent first)
+  @@index([status, createdAt])
+  @@index([sentById, createdAt])
+  @@map("broadcast_campaigns")
+}
+
+model BroadcastRecipient {
+  id         String            @id @default(cuid())
+  campaignId String
+  campaign   BroadcastCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  userId     String
+
+  // Per-channel delivery status
+  inAppDelivered     Boolean   @default(false)
+  inAppRead          Boolean   @default(false)
+  pushDelivered      Boolean   @default(false)
+  emailDelivered     Boolean   @default(false)
+  nativePushDelivered Boolean  @default(false)
+
+  deliveredAt DateTime?
+  readAt      DateTime?
+  failedReason String?
+
+  createdAt DateTime @default(now())
+
+  @@unique([campaignId, userId])
+  @@index([userId, inAppRead])
+  @@map("broadcast_recipients")
+}
+
+// ===================================================================
+// BROADCAST TEMPLATES — Reusable notification templates
+// -------------------------------------------------------------------
+// Admin frequently-used broadcast messages (exam reminder, new content,
+// streak freeze warning, etc.) template হিসেবে সেভ করে রাখতে পারবে
+// — পরে শুধু ভেরিয়েবল (date, subject, link) পূরণ করে instantly পাঠাতে
+// পারবে। Admin Panel থেকে CRUD।
+// ===================================================================
+model BroadcastTemplate {
+  id String @id @default(cuid())
+
+  name        String // "Exam Reminder — 1 day before"
+  title       String
+  body        String @db.Text
+  link        String? // default link
+  icon        String? @default("📚")
+  targetType  BroadcastTargetType @default(ALL_USERS)
+
+  // Variable placeholders in body: {{date}}, {{subject}}, {{topic}}, {{time}}
+  // JSON: { "date": "২০২৫-০৪-১০", "subject": "পদার্থবিজ্ঞান" }
+  // Template body uses {{key}} syntax, replaced at send time
+  variables Json? // ["date", "subject", "topic"] — কোন var গুলো ব্যবহার হয়
+
+  usageCount Int      @default(0) // কতবার এই টেমপ্লেট ব্যবহার হয়েছে (popularity)
+  lastUsedAt DateTime?
+
+  createdById String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("broadcast_templates")
+}
+
+// ===================================================================
+// STRICT FOCUS — consent-based deep-study enforcement
+// ===================================================================
+enum FocusSessionSource {
+  SELF
+  ADMIN
+}
+
+enum FocusSessionStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  EMERGENCY_EXIT
+}
+
+enum FocusScheduleRepeat {
+  NONE
+  DAILY
+  WEEKLY
+}
+
+enum FocusScheduleStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+model FocusContract {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Admin may start a session without a second confirmation only after the
+  // user explicitly enables this contract on their own device/account.
+  allowAdminStart          Boolean @default(false)
+  maxAdminDurationMinutes Int     @default(120)
+  nativeEnforcementEnabled Boolean @default(false)
+  // Privacy-first: historical focus analytics is hidden from Admin unless
+  // the user explicitly opts in. Active-session operational status remains
+  // visible so an Admin-started session can be safely stopped.
+  shareAnalyticsWithAdmin  Boolean @default(false)
+  consentVersion           String  @default("2026-08-05")
+  consentedAt              DateTime?
+  revokedAt                DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("focus_contracts")
+}
+
+model FocusSession {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation("FocusSessionTarget", fields: [userId], references: [id], onDelete: Cascade)
+
+  initiatedById String?
+  initiatedBy   User?   @relation("FocusSessionInitiator", fields: [initiatedById], references: [id], onDelete: SetNull)
+
+  focusScheduleId String?
+  focusSchedule   FocusSchedule? @relation(fields: [focusScheduleId], references: [id], onDelete: SetNull)
+
+  source          FocusSessionSource
+  status          FocusSessionStatus @default(ACTIVE)
+  durationMinutes Int
+  subjectCode     SubjectCode?
+  focusLabel      String?            @db.VarChar(120)
+  startedAt       DateTime           @default(now())
+  endsAt          DateTime
+  completedAt     DateTime?
+
+  nativeEnforcementRequested Boolean @default(false)
+  nativeEnforcementActive    Boolean @default(false)
+  lastHeartbeatAt             DateTime?
+
+  emergencyExitedAt DateTime?
+  emergencyReason   String?   @db.Text
+  cancelledAt       DateTime?
+  cancelReason      String?   @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, status, endsAt])
+  @@index([userId, startedAt])
+  @@index([status, startedAt])
+  @@index([subjectCode, startedAt])
+  @@index([initiatedById, createdAt])
+  @@index([focusScheduleId, startedAt])
+  @@map("focus_sessions")
+}
+
+model FocusSchedule {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation("FocusScheduleTarget", fields: [userId], references: [id], onDelete: Cascade)
+
+  createdById String?
+  createdBy   User? @relation("FocusScheduleCreator", fields: [createdById], references: [id], onDelete: SetNull)
+
+  durationMinutes Int
+  subjectCode     SubjectCode?
+  focusLabel      String?             @db.VarChar(120)
+  repeat          FocusScheduleRepeat @default(NONE)
+  status          FocusScheduleStatus @default(ACTIVE)
+  timeZone        String              @default("Asia/Dhaka")
+
+  scheduledFor DateTime
+  nextRunAt    DateTime?
+  lastRunAt      DateTime?
+  reminderSentAt DateTime?
+  lastResult     String?  @db.VarChar(80)
+  cancelledAt    DateTime?
+  cancelReason String?  @db.Text
+
+  sessions FocusSession[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, nextRunAt])
+  @@index([userId, status, nextRunAt])
+  @@index([createdById, createdAt])
+  @@map("focus_schedules")
+}
+
+// One-row operational state for the external/admin Focus scheduler. This keeps
+// heartbeat/failure metrics bounded instead of writing an audit row every minute.
+model FocusSchedulerState {
+  id String @id @default("global")
+
+  lastStartedAt   DateTime?
+  lastCompletedAt DateTime?
+  lastSuccessAt   DateTime?
+  lastFailureAt   DateTime?
+  lastStatus      String    @default("NEVER") @db.VarChar(32)
+  lastSource      String?   @db.VarChar(16)
+  lastDurationMs  Int?
+
+  lastReminderCount Int @default(0)
+  lastDueCount      Int @default(0)
+  lastProcessedCount Int @default(0)
+  lastStartedCount  Int @default(0)
+  lastFailedCount   Int @default(0)
+  lastErrorCode     String? @db.VarChar(80)
+
+  consecutiveFailures Int @default(0)
+  totalRuns           Int @default(0)
+  overlapSkips        Int @default(0)
+
+  // Cross-instance lease: only one cron/admin run may process the queue at once.
+  leaseToken     String?   @db.VarChar(64)
+  leaseExpiresAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("focus_scheduler_state")
+}
+
+model NativeDevice {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  token                 String   @unique @db.Text
+  platform              String   @default("android")
+  appVersion            String?  @db.VarChar(40)
+  deviceModel           String?  @db.VarChar(120)
+  remoteFocusCapable    Boolean  @default(false)
+  accessibilityEnabled  Boolean  @default(false)
+  lastSeenAt            DateTime @default(now())
+
+  lastPushAttemptAt  DateTime?
+  lastPushSuccessAt  DateTime?
+  lastPushFailureAt  DateTime?
+  lastPushErrorCode  String?   @db.VarChar(100)
+  lastCommandId      String?   @db.VarChar(64)
+  lastReceiptAt      DateTime?
+  lastReceiptStatus  String?   @db.VarChar(64)
+  disabledAt         DateTime?
+  disabledReason     String?   @db.VarChar(100)
+
+  pushDeliveries NativePushDelivery[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, remoteFocusCapable, disabledAt])
+  @@index([lastSeenAt])
+  @@map("native_devices")
+}
+
+model NativePushDelivery {
+  id        String @id @default(cuid())
+  commandId String @db.VarChar(64)
+  deviceId  String
+  device    NativeDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+
+  sessionId String @db.VarChar(80)
+  type      String @db.VarChar(24)
+  status    String @default("PENDING") @db.VarChar(40)
+  issuedAt  DateTime
+  expiresAt DateTime
+  sentAt    DateTime?
+  receiptAt DateTime?
+  errorCode String? @db.VarChar(100)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([commandId, deviceId])
+  @@index([deviceId, createdAt])
+  @@index([sessionId, type, createdAt])
+  @@index([status, createdAt])
+  @@map("native_push_deliveries")
+}
+
+// ===================================================================
+// System-level Control — Maintenance Mode, Announcement Banner,
+// Feature Flags
+// -------------------------------------------------------------------
+// Admin Panel Power-up ফিচারের অংশ। একটামাত্র singleton row (id সবসময়
+// "global") — key-value স্টাইল না বানিয়ে একটা structured row রাখা
+// হয়েছে কারণ এই মুহূর্তে মাত্র ৩টা toggle দরকার, ভবিষ্যতে বাড়লে আলাদা
+// key-value মডেলে migrate করা যাবে। কোনো cron/background job লাগে না —
+// Admin UI থেকে টগল করলেই সাথে সাথে effective হয় (middleware/layout এ
+// প্রতি রিকোয়েস্টে DB থেকে read হয়)।
+// ===================================================================
+model SystemSetting {
+  id String @id @default("global")
+
+  // Maintenance Mode — চালু করলে student-facing সব রুটে একটা
+  // "রক্ষণাবেক্ষণ চলছে" পেজ দেখানো হয় (Admin নিজে তখনও /admin এ ঢুকতে
+  // পারবে, নিজের কাজ শেষ করে বন্ধ করতে)।
+  maintenanceMode    Boolean @default(false)
+  maintenanceMessage String? @db.Text
+
+  // Announcement Banner — সব ইউজারকে Dashboard এর উপরে একটা ডিসমিসেবল
+  // ব্যানারে ঘোষণা দেখানো (যেমন "নতুন ফিচার আসলো!")। ইউজার একবার বন্ধ
+  // করলে আর দেখাবে না (client-side localStorage এ bannerId মনে রাখা
+  // হয়, তাই নতুন announcement বানালে নতুন ইউজাররাও আবার দেখতে পাবে)।
+  announcementEnabled Boolean @default(false)
+  announcementText    String? @db.Text
+  announcementId      String? // প্রতিবার নতুন announcement বানালে নতুন id (dismiss-tracking এর জন্য)
+
+  // Feature Flags — নির্দিষ্ট মডিউল সাময়িকভাবে বন্ধ রাখা যায় (যেমন
+  // কোনো ফিচারে বাগ পাওয়া গেলে দ্রুত বন্ধ করা, কোড ডিপ্লয় ছাড়াই)।
+  // JSON ম্যাপ: { "quiz-battle": true, "pdf-chat": false } — মডিউল key
+  // না থাকলে ডিফল্টে চালু ধরা হয় (opt-out ডিজাইন)।
+  featureFlags Json?
+
+  updatedAt DateTime @updatedAt
+  updatedBy String? // যে admin সর্বশেষ পরিবর্তন করেছে
+
+  @@map("system_settings")
+}

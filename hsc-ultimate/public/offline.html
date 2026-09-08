@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>অফলাইন — HSC Ultimate</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #5b21b6 100%);
+      color: #f5f5f7;
+    }
+    .wrap {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+    .icon { font-size: 4rem; margin-bottom: 1rem; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700; }
+    p { color: #d4d4d8; max-width: 26rem; line-height: 1.6; margin-bottom: 1.5rem; }
+    button {
+      background: #ffffff;
+      color: #6d28d9;
+      border: none;
+      padding: 0.75rem 1.75rem;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="icon">📡</div>
+    <h1>ইন্টারনেট সংযোগ নেই</h1>
+    <p>
+      মনে হচ্ছে তুমি এখন অফলাইনে আছো। ইন্টারনেট সংযোগ ফিরে এলে স্বয়ংক্রিয়ভাবে
+      আবার চেষ্টা করো, অথবা নিচের বাটনে ক্লিক করো।
+    </p>
+    <button onclick="window.location.reload()">আবার চেষ্টা করো</button>
+  </div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+# HSC Ultimate — production web container
+# Run database migrations from CI/source as a separate release step:
+#   npm ci && npx prisma migrate deploy
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: hsc-ultimate:latest
+    container_name: hsc-ultimate-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      DATABASE_URL: ${DATABASE_URL}
+      DIRECT_URL: ${DIRECT_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      NEXTAUTH_URL: ${NEXTAUTH_URL}
+      AUTH_TRUST_HOST: ${AUTH_TRUST_HOST:-true}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY}
+      CEREBRAS_API_KEY: ${CEREBRAS_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY}
+      VAPID_SUBJECT: ${VAPID_SUBJECT}
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:-}
+      FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL:-}
+      FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY:-}
+      CRON_SECRET: ${CRON_SECRET:-}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
+      SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "5"
+    networks:
+      - hsc-net
+
+networks:
+  hsc-net:
+    driver: bridge

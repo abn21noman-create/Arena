@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-05T06:58:23.981805+00:00",
+  "phase": "Feature Polish + UI/UX + Live User Acceptance",
+  "mode": "LOCAL_REAL_POSTGRESQL_DISPOSABLE_USERS",
+  "status": "PASS",
+  "build": {
+    "routes": "181/181",
+    "buildId": "tnUilBjCuhxu8Mm6l3eYw",
+    "node": "22.23.0"
+  },
+  "verification": {
+    "webUnit": "109/109",
+    "pureLogic": "162/162",
+    "uxIntegrity": {
+      "total": 18,
+      "pass": 18,
+      "fail": 0
+    },
+    "apiSecurity": "213/213",
+    "foreignKeyIndexes": "80/80",
+    "criticalIndexes": "18/18",
+    "runtimeIntegrity": "15/15",
+    "productionVulnerabilities": 0,
+    "secretChecks": "18/18"
+  },
+  "liveAcceptance": {
+    "studentE2e": {
+      "pass": 46,
+      "fail": 0,
+      "total": 46
+    },
+    "apiAcceptance": {
+      "pass": 112,
+      "fail": 0,
+      "total": 112
+    },
+    "allPageSmoke": {
+      "total": 89,
+      "ok": 89,
+      "fail": 0,
+      "skipNoOwnedData": 0
+    },
+    "mobileUx": {
+      "pass": 46,
+      "fail": 0,
+      "total": 46
+    },
+    "uxIntegrity": {
+      "total": 18,
+      "pass": 18,
+      "fail": 0
+    }
+  },
+  "coverageMeaning": {
+    "allPages": "Every 89 page route rendered with a real authenticated disposable Admin and owned dynamic PostgreSQL records; 0 skip.",
+    "api": "112 assertions cover real auth, reads, persistence, scoring, planner, FSRS, Focus, Reading Room, Study Group, Admission, Mock, Duel, Battle, Live Exam and Admin guards.",
+    "apiInventory": "All 213 API route files remain statically authenticated/rate/security audited; the suite does not destructively mutate every Admin endpoint.",
+    "mobile": "Real Chromium at 390x844 validated six high-traffic pages, More menu, global search, target sizes, titles, overflow and bottom-nav overlap."
+  },
+  "databaseAfterCleanup": {
+    "users": 1,
+    "subjects": 13,
+    "chapters": 89,
+    "topics": 185,
+    "coreMcq": 688,
+    "admissionMcq": 220,
+    "cq": 64,
+    "badges": 14,
+    "academicReports": 0,
+    "contentReviews": 1,
+    "reviewRevisions": 1,
+    "aiReviewBatches": 1,
+    "aiProviderRuns": 2
+  },
+  "reviewerIdentity": {
+    "AI": 1,
+    "ADMIN": 0
+  },
+  "cleanup": {
+    "disposableUsersRemaining": 0,
+    "nonSystemOrphanTestActorLogsRemaining": 0,
+    "exactUserOnly": true,
+    "academicContentCountChanged": false
+  },
+  "release": {
+    "status": "LOCAL_READY",
+    "externalPending": [
+      "publicUrl",
+      "externalScheduler",
+      "distributedRateLimit",
+      "firebaseAdmin",
+      "productionRuntime"
+    ],
+    "knownWarning": "academic-review-backlog: 1156 unreviewed",
+    "checks": {
+      "pass": 22,
+      "warn": 1,
+      "fail": 0
+    },
+    "sourceFilesHashed": 824,
+    "sourceAggregateSha256": "5e4ed61977539745dc3b93804343f76e92d20472962abfbdcf9eefca674632bf",
+    "migrationAggregateSha256": "6386bed1dc09e6b56162ea4534094264c556c223c63ebab987fc60c4a1c5e8a9"
+  },
+  "runtimeDataPolicy": "No mock/fake/no-op runtime data added. Temporary acceptance records were real PostgreSQL rows under reserved disposable accounts and were removed exactly after each suite."
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T10:22:45.182Z",
+  "mode": "APPLY",
+  "before": {
+    "oldRangeOccurrences": 5,
+    "topicNeedsUpdate": true,
+    "cqNeedsUpdate": true,
+    "admissionNeedsUpdate": true
+  },
+  "outcome": {
+    "topicUpdates": 1,
+    "cqUpdates": 1,
+    "admissionUpdates": 1,
+    "replacedRangeOccurrences": 5
+  },
+  "after": {
+    "oldRangeOccurrences": 0,
+    "topicNeedsUpdate": false,
+    "cqNeedsUpdate": false,
+    "admissionNeedsUpdate": false
+  },
+  "inserts": 0,
+  "deletes": 0,
+  "safeguards": {
+    "exactIdentityChecks": true,
+    "compareBeforeWrite": true,
+    "transactionIsolation": "Serializable",
+    "advisoryLock": 2026080402
+  }
+}

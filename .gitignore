@@ -1,0 +1,11 @@
+# Arena Root Gitignore
+workspace-*.zip
+*.zip
+*.log
+.DS_Store
+node_modules/
+.next/
+dist/
+build/
+.cache/
+__pycache__/

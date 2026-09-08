@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-05T09:01:49.743Z",
+  "mode": "READ_ONLY_AUDIT",
+  "conclusion": {
+    "historicalClaim": {
+      "sourceAllMcq": 908,
+      "liveCoreMcq": 677,
+      "reportedDifference": 231
+    },
+    "invalidCrossCategoryDifferenceUsingCurrentLiveCore": 220,
+    "categoryError": "The old comparison subtracted live core Question rows from a source total that also included AdmissionQuestion rows.",
+    "sourceAllMcqEntities": 908,
+    "sourceCoreMcq": 688,
+    "sourceAdmissionMcq": 220,
+    "liveAllMcqEntities": 908,
+    "liveCoreMcq": 688,
+    "liveAdmissionMcq": 220,
+    "actualMissingCoreMcq": 0
+  },
+  "baseline": {
+    "core": 688,
+    "admission": 220,
+    "all": 908
+  },
+  "sourceByFile": {
+    "prisma/seed-questions.ts": 32,
+    "prisma/seed-questions-2.ts": 94,
+    "prisma/seed-questions-physics-gaps.ts": 20,
+    "prisma/seed-questions-hmath-gaps.ts": 55,
+    "prisma/seed-questions-biology-gaps.ts": 45,
+    "prisma/seed-questions-chem-ict-gaps.ts": 29,
+    "prisma/seed-bangla-english-ict.ts": 77,
+    "prisma/seed-board-questions.ts": 8,
+    "prisma/seed-questions-topic-gaps.ts": 100,
+    "prisma/seed-questions-empty-chapters.ts": 90,
+    "prisma/seed-questions-physics-topic-gaps.ts": 57,
+    "prisma/seed-questions-topic-gaps-2.ts": 81,
+    "prisma/seed-admission-questions.ts": 53,
+    "prisma/seed-admission-questions-2.ts": 167
+  },
+  "quality": {
+    "sourceCoreBlockers": 0,
+    "sourceCoreWarnings": 0,
+    "liveCoreBlockers": 0,
+    "liveCoreWarnings": 0,
+    "missingCoreBlockers": 0,
+    "missingCoreWarnings": 0,
+    "sourceAdmissionBlockers": 0,
+    "liveAdmissionBlockers": 0
+  },
+  "core": {
+    "sourceTotal": 688,
+    "sourceUniqueIdentityCount": 688,
+    "unresolvedTopicReferences": [],
+    "liveTotal": 688,
+    "liveUniqueIdentityCount": 688,
+    "exactMatches": 688,
+    "contentDrifts": [],
+    "missing": [],
+    "liveExtras": [],
+    "sourceIdentityDuplicateGroups": [],
+    "sourceGlobalTextDuplicateGroups": [
+      [
+        {
+          "fingerprint": "0eedb70471775dad227725b20c4c0f794eea311d95af25582f0cbc7250eae2e1",
+          "topic": "PHYSICS:FIRST:শব্দ তরঙ্গ",
+          "text": "শব্দ তরঙ্গ কোন ধরনের তরঙ্গ?",
+          "source": {
+            "file": "prisma/seed-questions-2.ts",
+            "line": 169
+          }
+        },
+        {
+          "fingerprint": "5bc3de0701c9a4db092e62c1c1d125f8cd5dfce03b79cdf189a9ce470e2c8a33",
+          "topic": "PHYSICS:FIRST:তরঙ্গের প্রকারভেদ",
+          "text": "শব্দ তরঙ্গ কোন ধরনের তরঙ্গ?",
+          "source": {
+            "file": "prisma/seed-questions-physics-topic-gaps.ts",
+            "line": 386
+          }
+        }
+      ],
+      [
+        {
+          "fingerprint": "82d471b05158bc9d4691d42d056b421cbccd1c01730ddeab6366f277b1aa30cf",
+          "topic": "HIGHER_MATH:FIRST:ত্রিকোণমিতিক অভেদ",
+          "text": "sin²θ + cos²θ এর মান কত?",
+          "source": {
+            "file": "prisma/seed-questions-hmath-gaps.ts",
+            "line": 96
+          }
+        },
+        {
+          "fingerprint": "929dfd588efec608fe610e2f0ae2ec32cf25da4bb030bd5983beb243bb0e9009",
+          "topic": "HIGHER_MATH:FIRST:ত্রিকোণমিতিক অনুপাতের ধারণা",
+          "text": "sin²θ + cos²θ এর মান কত?",
+          "source": {
+            "file": "prisma/seed-questions-topic-gaps-2.ts",
+            "line": 634
+          }
+        }
+      ]
+    ],
+    "liveIdentityDuplicateGroups": [],
+    "sourceNearDuplicates": []
+  },
+  "admission": {
+    "sourceTotal": 220,
+    "sourceUniqueIdentityCount": 220,
+    "liveTotal": 220,
+    "liveUniqueIdentityCount": 220,
+    "exactMatches": 220,
+    "contentDrifts": [],
+    "missing": [],
+    "liveExtras": [],
+    "sourceIdentityDuplicateGroups": 0,
+    "liveIdentityDuplicateGroups": 0
+  },
+  "safeguards": [
+    "This command performs read-only SELECT queries.",
+    "No seed script is executed.",
+    "No question is inserted, updated, or deleted.",
+    "Import candidates require a separate reviewed approval manifest and an explicit --apply flag."
+  ]
+}

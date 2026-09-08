@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T13:22:00Z",
+  "feature": "academic-content-quality-center",
+  "safety": {
+    "automatedFactualApproval": false,
+    "automatedContentEditing": false,
+    "automatedContentDeletion": false,
+    "absenceMeans": "UNREVIEWED",
+    "humanEvidenceRequiredForApproval": true,
+    "httpsProvenanceOnly": true,
+    "reviewActionsAudited": true
+  },
+  "database": {
+    "migrationsApplied": 26,
+    "migrationsExpected": 26,
+    "newModel": "ContentReview",
+    "reviewRowsBeforeWorkflowTest": 0,
+    "reviewRowsDuringWorkflowTest": 1,
+    "reviewRowsAfterCleanup": 0,
+    "academicContentRowsModifiedDuringTest": 0
+  },
+  "liveScan": {
+    "durationMs": 3180,
+    "totalItems": 1157,
+    "coreMcq": 688,
+    "admissionMcq": 220,
+    "cq": 64,
+    "topicNotes": 185,
+    "reviewed": 0,
+    "unreviewed": 1157,
+    "approved": 0,
+    "needsCorrection": 0,
+    "rejected": 0,
+    "automatedRiskItems": 4,
+    "blockerItems": 0,
+    "warningItems": 4,
+    "sameContextDuplicateGroups": 0,
+    "crossContextDuplicateGroups": 2
+  },
+  "attentionQueue": [
+    {
+      "text": "sin²θ + cos²θ এর মান কত?",
+      "contexts": [
+        "উচ্চতর গণিত ১ম পত্র · ত্রিকোণমিতিক অভেদ",
+        "উচ্চতর গণিত ১ম পত্র · ত্রিকোণমিতিক অনুপাতের ধারণা"
+      ],
+      "risk": "CROSS_CONTEXT_DUPLICATE"
+    },
+    {
+      "text": "শব্দ তরঙ্গ কোন ধরনের তরঙ্গ?",
+      "contexts": [
+        "পদার্থবিজ্ঞান ১ম পত্র · শব্দ তরঙ্গ",
+        "পদার্থবিজ্ঞান ১ম পত্র · তরঙ্গের প্রকারভেদ"
+      ],
+      "risk": "CROSS_CONTEXT_DUPLICATE"
+    }
+  ],
+  "workflowVerification": {
+    "targetExistenceCheck": true,
+    "temporaryStatus": "NEEDS_CORRECTION",
+    "reviewAppearedInReviewedQueue": true,
+    "cleanupRestoredOriginalCount": true,
+    "contentModified": false
+  },
+  "verification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 67,
+    "unitTestsTotal": 67,
+    "contentQualityTestsPassed": 8,
+    "pureLogicPassed": 162,
+    "secretShapePassed": 17,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 204,
+    "productionStaticPagesExpected": 204,
+    "productionBuildExitCode": 0,
+    "previewStarted": false
+  },
+  "manualBacklog": {
+    "items": 1157,
+    "requiresQualifiedSubjectReviewers": true,
+    "automatedScannerIsNotExpertReview": true
+  },
+  "secretsPrinted": false
+}

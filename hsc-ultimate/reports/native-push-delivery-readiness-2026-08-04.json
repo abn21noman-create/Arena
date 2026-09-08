@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T12:25:00Z",
+  "feature": "android-strict-focus-native-push-delivery-readiness",
+  "database": {
+    "migrationsApplied": 25,
+    "migrationsExpected": 25,
+    "newModel": "NativePushDelivery",
+    "nativeDevicesAfterTest": 0,
+    "nativePushDeliveriesAfterTest": 0,
+    "existingContentDeleted": 0
+  },
+  "runtime": {
+    "firebaseStatus": "unconfigured",
+    "configured": false,
+    "safeFallbackErrorCode": "FIREBASE_NOT_CONFIGURED",
+    "appOpenPollingAvailable": true,
+    "webOverlayAvailable": true,
+    "closedAppFcmAvailable": false
+  },
+  "commandSafety": {
+    "commandIdRequired": true,
+    "issuedAtRequired": true,
+    "maxCommandAgeMs": 120000,
+    "maxFutureSkewMs": 30000,
+    "rememberedCommandIds": 20,
+    "pendingReceiptLimit": 10,
+    "focusDurationMinutes": { "minimum": 20, "maximum": 120 },
+    "localConsentRequired": true,
+    "accessibilityRequiredForStart": true,
+    "stopRequiresMatchingSession": true
+  },
+  "deliverySafety": {
+    "firebaseExceptionsPropagateToFocusApi": false,
+    "invalidTokensHardDeleted": false,
+    "invalidTokensSoftDisabled": true,
+    "validReregistrationCanRecover": true,
+    "deviceStaleDays": 90,
+    "deliveryRetentionDays": 90,
+    "rawTokenExposedToAdmin": false,
+    "adminTokenFingerprintLength": 12
+  },
+  "liveReceiptVerification": {
+    "exactReceiptMatched": 1,
+    "unknownReceiptUnmatched": 1,
+    "deliveryStatusPersisted": "STARTED",
+    "deviceReceiptPersisted": "STARTED",
+    "temporaryRowsCleaned": true
+  },
+  "webVerification": {
+    "typeScriptErrors": 0,
+    "eslintWarnings": 0,
+    "unitTestsPassed": 54,
+    "unitTestsTotal": 54,
+    "pureLogicPassed": 162,
+    "secretShapePassed": 17,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 202,
+    "productionStaticPagesExpected": 202,
+    "productionBuildExitCode": 0
+  },
+  "androidVerification": {
+    "javaVersion": "21.0.12",
+    "compileSdk": 36,
+    "gradleVersion": "8.13",
+    "capacitorDoctor": "Android looking great",
+    "strictFocusCommandGuardTestsPassed": 5,
+    "androidJvmTestsPassed": 6,
+    "androidJvmTestsTotal": 6,
+    "assembleDebug": "passed",
+    "lintDebug": "passed",
+    "debugApkApproxMb": 5.8,
+    "lowMemorySwapAutoCleanup": true
+  },
+  "privacy": {
+    "screenContentCollected": false,
+    "messagesCollected": false,
+    "passwordsCollected": false,
+    "browsingHistoryCollected": false,
+    "receiptFields": [
+      "commandId",
+      "sessionId",
+      "commandType",
+      "resultStatus",
+      "occurredAtEpochMs"
+    ]
+  },
+  "externalPending": [
+    "android/app/google-services.json",
+    "FIREBASE_PROJECT_ID",
+    "FIREBASE_CLIENT_EMAIL",
+    "FIREBASE_PRIVATE_KEY",
+    "Real Firebase multicast delivery test",
+    "Physical Android background/OEM battery/Accessibility behavior test"
+  ],
+  "secretsPrinted": false,
+  "previewStarted": false
+}

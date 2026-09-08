@@ -1,0 +1,106 @@
+{
+  "generatedAt": "2026-08-05T07:00:18.295Z",
+  "scope": "feature-polish-ui-ux",
+  "summary": {
+    "total": 18,
+    "pass": 18,
+    "fail": 0
+  },
+  "inventory": {
+    "pages": 89,
+    "componentAndPageTsxFiles": 305,
+    "navigationTargets": 22
+  },
+  "checks": [
+    {
+      "id": "no-nested-interactive-links",
+      "status": "PASS",
+      "detail": "0 Link > Button/button nesting patterns"
+    },
+    {
+      "id": "localized-control-labels",
+      "status": "PASS",
+      "detail": "Back/Close labels are localized"
+    },
+    {
+      "id": "no-broken-unicode",
+      "status": "PASS",
+      "detail": "No Unicode replacement characters"
+    },
+    {
+      "id": "no-runtime-8-11px-text",
+      "status": "PASS",
+      "detail": "No 8–11px arbitrary runtime text"
+    },
+    {
+      "id": "required:app/loading.tsx",
+      "status": "PASS",
+      "detail": "app/loading.tsx"
+    },
+    {
+      "id": "required:app/error.tsx",
+      "status": "PASS",
+      "detail": "app/error.tsx"
+    },
+    {
+      "id": "required:app/global-error.tsx",
+      "status": "PASS",
+      "detail": "app/global-error.tsx"
+    },
+    {
+      "id": "required:app/not-found.tsx",
+      "status": "PASS",
+      "detail": "app/not-found.tsx"
+    },
+    {
+      "id": "required:components/layout/route-experience.tsx",
+      "status": "PASS",
+      "detail": "components/layout/route-experience.tsx"
+    },
+    {
+      "id": "required:components/layout/global-search.tsx",
+      "status": "PASS",
+      "detail": "components/layout/global-search.tsx"
+    },
+    {
+      "id": "route-context-coverage",
+      "status": "PASS",
+      "detail": "89/89 page routes have contextual labels"
+    },
+    {
+      "id": "navigation-targets-exist",
+      "status": "PASS",
+      "detail": "22 navigation targets resolve to pages"
+    },
+    {
+      "id": "live-qa-python-syntax",
+      "status": "PASS",
+      "detail": "7/7 live QA scripts compile"
+    },
+    {
+      "id": "live-qa-exact-user-cleanup",
+      "status": "PASS",
+      "detail": "Live suites never wildcard-delete test or real users"
+    },
+    {
+      "id": "live-qa-owned-server-lifecycle",
+      "status": "PASS",
+      "detail": "QA scripts never kill operator-managed Next.js processes"
+    },
+    {
+      "id": "horizontal-tabs-layout",
+      "status": "PASS",
+      "detail": "Horizontal Tabs stack list and panel vertically on mobile"
+    },
+    {
+      "id": "search-request-cancellation",
+      "status": "PASS",
+      "detail": "Global search distinguishes errors and cancels stale requests"
+    },
+    {
+      "id": "mobile-menu-discoverability",
+      "status": "PASS",
+      "detail": "Mobile tools are grouped and searchable"
+    }
+  ]
+}

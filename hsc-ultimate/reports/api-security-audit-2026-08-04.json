@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T18:11:01.283Z",
+  "status": "PASS",
+  "routes": {
+    "total": 240,
+    "admin": 43,
+    "adminWithoutGuard": [],
+    "authenticatedOrAdminOrCron": 232,
+    "intentionalPublic": [
+      {
+        "file": "app/api/auth/[...nextauth]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/auth/forgot-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/auth/register/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/auth/reset-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/health/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "file": "app/api/public-profile/[slug]/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "file": "app/api/push/vapid-public-key/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "file": "app/api/stats/user-count/route.ts",
+        "methods": [
+          "GET"
+        ]
+      },
+      {
+        "file": "app/api/system-settings/route.ts",
+        "methods": [
+          "GET"
+        ]
+      }
+    ],
+    "unauthorizedPrivate": [],
+    "mutations": 167,
+    "mutationWithoutAuth": [],
+    "publicMutations": [
+      {
+        "file": "app/api/auth/[...nextauth]/route.ts",
+        "methods": [
+          "GET",
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/auth/forgot-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/auth/register/route.ts",
+        "methods": [
+          "POST"
+        ]
+      },
+      {
+        "file": "app/api/auth/reset-password/route.ts",
+        "methods": [
+          "POST"
+        ]
+      }
+    ],
+    "routeSpecificRateLimit": 52,
+    "globalRateLimited": 240
+  },
+  "globalBaseline": {
+    "apiMatcher": true,
+    "rateLimit": true,
+    "originGuard": true,
+    "absoluteBodyLimit": true
+  },
+  "headers": {
+    "required": [
+      "X-Frame-Options",
+      "X-Content-Type-Options",
+      "Referrer-Policy",
+      "Permissions-Policy",
+      "Strict-Transport-Security",
+      "Content-Security-Policy-Report-Only",
+      "Cross-Origin-Opener-Policy",
+      "X-Permitted-Cross-Domain-Policies"
+    ],
+    "missing": []
+  },
+  "rawQueries": {
+    "files": [
+      "lib/pdf-chat.ts"
+    ],
+    "approvedParameterizedPgvector": true,
+    "violations": []
+  },
+  "hardcodedSecrets": [],
+  "blockers": [],
+  "databaseWrites": 0,
+  "previewStarted": false,
+  "verification": {
+    "migrationsApplied": 29,
+    "unitTestsPassed": 93,
+    "apiSecurityTestsPassed": 7,
+    "pureLogicPassed": 162,
+    "productionVulnerabilities": 0,
+    "productionStaticPagesGenerated": 206,
+    "productionStaticPagesExpected": 206,
+    "productionBuildExitCode": 0,
+    "existingCoreE2eBaseline": 46,
+    "existingFocusE2eBaseline": 37,
+    "previewStarted": false
+  }
+}

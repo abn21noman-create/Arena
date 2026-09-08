@@ -1,0 +1,13 @@
+{
+  "suite": "live-api-real-user",
+  "baseUrl": "http://localhost:3000",
+  "realDatabase": true,
+  "disposableUsers": 2,
+  "summary": {
+    "pass": 112,
+    "fail": 0,
+    "total": 112
+  },
+  "failed": [],
+  "finalizedAt": "2026-08-05T06:58:21.671999+00:00"
+}

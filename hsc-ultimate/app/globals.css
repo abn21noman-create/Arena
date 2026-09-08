@@ -1,0 +1,782 @@
+@import "tailwindcss";
+
+/* ====================================================================
+   HSC ULTIMATE — 2026 ULTRA-SMOOTH & HIGH-CONTRAST DESIGN SYSTEM
+   --------------------------------------------------------------------
+   - Aurora Glass 2026 theme (Hardware-accelerated & battery friendly)
+   - High-contrast typography & dark mode clarity (WCAG AAA compliant)
+   - Fluid typography tokens (Inter + Noto Sans Bengali Variable)
+   - Lightweight frosted glassmorphism (optimized for phones & laptops)
+   - Comprehensive sidebar & navigation color tokens
+   - Responsive & low-power GPU profile
+   ==================================================================== */
+
+@theme {
+  /* ----- Brand colors ----- */
+  --color-primary: hsl(252 88% 62%);
+  --color-primary-fg: hsl(0 0% 100%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(292 82% 60%);
+  --color-secondary-foreground: hsl(0 0% 100%);
+  --color-accent: hsl(187 88% 48%);
+  --color-accent-fg: hsl(0 0% 98%);
+  --color-accent-foreground: hsl(0 0% 98%);
+  --color-success: hsl(155 84% 42%);
+  --color-warning: hsl(38 94% 52%);
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  /* ----- DARK MODE (Default) ----- */
+  --color-background: hsl(232 30% 6%);
+  --color-foreground: hsl(0 0% 98%);
+  --color-card: hsl(230 25% 10%);
+  --color-card-foreground: hsl(0 0% 98%);
+  --color-popover: hsl(232 28% 10%);
+  --color-popover-foreground: hsl(0 0% 98%);
+  --color-muted: hsl(230 20% 15%);
+  --color-muted-foreground: hsl(220 18% 78%);
+  --color-border: hsl(230 18% 22%);
+  --color-input: hsl(230 20% 16%);
+  --color-ring: hsl(252 88% 66%);
+
+  /* ----- Sidebar Tokens (Dark) ----- */
+  --color-sidebar: hsl(232 30% 7%);
+  --color-sidebar-foreground: hsl(0 0% 98%);
+  --color-sidebar-border: hsl(230 18% 18%);
+  --color-sidebar-muted-foreground: hsl(220 16% 74%);
+  --color-sidebar-accent: hsl(230 22% 16%);
+  --color-sidebar-accent-foreground: hsl(0 0% 100%);
+
+  /* ----- Brand gradients ----- */
+  --gradient-brand: linear-gradient(135deg, hsl(252 88% 64%) 0%, hsl(292 82% 62%) 48%, hsl(187 88% 52%) 100%);
+  --gradient-aurora: linear-gradient(135deg, hsl(252 88% 60% / 0.12), hsl(292 82% 58% / 0.09), hsl(187 88% 48% / 0.09));
+  --gradient-mesh: radial-gradient(at 16% 18%, hsl(252 88% 60% / 0.16), transparent 46%),
+                   radial-gradient(at 84% 14%, hsl(292 82% 58% / 0.12), transparent 44%),
+                   radial-gradient(at 62% 86%, hsl(187 88% 48% / 0.10), transparent 48%);
+  --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.08), hsl(0 0% 100% / 0.02));
+  --gradient-border: linear-gradient(135deg, hsl(0 0% 100% / 0.22), hsl(0 0% 100% / 0.06));
+
+  /* ----- Shadows ----- */
+  --shadow-soft: 0 1px 2px hsl(0 0% 0% / 0.22), 0 2px 8px hsl(0 0% 0% / 0.15);
+  --shadow-elevated: 0 4px 12px hsl(0 0% 0% / 0.25), 0 12px 32px hsl(0 0% 0% / 0.30);
+  --shadow-glow: 0 0 0 1px hsl(252 88% 62% / 0.3), 0 8px 24px hsl(252 88% 50% / 0.22);
+  --shadow-glow-strong: 0 0 0 1px hsl(252 88% 65% / 0.48), 0 14px 40px hsl(292 82% 48% / 0.28);
+  --shadow-glass: 0 8px 28px hsl(0 0% 0% / 0.32), inset 0 1px 0 hsl(0 0% 100% / 0.08);
+
+  /* ----- Scrollbar (Dark) ----- */
+  --scrollbar-thumb: hsl(225 15% 28%);
+  --scrollbar-thumb-hover: hsl(225 15% 42%);
+
+  /* ----- Skeleton (Dark) ----- */
+  --skeleton-base: hsl(225 15% 15%);
+  --skeleton-highlight: hsl(225 15% 22%);
+
+  /* ----- Easing & Radii ----- */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+
+  /* ----- Lightweight CSS Animations ----- */
+  --animate-aurora: aurora 30s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-fade-up: fade-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.3s ease-out forwards;
+  --animate-scale-in: scale-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes aurora {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.55; }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+/* ====================================================================
+   LIGHT MODE — `.light` class (set by next-themes)
+   ==================================================================== */
+html.light {
+  --color-background: hsl(0 0% 99%);
+  --color-foreground: hsl(225 25% 10%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(225 25% 10%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(225 25% 10%);
+  --color-muted: hsl(220 15% 94%);
+  --color-muted-foreground: hsl(225 14% 36%);
+  --color-accent-fg: hsl(225 25% 10%);
+  --color-accent-foreground: hsl(225 25% 10%);
+  --color-border: hsl(220 15% 88%);
+  --color-input: hsl(220 15% 94%);
+  --color-ring: hsl(252 88% 55%);
+
+  /* Sidebar Tokens (Light) */
+  --color-sidebar: hsl(220 20% 97%);
+  --color-sidebar-foreground: hsl(225 25% 12%);
+  --color-sidebar-border: hsl(220 15% 88%);
+  --color-sidebar-muted-foreground: hsl(225 12% 42%);
+  --color-sidebar-accent: hsl(220 18% 91%);
+  --color-sidebar-accent-foreground: hsl(225 25% 10%);
+
+  --gradient-mesh: radial-gradient(at 16% 18%, hsl(252 88% 62% / 0.08), transparent 46%),
+                   radial-gradient(at 84% 14%, hsl(292 82% 60% / 0.06), transparent 44%),
+                   radial-gradient(at 62% 86%, hsl(187 88% 48% / 0.05), transparent 48%);
+  --gradient-glass: linear-gradient(135deg, hsl(0 0% 100% / 0.8), hsl(0 0% 100% / 0.5));
+  --gradient-border: linear-gradient(135deg, hsl(220 90% 56% / 0.3), hsl(280 80% 60% / 0.15));
+
+  --shadow-soft: 0 1px 2px hsl(225 15% 80% / 0.3), 0 2px 8px hsl(225 15% 80% / 0.18);
+  --shadow-elevated: 0 4px 12px hsl(225 15% 80% / 0.25), 0 12px 32px hsl(225 15% 80% / 0.15);
+  --shadow-glow: 0 0 0 1px hsl(252 88% 60% / 0.22), 0 8px 24px hsl(252 70% 55% / 0.16);
+  --shadow-glow-strong: 0 0 0 1px hsl(252 88% 58% / 0.36), 0 12px 36px hsl(292 70% 55% / 0.22);
+  --shadow-glass: 0 8px 32px hsl(225 15% 80% / 0.25), inset 0 1px 0 hsl(0 0% 100% / 0.8);
+
+  --scrollbar-thumb: hsl(220 15% 75%);
+  --scrollbar-thumb-hover: hsl(220 15% 60%);
+
+  --skeleton-base: hsl(220 15% 90%);
+  --skeleton-highlight: hsl(220 15% 96%);
+
+  color-scheme: light;
+}
+
+/* ====================================================================
+   DARK MODE — explicit (next-themes adds .dark)
+   ==================================================================== */
+html.dark {
+  color-scheme: dark;
+}
+
+/* ====================================================================
+   BASE STYLES
+   ==================================================================== */
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  font-size: var(--a11y-font-size, 16px);
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-background);
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+  font-variant-numeric: tabular-nums;
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.2s var(--ease-smooth), color 0.2s var(--ease-smooth);
+}
+
+/* ====================================================================
+   TYPOGRAPHY — High-legibility Bengali + Latin
+   ==================================================================== */
+.text-display {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 800;
+}
+.text-h1 {
+  font-size: clamp(1.85rem, 3.5vw, 2.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+.text-h2 {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+.text-h3 {
+  font-size: clamp(1.15rem, 1.8vw, 1.4rem);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+.text-lead {
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--color-muted-foreground);
+}
+
+/* ====================================================================
+   AURORA BACKGROUND — Ultra-fast, GPU-friendly & Zero-lag
+   ==================================================================== */
+.aurora-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--color-background);
+  contain: strict;
+}
+.aurora-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-mesh);
+  opacity: 0.9;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+.aurora-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 18% 18%, hsl(252 88% 60% / 0.08) 0%, transparent 45%),
+    radial-gradient(circle at 82% 82%, hsl(292 82% 58% / 0.06) 0%, transparent 45%);
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+/* Performant Aurora Spots using pure radial gradients */
+.aurora-spot {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 9999px;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  transform: translateZ(0);
+}
+html.light .aurora-spot {
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+}
+.aurora-spot-blue {
+  background: radial-gradient(circle, hsl(220 90% 56% / 0.22) 0%, transparent 70%);
+  top: -120px;
+  left: -60px;
+}
+.aurora-spot-purple {
+  background: radial-gradient(circle, hsl(280 80% 60% / 0.18) 0%, transparent 70%);
+  top: 60px;
+  right: -80px;
+}
+.aurora-spot-cyan {
+  background: radial-gradient(circle, hsl(180 85% 55% / 0.16) 0%, transparent 70%);
+  bottom: -60px;
+  left: 25%;
+}
+
+/* ====================================================================
+   GLASS & SURFACE SYSTEM (Optimized for crystal clear dark mode)
+   ==================================================================== */
+.glass {
+  background-color: hsl(230 25% 10% / 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid hsl(0 0% 100% / 0.08);
+  box-shadow: var(--shadow-glass);
+}
+html.light .glass {
+  background-color: hsl(0 0% 100% / 0.92);
+  border: 1px solid hsl(220 15% 90% / 0.9);
+}
+
+.glass-surface {
+  background-color: hsl(230 25% 10% / 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid hsl(0 0% 100% / 0.09);
+  box-shadow: 0 4px 18px hsl(0 0% 0% / 0.25), inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  color: var(--color-foreground);
+}
+html.light .glass-surface {
+  background-color: hsl(0 0% 100% / 0.95);
+  border: 1px solid hsl(220 15% 90% / 0.9);
+  box-shadow: 0 4px 18px hsl(220 20% 80% / 0.15), inset 0 1px 0 hsl(0 0% 100% / 0.9);
+  color: var(--color-foreground);
+}
+
+.glass-card {
+  background-color: hsl(230 25% 10% / 0.90);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid hsl(0 0% 100% / 0.09);
+  box-shadow: 0 6px 24px hsl(0 0% 0% / 0.28), inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  border-radius: var(--radius-xl);
+  color: var(--color-foreground);
+  transition: background-color 0.2s var(--ease-smooth), border-color 0.2s var(--ease-smooth);
+}
+html.light .glass-card {
+  background-color: hsl(0 0% 100% / 0.95);
+  border: 1px solid hsl(220 15% 90% / 0.9);
+  box-shadow: 0 6px 24px hsl(220 20% 80% / 0.15), inset 0 1px 0 hsl(0 0% 100% / 0.9);
+  color: var(--color-foreground);
+}
+
+.glass-panel {
+  background-color: hsl(230 25% 9% / 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsl(0 0% 100% / 0.1);
+  box-shadow: 0 12px 36px hsl(0 0% 0% / 0.38), inset 0 1px 0 hsl(0 0% 100% / 0.1);
+  color: var(--color-foreground);
+}
+html.light .glass-panel {
+  background-color: hsl(0 0% 100% / 0.98);
+  border: 1px solid hsl(220 15% 88%);
+  box-shadow: 0 12px 36px hsl(220 20% 75% / 0.18), inset 0 1px 0 hsl(0 0% 100% / 0.9);
+  color: var(--color-foreground);
+}
+
+.glass-overlay {
+  background-color: hsl(232 28% 10% / 0.97);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid hsl(0 0% 100% / 0.12);
+  box-shadow: 0 16px 48px hsl(0 0% 0% / 0.5), inset 0 1px 0 hsl(0 0% 100% / 0.1);
+  color: var(--color-popover-foreground);
+}
+html.light .glass-overlay {
+  background-color: hsl(0 0% 100% / 0.99);
+  border: 1px solid hsl(220 15% 86%);
+  box-shadow: 0 16px 48px hsl(220 20% 70% / 0.22), inset 0 1px 0 hsl(0 0% 100% / 0.9);
+  color: var(--color-popover-foreground);
+}
+
+.glass-nav {
+  background-color: hsl(232 30% 7% / 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-color: var(--color-sidebar-border);
+}
+html.light .glass-nav {
+  background-color: hsl(0 0% 100% / 0.96);
+  border-color: var(--color-sidebar-border);
+}
+
+.glass-chip {
+  background-color: hsl(0 0% 100% / 0.08);
+  border: 1px solid hsl(0 0% 100% / 0.12);
+  backdrop-filter: blur(6px);
+}
+html.light .glass-chip {
+  background-color: hsl(220 15% 92% / 0.85);
+  border: 1px solid hsl(220 15% 84%);
+}
+
+.glass-hero {
+  border: 1px solid hsl(0 0% 100% / 0.12);
+  box-shadow: 0 16px 48px hsl(0 0% 0% / 0.35);
+}
+
+.glass-hero-card {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.glass-hero-orb {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0.22;
+}
+
+/* Gradient border */
+.gradient-border {
+  position: relative;
+  background: var(--color-card);
+  border-radius: var(--radius-xl);
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--gradient-border);
+  -webkit-mask: linear-gradient(hsl(0 0% 100% / 1) 0 0) content-box, linear-gradient(hsl(0 0% 100% / 1) 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Brand gradient text */
+.text-gradient {
+  background: var(--gradient-brand);
+  background-size: 150% 150%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ====================================================================
+   SHIMMER — for skeletons / loading
+   ==================================================================== */
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(0 0% 100% / 0) 0%,
+    hsl(0 0% 100% / 0.08) 50%,
+    hsl(0 0% 100% / 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+html.light .shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(0 0% 100% / 0) 0%,
+    hsl(220 15% 60% / 0.12) 50%,
+    hsl(0 0% 100% / 0) 100%
+  );
+}
+
+/* ====================================================================
+   TOUCH & INTERACTION
+   ==================================================================== */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* iOS safe area helpers */
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+.safe-left { padding-left: env(safe-area-inset-left); }
+.safe-right { padding-right: env(safe-area-inset-right); }
+
+/* Prevent iOS auto-zoom on focus */
+input, textarea, select { font-size: max(16px, 1rem); }
+
+/* ====================================================================
+   SCROLLBAR
+   ==================================================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox */
+* {
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+
+/* Selection */
+::selection {
+  background: hsl(252 88% 60% / 0.35);
+  color: var(--color-foreground);
+}
+
+/* ====================================================================
+   PREMIUM LOADING EXPERIENCE — Obsidian Prism
+   ==================================================================== */
+.premium-loading {
+  background:
+    radial-gradient(circle at 50% -12%, hsl(252 88% 62% / 0.10), transparent 36%),
+    linear-gradient(180deg, hsl(232 32% 5%), hsl(234 36% 4%));
+  color: var(--color-foreground);
+}
+html.light .premium-loading {
+  background:
+    radial-gradient(circle at 50% -12%, hsl(252 88% 62% / 0.10), transparent 38%),
+    linear-gradient(180deg, hsl(250 100% 99%), hsl(225 60% 97%));
+}
+.premium-loading-grid {
+  background-image:
+    linear-gradient(hsl(0 0% 100% / 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(0 0% 100% / 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black 0%, transparent 82%);
+}
+html.light .premium-loading-grid {
+  background-image:
+    linear-gradient(hsl(252 50% 30% / 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, hsl(252 50% 30% / 0.045) 1px, transparent 1px);
+}
+.loading-aurora {
+  position: absolute;
+  border-radius: 999px;
+  opacity: 0.25;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+.loading-aurora-one {
+  left: -6rem;
+  top: 8%;
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, hsl(252 88% 55% / 0.35) 0%, transparent 70%);
+}
+.loading-aurora-two {
+  right: -8rem;
+  top: 18%;
+  width: 26rem;
+  height: 26rem;
+  background: radial-gradient(circle, hsl(292 82% 52% / 0.28) 0%, transparent 70%);
+}
+.loading-aurora-three {
+  bottom: -10rem;
+  left: 42%;
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, hsl(187 88% 45% / 0.22) 0%, transparent 70%);
+}
+.loading-emblem {
+  filter: drop-shadow(0 14px 28px hsl(252 88% 35% / 0.24));
+}
+.loading-orbit {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid hsl(0 0% 100% / 0.12);
+}
+html.light .loading-orbit { border-color: hsl(252 50% 35% / 0.14); }
+.loading-orbit-outer {
+  inset: 0;
+  border-top-color: hsl(187 88% 60% / 0.75);
+  border-right-color: hsl(292 82% 65% / 0.42);
+  animation: loading-spin 8s linear infinite;
+}
+.loading-orbit-inner {
+  inset: 0.7rem;
+  border-bottom-color: hsl(252 88% 70% / 0.8);
+  border-left-color: hsl(292 82% 65% / 0.42);
+  animation: loading-spin-reverse 6s linear infinite;
+}
+.loading-orbit-dot {
+  position: absolute;
+  left: 50%;
+  top: -0.2rem;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  background: hsl(187 88% 62%);
+  box-shadow: 0 0 0 4px hsl(187 88% 52% / 0.12), 0 0 16px hsl(187 88% 58% / 0.6);
+  transform: translateX(-50%);
+}
+.loading-live-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: hsl(155 85% 52%);
+  box-shadow: 0 0 0 4px hsl(155 85% 50% / 0.10);
+  animation: loading-breathe 2.4s ease-in-out infinite;
+}
+.loading-track {
+  box-shadow: inset 0 1px 3px hsl(235 50% 1% / 0.28);
+}
+.loading-progress {
+  position: relative;
+  animation: loading-travel 2.4s var(--ease-spring) infinite;
+  box-shadow: 0 0 16px hsl(252 88% 62% / 0.35);
+}
+.loading-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.75), transparent);
+  animation: shimmer 1.6s linear infinite;
+}
+.premium-loading-preview {
+  background:
+    linear-gradient(145deg, hsl(0 0% 100% / 0.055), transparent 42%),
+    hsl(232 28% 7% / 0.75);
+}
+html.light .premium-loading-preview {
+  background:
+    linear-gradient(145deg, hsl(0 0% 100% / 0.96), hsl(252 100% 98% / 0.76)),
+    hsl(0 0% 100% / 0.88);
+  border-color: hsl(252 55% 76% / 0.34);
+  box-shadow: 0 20px 60px hsl(250 50% 60% / 0.12);
+}
+.premium-skeleton-panel {
+  border: 1px solid hsl(0 0% 100% / 0.06);
+  background: hsl(0 0% 100% / 0.025);
+  box-shadow: inset 0 1px 0 hsl(0 0% 100% / 0.025);
+}
+html.light .premium-skeleton-panel {
+  border-color: hsl(252 40% 72% / 0.20);
+  background: hsl(252 100% 99% / 0.72);
+}
+.premium-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(110deg, hsl(230 18% 15%), hsl(232 20% 19%), hsl(230 18% 15%));
+  background-size: 220% 100%;
+  animation: premium-skeleton-sweep 2s linear infinite;
+}
+html.light .premium-skeleton {
+  background: linear-gradient(110deg, hsl(246 35% 91%), hsl(252 55% 97%), hsl(246 35% 91%));
+  background-size: 220% 100%;
+}
+
+@keyframes loading-spin { to { transform: rotate(360deg); } }
+@keyframes loading-spin-reverse { to { transform: rotate(-360deg); } }
+@keyframes loading-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(0.88); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+@keyframes loading-travel {
+  0% { transform: translateX(-55%); width: 24%; }
+  45% { width: 46%; }
+  100% { transform: translateX(245%); width: 24%; }
+}
+@keyframes premium-skeleton-sweep {
+  from { background-position: 180% 0; }
+  to { background-position: -40% 0; }
+}
+
+/* ====================================================================
+   ACCESSIBILITY & MOTION PREFERENCES
+   ==================================================================== */
+html.reduced-motion *,
+html.reduced-motion *::before,
+html.reduced-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html.high-contrast {
+  --color-foreground: hsl(0 0% 100%);
+  --color-muted-foreground: hsl(220 15% 90%);
+  --color-border: hsl(220 20% 58%);
+  --color-card: hsl(232 35% 4%);
+  --color-input: hsl(230 24% 12%);
+}
+html.light.high-contrast {
+  --color-foreground: hsl(0 0% 0%);
+  --color-muted-foreground: hsl(225 20% 18%);
+  --color-border: hsl(225 30% 28%);
+  --color-card: hsl(0 0% 100%);
+  --color-input: hsl(0 0% 96%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  .no-print, .aurora-bg, [class*="animate-"] { display: none !important; }
+  body { background: white; color: black; }
+  html.light, html.dark { --color-background: white; --color-foreground: black; }
+}
+
+/* ====================================================================
+   MOBILE OPTIMIZATION (Disables heavy blurs for battery/cooling)
+   ==================================================================== */
+@media (max-width: 768px) {
+  .aurora-spot {
+    display: none !important;
+  }
+  .glass, .glass-card, .glass-surface, .glass-panel, .glass-overlay, .glass-nav {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
+/* ====================================================================
+   MARQUEE, SKELETON & HOVER UTILITIES
+   ==================================================================== */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+.marquee {
+  display: flex;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+.marquee-content {
+  display: flex;
+  gap: 2rem;
+  animation: marquee 30s linear infinite;
+  flex-shrink: 0;
+}
+
+.hover-glow {
+  transition: box-shadow 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth);
+}
+.hover-glow:hover {
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base) 0%,
+    var(--skeleton-highlight) 50%,
+    var(--skeleton-base) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+  border-radius: var(--radius-md);
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 1000;
+  padding: 0.5rem 1rem;
+  background: var(--color-primary);
+  color: var(--color-primary-fg);
+  border-radius: 0 0 var(--radius-md) 0;
+  text-decoration: none;
+  font-weight: 600;
+}
+.skip-to-content:focus {
+  top: 0;
+}

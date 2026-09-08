@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T22:27:37.290Z",
+  "mode": "LIVE_READ_ONLY",
+  "status": "LOCAL_READY",
+  "strictRequested": false,
+  "application": {
+    "name": "HSC Ultimate",
+    "version": "0.1.0",
+    "node": "v22.23.2",
+    "npm": "npm/10.9.8"
+  },
+  "inventory": {
+    "pages": 89,
+    "apiRoutes": 213,
+    "components": 178,
+    "libraryFiles": 113,
+    "prismaModels": 67,
+    "prismaMigrations": 33
+  },
+  "checks": [
+    {
+      "id": "node",
+      "status": "PASS",
+      "detail": "v22.23.2"
+    },
+    {
+      "id": "package-manager",
+      "status": "PASS",
+      "detail": "npm@10.8.2"
+    },
+    {
+      "id": "single-lockfile",
+      "status": "PASS",
+      "detail": "npm lock only"
+    },
+    {
+      "id": "privacy-compliance",
+      "status": "PASS",
+      "detail": "privacy 2026.08.05 · terms 2026.08.05 · public routes present"
+    },
+    {
+      "id": "runtime-truth-integrity",
+      "status": "PASS",
+      "detail": "live landing + no prototype API + public-only page cache"
+    },
+    {
+      "id": "inventory-pages",
+      "status": "PASS",
+      "detail": "89/89"
+    },
+    {
+      "id": "inventory-apiRoutes",
+      "status": "PASS",
+      "detail": "213/213"
+    },
+    {
+      "id": "inventory-components",
+      "status": "PASS",
+      "detail": "178/178"
+    },
+    {
+      "id": "inventory-libraryFiles",
+      "status": "PASS",
+      "detail": "113/113"
+    },
+    {
+      "id": "inventory-prismaModels",
+      "status": "PASS",
+      "detail": "67/67"
+    },
+    {
+      "id": "inventory-prismaMigrations",
+      "status": "PASS",
+      "detail": "33/33"
+    },
+    {
+      "id": "source-manifest",
+      "status": "PASS",
+      "detail": "819 files"
+    },
+    {
+      "id": "production-audit",
+      "status": "PASS",
+      "detail": "0 vulnerabilities"
+    },
+    {
+      "id": "backup-hygiene",
+      "status": "PASS",
+      "detail": "0 generated files"
+    },
+    {
+      "id": "android-local-path",
+      "status": "PASS",
+      "detail": "clean"
+    },
+    {
+      "id": "build-artifact",
+      "status": "PASS",
+      "detail": "BUILD_ID present"
+    },
+    {
+      "id": "live-migrations",
+      "status": "PASS",
+      "detail": "33/33"
+    },
+    {
+      "id": "academic-baseline",
+      "status": "PASS",
+      "detail": "1157/1157 reviewable"
+    },
+    {
+      "id": "content-blockers",
+      "status": "PASS",
+      "detail": "0 blockers"
+    },
+    {
+      "id": "stale-reviews",
+      "status": "PASS",
+      "detail": "0 stale"
+    },
+    {
+      "id": "academic-review-backlog",
+      "status": "WARN",
+      "detail": "1156 unreviewed"
+    },
+    {
+      "id": "snapshot-integrity",
+      "status": "PASS",
+      "detail": "2153b46c3c4c5d457645206df5e122d248ce62e87ef8f5a5dde14dacf4296fca"
+    },
+    {
+      "id": "report-secret-shape",
+      "status": "PASS",
+      "detail": "no credential-value fields"
+    }
+  ],
+  "supplyChain": {
+    "fileCount": 819,
+    "aggregateSha256": "e0a96e159158928894c51b5a24a8bb8cbb7583a7cf1f4469bac58becae52901f",
+    "migrationAggregateSha256": "6386bed1dc09e6b56162ea4534094264c556c223c63ebab987fc60c4a1c5e8a9",
+    "critical": {
+      ".github/workflows/ci.yml": "0cabc77fe1f2d3e45b85f01f320997cdeb88a965246870ac8ac4f07081163439",
+      "Dockerfile": "6fa1f0b8103b12c3c0f2bc5c0a2461647438bd697afa306c488bb325e7b9c79c",
+      "android/app/build.gradle": "1641f4167bbbcc429cbdc8b5e3d3e8b694c7c53bf6ce52d4ed1151eb29b48c7d",
+      "android/build.gradle": "02964f3846db299e60eb65eae3d751a2275f4c5b1492ee8c89f7ab08fe6f90ed",
+      "android/gradle.properties": "21e558b4e40fe140c304fd856d260258ea8f464673e2152fae73870151fd4cd0",
+      "android/gradle/wrapper/gradle-wrapper.properties": "d5175eaa933ae7aebb126f5c99024f511a396132e8bacdfe74c66daf8292920d",
+      "capacitor.config.ts": "83af21032eee70b46acb18ae71ae5ce35a932a45268aa5283f9b6c2cc7849924",
+      "next.config.ts": "f7b41cfaee9792f4ce92072a2e5fc6033ae3c3bf669ab584f4787d2bcb8a26c9",
+      "package-lock.json": "e4ce0d6d58ffb08ed820332948eceef24b37aacdd75e251cc373952da6884f4c",
+      "package.json": "986a242c7dad6f1843c279cc043092c2c52e812a3ea7bc28b25bf5437c833fed",
+      "prisma/schema.prisma": "4e2f9b1024f92d9b22b98b6f8c7e9cf0cf885623b330c34a556936ceb11f068d",
+      "tsconfig.typecheck.json": "91fd2c2a5e587e07a76c2cfb97a90fb3ba6a33bf44c80dc1bfdcdb0b1d7233f7"
+    }
+  },
+  "productionAudit": {
+    "available": true,
+    "total": 0,
+    "exitCode": 0
+  },
+  "live": {
+    "migrationsApplied": 33,
+    "academicCounts": {
+      "subjects": 13,
+      "chapters": 89,
+      "topics": 185,
+      "coreMcq": 688,
+      "admissionMcq": 220,
+      "cq": 64,
+      "badges": 14,
+      "contentReviews": 1,
+      "contentReviewRevisions": 1,
+      "aiReviewBatches": 1,
+      "aiReviewRuns": 2
+    },
+    "contentQuality": {
+      "total": 1157,
+      "blockers": 0,
+      "warnings": 4,
+      "staleReviews": 0,
+      "unreviewed": 1156
+    },
+    "snapshot": {
+      "checksum": "2153b46c3c4c5d457645206df5e122d248ce62e87ef8f5a5dde14dacf4296fca",
+      "valid": true
+    },
+    "deploymentReadiness": {
+      "readyCount": 2,
+      "totalChecks": 7,
+      "pending": [
+        "publicUrl",
+        "externalScheduler",
+        "distributedRateLimit",
+        "firebaseAdmin",
+        "productionRuntime"
+      ]
+    }
+  },
+  "externalPending": [
+    "publicUrl",
+    "externalScheduler",
+    "distributedRateLimit",
+    "firebaseAdmin",
+    "productionRuntime"
+  ],
+  "reportContainsForbiddenSecretKey": false,
+  "databaseWrites": 0
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-04T10:23:17.407Z",
+  "mode": "APPLY",
+  "approvalManifest": "scripts/data/mcq-import-approval-2026-08-04.json",
+  "reviewedAt": "2026-08-04",
+  "before": {
+    "sourceCore": 688,
+    "liveCore": 688,
+    "missingCore": 0,
+    "liveExtras": 0,
+    "contentDrifts": 0
+  },
+  "plan": {
+    "approvedMissing": 0,
+    "unapprovedMissing": 0,
+    "approvedFingerprints": [],
+    "unapprovedFingerprints": []
+  },
+  "outcome": {
+    "inserted": 0,
+    "skippedAlreadyPresent": 0,
+    "updates": 0,
+    "deletes": 0,
+    "created": [],
+    "skipped": []
+  },
+  "after": {
+    "sourceCore": 688,
+    "liveCore": 688,
+    "missingCore": 0,
+    "liveExtras": 0,
+    "contentDrifts": 0,
+    "identityDuplicateGroups": 0,
+    "qualityBlockers": 0
+  },
+  "transaction": {
+    "isolation": "Serializable",
+    "advisoryLock": 2026080401,
+    "appendOnly": true
+  }
+}
