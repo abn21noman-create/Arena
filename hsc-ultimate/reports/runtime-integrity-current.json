@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-08T11:00:02.589Z",
+  "generatedAt": "2026-09-08T11:07:27.765Z",
   "status": "PASS",
-  "runtimeFilesScanned": 693,
+  "runtimeFilesScanned": 701,
   "apiRoutesScanned": 213,
   "checks": [
     {
