@@ -167,3 +167,15 @@ export function resetAccentColor() {
     root.style.removeProperty(prop);
   }
 }
+
+export function getStoredAccentColor(): AccentColorId {
+  if (typeof window === "undefined") return DEFAULT_ACCENT_COLOR;
+  const stored = localStorage.getItem(ACCENT_THEME_STORAGE_KEY) as AccentColorId;
+  return ACCENT_COLORS.some((c) => c.id === stored) ? stored : DEFAULT_ACCENT_COLOR;
+}
+
+export function setStoredAccentColor(color: AccentColorId) {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(ACCENT_THEME_STORAGE_KEY, color);
+}
+

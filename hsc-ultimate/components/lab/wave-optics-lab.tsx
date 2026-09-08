@@ -154,7 +154,7 @@ export function WaveOpticsLab() {
                   </Badge>
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  আলোর ব্যতিচার, ডোরার প্রস্থ ($\beta = \frac{\lambda D}{d}$) এবং পর্দার উজ্জ্বল/অন্ধকার ডোরার বিস্তার পর্যবেক্ষণ
+                  আলোর ব্যতিচার, ডোরার প্রস্থ (β = λD / d) এবং পর্দার উজ্জ্বল/অন্ধকার ডোরার বিস্তার পর্যবেক্ষণ
                 </p>
               </div>
             </div>
@@ -283,7 +283,7 @@ export function WaveOpticsLab() {
                   HSC ব্যতিচার নীতি:
                 </div>
                 <p className="text-foreground leading-relaxed">
-                  চিরদ্বয়ের দূরত্ব $d$ যত কম হবে এবং পর্দার দূরত্ব $D$ যত বেশি হবে, ডোরার প্রস্থ $\beta$ তত দৃশ্যমান ও স্পষ্ট হবে।
+                  চিরদ্বয়ের দূরত্ব d যত কম হবে এবং পর্দার দূরত্ব D যত বেশি হবে, ডোরার প্রস্থ β তত দৃশ্যমান ও স্পষ্ট হবে।
                 </p>
               </div>
             </div>

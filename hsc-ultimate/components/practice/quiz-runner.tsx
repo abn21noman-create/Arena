@@ -221,11 +221,12 @@ export function QuizRunner({
     return (
       <div className="max-w-xl mx-auto py-12 px-4 text-center">
         <p className="text-destructive font-medium mb-4">{error ?? "কোনো প্রশ্ন পাওয়া যায়নি"}</p>
-        <Button variant="outline" asChild>
-          <Link href={`/practice/${subjectId}`}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            অধ্যায়ে ফিরে যাও
-          </Link>
+        <Button
+          render={<Link href={`/practice/${subjectId}`} />}
+          variant="outline"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          অধ্যায়ে ফিরে যাও
         </Button>
       </div>
     );
@@ -238,11 +239,13 @@ export function QuizRunner({
     <div className="max-w-2xl mx-auto space-y-4">
       {/* Top action toolbar */}
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href={`/practice/${subjectId}`}>
-            <ArrowLeft className="h-4 w-4 mr-1" />
-            বেরিয়ে যাও
-          </Link>
+        <Button
+          render={<Link href={`/practice/${subjectId}`} />}
+          variant="ghost"
+          size="sm"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          বেরিয়ে যাও
         </Button>
 
         <div className="flex items-center gap-1.5">

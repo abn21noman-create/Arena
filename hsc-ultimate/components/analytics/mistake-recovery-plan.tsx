@@ -238,15 +238,13 @@ export function MistakeRecoveryPlan() {
                 {/* Action Link */}
                 <div className="mt-3 flex justify-end">
                   <Button
+                    render={<Link href={plan.practiceLink} />}
                     size="sm"
                     variant="outline"
                     className="h-7 text-xs gap-1"
-                    asChild
                   >
-                    <Link href={plan.practiceLink}>
-                      <span>অনুশীলন করো</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </Link>
+                    <span>অনুশীলন করো</span>
+                    <ArrowRight className="h-3 w-3" />
                   </Button>
                 </div>
               </div>

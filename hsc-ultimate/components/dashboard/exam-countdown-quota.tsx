@@ -143,11 +143,14 @@ export function ExamCountdownQuota({
                 ? "🎉 আজকের লক্ষ্য সম্পূর্ণ! চমৎকার ধারাবাহিকতা।"
                 : `আজকের লক্ষ্য পূরণে আর ${dailyTarget - todaySolvedCount}টি প্রশ্ন সমাধান প্রয়োজন`}
             </span>
-            <Button size="sm" variant="default" className="h-7 text-xs gap-1 shrink-0" asChild>
-              <Link href="/practice">
-                <Zap className="h-3 w-3" />
-                <span>প্র্যাকটিস করো</span>
-              </Link>
+            <Button
+              render={<Link href="/practice" />}
+              size="sm"
+              variant="default"
+              className="h-7 text-xs gap-1 shrink-0"
+            >
+              <Zap className="h-3 w-3" />
+              <span>প্র্যাকটিস করো</span>
             </Button>
           </div>
         </div>

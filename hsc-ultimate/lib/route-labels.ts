@@ -26,6 +26,7 @@ const EXACT_ROUTE_LABELS: Record<string, string> = {
   "/practice/formula-match": "স্পিড সূত্র ম্যাচ",
   "/practice/cq-architect": "CQ আর্কিটেক্ট",
   "/practice/cq-evaluator": "AI লিখিত খাতা মূল্যায়ন",
+  "/practice/question-vault": "HSC প্রশ্নভাণ্ডার ও বোর্ড আর্কাইভ",
   "/practice/mental-math": "নন-ক্যালকুলেটর মেন্টাল ম্যাথ",
   "/practice/omr": "OMR ও চিট-শিট",
   "/practice/omr-scanner": "স্মার্ট ক্যামেরা OMR স্ক্যানার",

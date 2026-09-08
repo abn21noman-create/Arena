@@ -32,7 +32,7 @@ const PHYLA_MATRIX: PhylumData[] = [
   { phylum: "Annelida", banglaName: "অ্যানিলিডা (অঙ্গুরীমাল)", germLayers: "ত্রিস্তরী", coelom: "ইউসিলোমেট", symmetry: "দ্বিপার্শ্বীয়", specialOrgan: "নেফ্রিডিয়া (রেচন) ও সিটি", example: "Metaphire posthuma (কেঁচো)" },
   { phylum: "Arthropoda", banglaName: "আর্থ্রোপোডা (সন্ধিপদী)", germLayers: "ত্রিস্তরী", coelom: "ইউসিলোমেট", symmetry: "দ্বিপার্শ্বীয়", specialOrgan: "হিমোসিল ও ম্যালপিজিয়ান নালিকা", example: "Periplaneta americana (তেলাপোকা)" },
   { phylum: "Mollusca", banglaName: "মলাস্কা (কম্বোজ)", germLayers: "ত্রিস্তরী", coelom: "ইউসিলোমেট", symmetry: "দ্বিপার্শ্বীয়", specialOrgan: "ম্যান্টল পর্দা ও রেডুলা (রেতিজিহ্বা)", example: "Pila globosa (আপেল শামুক)" },
-  { phylum: "Echinodermata", banglaName: "একাইনোডার্মাটা (কণ্টকত্বকী)", germLayers: "ত্রিস্তরী", coelom: "ইউসিলোমেট", symmetry: "অরীয় (পূর্ণাঙ্গ)", specialOrgan: "পানি সংবহনতন্ত্র ও নালিকা পদ", example: "Asterias (তারা মাছ)" },
+  { phylum: "Echinodermata", banglaName: "একাইনোডার্মাটা (কণ্টকত্বকী)", germLayers: "ত্রিস্তরী", coelom: "ইউসিলোমেট", symmetry: "অরীয়", specialOrgan: "পানি সংবহনতন্ত্র ও নালিকা পদ", example: "Asterias (তারা মাছ)" },
   { phylum: "Chordata", banglaName: "কর্ডাটা", germLayers: "ত্রিস্তরী", coelom: "ইউসিলোমেট", symmetry: "দ্বিপার্শ্বীয়", specialOrgan: "নটোকর্ড, নার্ভকর্ড ও গলবিলীয় ফুলকারন্ধ্র", example: "Homo sapiens (মানুষ)" },
 ];
 

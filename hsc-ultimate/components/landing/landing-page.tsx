@@ -101,6 +101,7 @@ const bentoFeatures = [
     gradient: "from-pink-500 to-rose-500",
     glowColor: "rgba(244, 63, 94, 0.15)",
     span: "lg:col-span-1",
+    highlight: false,
   },
   {
     href: "/flashcards",
@@ -112,6 +113,7 @@ const bentoFeatures = [
     gradient: "from-amber-500 to-orange-500",
     glowColor: "rgba(245, 158, 11, 0.15)",
     span: "lg:col-span-1",
+    highlight: false,
   },
   {
     href: "/learn",
@@ -123,6 +125,7 @@ const bentoFeatures = [
     gradient: "from-violet-500 to-purple-500",
     glowColor: "rgba(139, 92, 246, 0.15)",
     span: "lg:col-span-1",
+    highlight: false,
   },
   {
     href: "/planner",
@@ -134,6 +137,7 @@ const bentoFeatures = [
     gradient: "from-emerald-500 to-teal-500",
     glowColor: "rgba(16, 185, 129, 0.15)",
     span: "lg:col-span-1",
+    highlight: false,
   },
   {
     href: "/quiz-battle",
@@ -145,6 +149,7 @@ const bentoFeatures = [
     gradient: "from-yellow-500 to-amber-500",
     glowColor: "rgba(234, 179, 8, 0.15)",
     span: "lg:col-span-2",
+    highlight: false,
   },
   {
     href: "/analytics",
@@ -156,6 +161,7 @@ const bentoFeatures = [
     gradient: "from-cyan-500 to-blue-500",
     glowColor: "rgba(6, 182, 212, 0.15)",
     span: "lg:col-span-2",
+    highlight: false,
   },
 ] as const;
 

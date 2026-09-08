@@ -272,11 +272,14 @@ export function SubjectWeaknessRadar({ data = DEFAULT_SUBJECTS }: SubjectWeaknes
                   </span>
                 </p>
                 <div className="mt-2.5 flex items-center gap-2">
-                  <Button size="sm" variant="destructive" className="h-7 text-xs gap-1" asChild>
-                    <Link href={`/practice/${weakest.subjectId}`}>
-                      <Zap className="h-3 w-3" />
-                      দুর্বলতা কাটাতে প্র্যাকটিস শুরু করো
-                    </Link>
+                  <Button
+                    render={<Link href={`/practice/${weakest.subjectId}`} />}
+                    size="sm"
+                    variant="destructive"
+                    className="h-7 text-xs gap-1"
+                  >
+                    <Zap className="h-3 w-3" />
+                    দুর্বলতা কাটাতে প্র্যাকটিস শুরু করো
                   </Button>
                 </div>
               </div>
@@ -338,11 +341,14 @@ export function SubjectWeaknessRadar({ data = DEFAULT_SUBJECTS }: SubjectWeaknes
                 </div>
 
                 <div className="pt-2 flex items-center justify-end">
-                  <Button size="sm" variant="outline" className="h-8 gap-1.5 text-xs w-full sm:w-auto" asChild>
-                    <Link href={`/practice/${selectedSubject.subjectId}`}>
-                      <span>{selectedSubject.subjectName} প্র্যাকটিসে যাও</span>
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Link>
+                  <Button
+                    render={<Link href={`/practice/${selectedSubject.subjectId}`} />}
+                    size="sm"
+                    variant="outline"
+                    className="h-8 gap-1.5 text-xs w-full sm:w-auto"
+                  >
+                    <span>{selectedSubject.subjectName} প্র্যাকটিসে যাও</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               </div>

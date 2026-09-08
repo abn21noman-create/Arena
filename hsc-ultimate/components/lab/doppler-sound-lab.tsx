@@ -158,7 +158,7 @@ export function DopplerSoundLab() {
                   </Badge>
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  উৎস বা শ্রোতার আপেক্ষিক গতির কারণে আপাত কম্পাঙ্কের বৃদ্ধি ($f&apos; > f$) ও হ্রাস ($f&apos; &lt; f$) পর্যবেক্ষণ
+                  উৎস বা শ্রোতার আপেক্ষিক গতির কারণে আপাত কম্পাঙ্কের বৃদ্ধি (f&apos; &gt; f) ও হ্রাস (f&apos; &lt; f) পর্যবেক্ষণ
                 </p>
               </div>
             </div>
@@ -261,8 +261,8 @@ export function DopplerSoundLab() {
 
               <div className="rounded-xl border bg-muted/20 p-3 text-2xs space-y-1">
                 <div className="font-bold text-foreground">ডপলার সূত্রাবলী:</div>
-                <div>• নিকটবর্তী হলে: $f&apos; = f \\left(\\frac{v}{v - v_s}\\right)$</div>
-                <div>• দূরবর্তী হলে: $f&apos; = f \\left(\\frac{v}{v + v_s}\\right)$</div>
+                <div>• নিকটবর্তী হলে: f&apos; = f (v / (v - v_s))</div>
+                <div>• দূরবর্তী হলে: f&apos; = f (v / (v + v_s))</div>
               </div>
             </div>
           </Card>

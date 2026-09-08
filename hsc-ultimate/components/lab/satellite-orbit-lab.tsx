@@ -135,7 +135,7 @@ export function SatelliteOrbitLab() {
                   </Badge>
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  ভূ-পৃষ্ঠ থেকে উচ্চতা ($h$), রৈখিক বেগ ($v$) এবং ভূ-স্থির উপগ্রহের আবর্তনকাল ($T = 24\text{ hrs}$) পর্যবেক্ষণ
+                  ভূ-পৃষ্ঠ থেকে উচ্চতা (h), রৈখিক বেগ (v) এবং ভূ-স্থির উপগ্রহের আবর্তনকাল (T = 24 hrs) পর্যবেক্ষণ
                 </p>
               </div>
             </div>

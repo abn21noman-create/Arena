@@ -32,6 +32,12 @@ export function OMRCheatSheet() {
     };
   }, [isSubmitted]);
 
+  const handleBubbleClick = (idx: number, opt: string) => {
+    if (isSubmitted) return;
+    sfx.play("pop");
+    setFilledAnswers((prev) => ({ ...prev, [idx]: opt }));
+  };
+
   // Keyboard listener for PC users
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

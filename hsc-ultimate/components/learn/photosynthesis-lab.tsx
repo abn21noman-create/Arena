@@ -165,7 +165,7 @@ export function PhotosynthesisBioenergeticsLab() {
                 সূর্যালোকের ফোটন Photosystem II (P680) তে আপতিত হয়ে পানির ফটোলাইসিস ঘটায়:
               </p>
               <div className="rounded-xl border bg-muted/20 p-3 font-mono text-xs font-bold text-primary">
-                $2\text{H}_2\text{O} \rightarrow 4\text{H}^+ + 4e^- + \text{O}_2$
+                2H₂O → 4H⁺ + 4e⁻ + O₂
               </div>
               <p className="text-2xs text-muted-foreground leading-relaxed">
                 মুক্ত ইলেকট্রন সাইটোক্রোম b6f কমপ্লেক্স হয়ে Photosystem I (P700) এ যায় এবং NADP+ কে বিজারিত করে NADPH2 ও ATP তৈরি করে।

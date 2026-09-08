@@ -110,11 +110,14 @@ export function DailyAIBriefing({
               </div>
 
               <div className="mt-3 pt-2 border-t flex justify-end">
-                <Button size="sm" variant="ghost" className="h-7 text-xs gap-1 text-primary hover:text-primary hover:bg-primary/10" asChild>
-                  <Link href={act.href}>
-                    <span>{act.actionText}</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
+                <Button
+                  render={<Link href={act.href} />}
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 text-xs gap-1 text-primary hover:text-primary hover:bg-primary/10"
+                >
+                  <span>{act.actionText}</span>
+                  <ArrowRight className="h-3 w-3" />
                 </Button>
               </div>
             </div>

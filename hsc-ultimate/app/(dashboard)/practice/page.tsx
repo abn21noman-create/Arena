@@ -158,6 +158,10 @@ export default async function PracticePage() {
                   <Zap className="h-4 w-4" />
                   Smart Practice
                 </Button>
+                <Button render={<Link href="/practice/question-vault" />} size="lg" className="gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-blue-500/20 font-semibold">
+                  <Brain className="h-4 w-4" />
+                  HSC প্রশ্নভাণ্ডার ও বোর্ড আর্কাইভ
+                </Button>
                 <Button render={<Link href="/practice/custom" />} size="lg" className="gap-2 bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-md shadow-rose-500/20 font-semibold">
                   <Target className="h-4 w-4" />
                   কাস্টম এক্সাম মেকার

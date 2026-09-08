@@ -75,6 +75,7 @@ export function ConfettiCanvas() {
     let startTime = Date.now();
 
     function render() {
+      if (!ctx) return;
       const elapsed = Date.now() - startTime;
       ctx.clearRect(0, 0, width, height);
 

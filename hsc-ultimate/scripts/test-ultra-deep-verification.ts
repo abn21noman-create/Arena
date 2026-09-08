@@ -19,6 +19,7 @@ import {
   calculateNextReview,
   defaultSRSState,
   MAX_INTERVAL_DAYS,
+  type FlashcardSRSState,
 } from "../lib/spaced-repetition";
 import { calculateNextFsrsReview } from "../lib/fsrs";
 import {
@@ -57,11 +58,12 @@ async function runUltraDeepTests() {
   console.log("── ১. Spaced Repetition Extreme Edge Cases (FSRS & SM-2)");
 
   // Test SM-2 Interval Cap (Permanent anti-overflow guard)
-  let srsState = defaultSRSState();
+  let srsState: FlashcardSRSState = defaultSRSState();
   for (let rep = 1; rep <= 50; rep++) {
-    srsState = calculateNextReview(srsState, "easy");
+    const srsRes = calculateNextReview(srsState, "easy");
+    srsState = srsRes;
     assert(srsState.intervalDays <= MAX_INTERVAL_DAYS, `SM-2 Interval Capped at rep ${rep}`, `Interval: ${srsState.intervalDays}d <= ${MAX_INTERVAL_DAYS}d`);
-    assert(!isNaN(srsState.dueDate.getTime()), `Valid Date at rep ${rep}`);
+    assert(!isNaN(srsRes.dueDate.getTime()), `Valid Date at rep ${rep}`);
   }
 
   // Extreme Failure (20 consecutive AGAINs)

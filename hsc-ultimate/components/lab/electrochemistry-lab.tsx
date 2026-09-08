@@ -157,7 +157,7 @@ export function ElectrochemistryLab() {
                   </Badge>
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  ড্যানিয়েল সেল ($Zn - Cu$), নার্নস্ট সমীকরণ দ্বারা কোষ বিভব ($E_{\text{cell}}$) ও মুক্ত শক্তি ($\Delta G$) বিশ্লেষণ
+                  ড্যানিয়েল সেল (Zn - Cu), নার্নস্ট সমীকরণ দ্বারা কোষ বিভব (E_cell) ও মুক্ত শক্তি (ΔG) বিশ্লেষণ
                 </p>
               </div>
             </div>
@@ -252,7 +252,7 @@ export function ElectrochemistryLab() {
                   নার্নস্ট সমীকরণ (২৯৮ K):
                 </div>
                 <p className="font-mono text-foreground">
-                  $E = E^\circ - \frac{0.0591}{n} \log \frac{[\text{Zn}^{2+}]}{[\text{Cu}^{2+}]}$
+                  E_cell = E0 - (0.0591 / n) * log([Zn2+] / [Cu2+])
                 </p>
               </div>
             </div>

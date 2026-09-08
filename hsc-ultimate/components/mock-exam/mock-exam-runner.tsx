@@ -356,11 +356,12 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
     return (
       <div className="max-w-xl mx-auto py-12 px-4 text-center">
         <p className="text-destructive font-medium mb-4">{error}</p>
-        <Button variant="outline" asChild>
-          <Link href="/mock-exam">
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            মডেল টেস্টে ফিরে যাও
-          </Link>
+        <Button
+          render={<Link href="/mock-exam" />}
+          variant="outline"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          মডেল টেস্টে ফিরে যাও
         </Button>
       </div>
     );

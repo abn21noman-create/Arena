@@ -174,8 +174,8 @@ export function AnalyticsDashboard() {
           </div>
           <div className="flex items-center gap-2">
             <PrintableReportCardDialog
-              totalSolved={overallStats.totalQuizzesTaken * 15}
-              overallAccuracy={overallStats.avgScorePct}
+              totalSolved={overallStats.totalQuizAttempts * 15}
+              overallAccuracy={overallStats.quizAccuracyPct}
             />
             <ReportCardDownloadButton />
           </div>

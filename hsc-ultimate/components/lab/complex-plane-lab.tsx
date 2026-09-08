@@ -154,7 +154,7 @@ export function ComplexPlaneLab() {
                   </Badge>
                 </CardTitle>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  মডুলাস ($|z|$), মুখ্য আর্গুমেন্ট ($\text{Arg}(z)$) এবং অনুবন্ধী জটিল সংখ্যার জ্যামিতিক রূপ
+                  মডুলাস (|z|), মুখ্য আর্গুমেন্ট Arg(z) এবং অনুবন্ধী জটিল সংখ্যার জ্যামিতিক রূপ
                 </p>
               </div>
             </div>
@@ -273,7 +273,7 @@ export function ComplexPlaneLab() {
                   ডি-ময়ভারের উপপাদ্য:
                 </div>
                 <p className="font-mono text-foreground">
-                  $(\cos\theta + i\sin\theta)^n = \cos(n\theta) + i\sin(n\theta)$
+                  (cos θ + i sin θ)ⁿ = cos(nθ) + i sin(nθ)
                 </p>
               </div>
             </div>

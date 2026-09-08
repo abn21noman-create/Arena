@@ -48,17 +48,19 @@ export function ThemeCustomizerButton() {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="h-9 w-9 border border-border bg-card/80 hover:bg-muted text-foreground transition-all shadow-xs"
-          title="কালার থিম কাস্টমাইজ করুন"
-          aria-label="কালার থিম কাস্টমাইজ করুন"
-        >
-          <Palette className="h-4 w-4 text-primary" />
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-9 w-9 border border-border bg-card/80 hover:bg-muted text-foreground transition-all shadow-xs"
+            title="কালার থিম কাস্টমাইজ করুন"
+            aria-label="কালার থিম কাস্টমাইজ করুন"
+          >
+            <Palette className="h-4 w-4 text-primary" />
+          </Button>
+        }
+      />
       <PopoverContent align="end" className="w-64 p-3 shadow-xl">
         <div className="space-y-3">
           <div className="flex items-center justify-between pb-1.5 border-b">

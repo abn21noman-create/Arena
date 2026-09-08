@@ -113,18 +113,20 @@ export function MathSymbolPalette({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          className={className || "h-7 gap-1 text-xs"}
-          title="ম্যাথ ও কেমিস্ট্রি চিহ্ন যুক্ত করুন"
-        >
-          <Pi className="h-3.5 w-3.5 text-primary" />
-          <span>{triggerLabel}</span>
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            className={className || "h-7 gap-1 text-xs"}
+            title="ম্যাথ ও কেমিস্ট্রি চিহ্ন যুক্ত করুন"
+          >
+            <Pi className="h-3.5 w-3.5 text-primary" />
+            <span>{triggerLabel}</span>
+          </Button>
+        }
+      />
       <PopoverContent
         align="start"
         className="w-80 max-w-[95vw] p-3 text-xs shadow-xl"
