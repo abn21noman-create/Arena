@@ -5,48 +5,58 @@
 
 ---
 
-## ⚠️ ০. ডিপ্লয়ের আগে অবশ্যই পড়ুন
+## ০. `vercel.json`-এ যা ঠিক করা হয়েছে
 
-### ০.১ `prisma db push --accept-data-loss` — ডেটা হারানোর ঝুঁকি
+### ০.১ `prisma db push --accept-data-loss` সরানো হয়েছে ✅
 
-`hsc-ultimate/vercel.json`-এর `buildCommand`-এ আছে:
+**আগে:** `buildCommand` ছিল
 
 ```
 node scripts/generate-prisma.mjs && npx prisma db push --accept-data-loss && next build
 ```
 
-এর মানে **প্রতিটা deploy-এ** production ডেটাবেসে `db push` চলবে, আর
-`--accept-data-loss` দিলে Prisma বিনা প্রশ্নে **কলাম ও ডেটা ড্রপ করতে পারে**।
+অর্থাৎ **প্রতিটা deploy-এ** production ডেটাবেসে `db push` চলত, আর
+`--accept-data-loss` দিলে Prisma বিনা প্রশ্নে **কলাম ও ডেটা ড্রপ করতে পারে** —
+বিশেষত এই রেপোতে, যার migration baseline নিজেই "reconstructed"।
 
-আপনার রেপোতে ইতিমধ্যে **৩৩টা Prisma migration** আছে (`prisma/migrations/`),
-তাই `db push` ব্যবহারের দরকার নেই। নিরাপদ বিকল্প:
-
-```json
-"buildCommand": "node scripts/generate-prisma.mjs && next build"
-```
-
-আর স্কিমা আপডেট হবে migration দিয়ে (নিচের ধাপ ৩ দেখুন) — deploy pipeline-এর
-বাইরে, একবার, হাতে নিয়ন্ত্রণে।
-
-> **কেন এটা জরুরি:** `db push` আর migration একসাথে ব্যবহার করলে দুটো আলাদা
-> "সত্বা" তৈরি হয়। এই রেপোর migration baseline নিজেই "reconstructed" (ফোল্ডার
-> একবার হাওয়া হয়ে গিয়েছিল), তাই কোনো একটা source-of-truth বেছে নেওয়া ভালো।
-
-### ০.২ CORS হেডারে wildcard + credentials
-
-`vercel.json`-এ `/api/(.*)` এর জন্য:
+**এখন:**
 
 ```
-Access-Control-Allow-Origin: *
-Access-Control-Allow-Credentials: true
+node scripts/generate-prisma.mjs && next build --webpack
 ```
 
-ব্রাউজার স্পেক অনুযায়ী যেকোনো origin-এ credentials পাঠানো **নিষিদ্ধ** — অর্থাৎ
-এটা কাজও করে না, আর নিরাপদও না। দরকার হলে নির্দিষ্ট origin দিন:
+মাইগ্রেশন এখন deploy pipeline-এর বাইরে, হাতে নিয়ন্ত্রণে — নিচের ধাপ ৩ দেখুন।
 
-```json
-{ "key": "Access-Control-Allow-Origin", "value": "https://your-project.vercel.app" }
-```
+> **কেন `db push` বাদ:** রেপোতে ৩৩টা versioned migration আছে। `db push` আর
+> migration একসাথে চললে দুটো আলাদা source-of-truth তৈরি হয়, আর `db push`
+> অপ্রত্যাশিত ড্রপ করতে পারে।
+
+> **কেন `--webpack`:** প্রজেক্টের নিজের `scripts/safe-build.sh`-ও
+> `next build --webpack` ব্যবহার করে, আর `next.config.ts`-এ
+> `experimental.webpackMemoryOptimizations` আছে। এই পথটাই যাচাই করা হয়েছে।
+
+### ০.২ CORS হেডার সরানো হয়েছে ✅
+
+**আগে:** `/api/(.*)`-এর জন্য `Access-Control-Allow-Origin: *` **সহ**
+`Access-Control-Allow-Credentials: true`। এটা দ্বিগুণ সমস্যার:
+
+1. **ব্রাউজার স্পেক অনুযায়ী অবৈধ** — wildcard origin-এর সাথে credentials
+   পাঠানো নিষিদ্ধ, ব্রাউজার রিকোয়েস্টটাই বাতিল করে।
+2. **অ্যাপের নিজের নীতির সাথে বিরোধী** — `proxy.ts` →
+   `isTrustedMutationOrigin()` শুধু same-origin (এবং `NEXT_PUBLIC_APP_URL` /
+   `NEXTAUTH_URL`) গ্রহণ করে; বাকি cross-origin mutation **403** পায়।
+
+**এখন:** CORS ব্লক সম্পূর্ণ বাদ। এটি নিরাপদ, কারণ অ্যাপটা **same-origin only**:
+
+- ওয়েব অ্যাপ নিজের হোস্ট থেকেই API ডাকে
+- Capacitor/Android অ্যাপও `server.url` (= `https://hsc-ultimate.app`) থেকে
+  পুরো ওয়েব অ্যাপ লোড করে — আলাদা origin নয়
+- Server-to-server কলে (cron, webhook) `Origin` হেডার থাকেই না
+
+অর্থাৎ CORS দরকার নেই, আর অ্যাপের নিজের origin guard-ই আসল সুরক্ষা।
+`/api/(.*)`-এর জন্য wildcard CORS যোগ করার আগে এই দুটো নথি দেখুন:
+[`docs/SECURITY_ABUSE_TESTING_2.md`](./SECURITY_ABUSE_TESTING_2.md),
+`lib/request-security.ts`।
 
 ---
 
@@ -139,9 +149,11 @@ npm run db:seed-questions
 
 সেখানে একটা স্ক্রিপ্ট আছে যা "এক কমান্ডে সব" করে। কিন্তু **দুটো কারণে সাবধানে:**
 
-1. এটি `prisma db push --skip-generate` ব্যবহার করে — migration নয়। আর
-   `vercel.json`-এর build command-ও `db push` করে। অর্থাৎ একই ডেটাবেসে দুই
-   জায়গা থেকে schema push হতে পারে। **একটা পথ বেছে নিন**, দুটো নয়।
+1. এটি `prisma db push --skip-generate` ব্যবহার করে — migration নয়। অর্থাৎ
+   আপনি যদি এটাও চালান আর অন্যদিকে `prisma migrate deploy`-ও চালান, ডেটাবেসে
+   দুই জায়গা থেকে schema push হবে। **একটা পথ বেছে নিন**, দুটো নয়।
+   (উপরে ০.১-এ `vercel.json` থেকে `db push` সরানো হয়েছে, তাই এই স্ক্রিপ্টই
+   এখন একমাত্র জায়গা যেখানে `db push` আছে — এটাও badge ছাড়া রাখলে ভালো।)
 2. স্ক্রিপ্টের শেষ ধাপ "20,000 MCQ vault" যাচাই করে দাবি করে, কিন্তু প্রকৃত
    seeded কনটেন্ট **৯০৮ MCQ** (`npm run test:seed`: ৬৮৮ core + ২২০ admission)
    + ৬৪ CQ। সংখ্যাটা মেলেনি বলে স্ক্রিপ্ট ফেল করলে আতঙ্কিত হবেন না।
@@ -189,10 +201,16 @@ Vercel-এর সার্ভার থেকে GitHub ও Supabase দুট�
 
 ---
 
-## ৬. এই ডকে যা ইচ্ছাকৃতভাবে বদলানো হয়নি
+## ৬. ভবিষ্যতে লক্ষ রাখার বিষয়
 
-উপরের ০.১ ও ০.২ আসল সমস্যা, কিন্তু deploy আচরণ বদলানোর সিদ্ধান্ত
-আপনার — তাই শুধু চিহ্নিত করা হয়েছে, পরিবর্তন করা হয়নি।
+- **`scripts/deploy-production.sh`** এখনো `prisma db push --skip-generate`
+  ব্যবহার করে (উপরের ধাপ ৩-এর সতর্কতা দেখুন)। migration-ভিত্তিক পথে যাওয়ার
+  সিদ্ধান্ত হলে এটাও `prisma migrate deploy`-এ বদলানো উচিত।
+- **`X-XSS-Protection`** — আধুনিক ব্রাউজারে deprecated ও উপেক্ষিত; ক্ষতিকর
+  নয়, তবে `Content-Security-Policy` (ইতিমধ্যে `next.config.ts`-এ
+  `frame-ancestors 'self'` সহ আছে) আসল সুরক্ষা দেয়।
+- **`cleanUrls: true`** — `/page.html` কে `/page`-এ রিডাইরেক্ট করে; Next.js
+  রাউটিংয়ে এর কোনো প্রভাব নেই, নিরাপদ।
 
 ## আরও দেখুন
 
