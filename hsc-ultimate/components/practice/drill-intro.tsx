@@ -11,7 +11,9 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { ArrowLeft, Zap, Loader2, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DRILL_DURATIONS, DEFAULT_DRILL_DURATION } from "@/lib/drill-practice";
+// ক্লায়েন্ট-সেফ মডিউল থেকে import — `@/lib/drill-practice` prisma টেনে আনে,
+// যা ব্রাউজার বান্ডলে `dns` খোঁজায় (build error)।
+import { DRILL_DURATIONS, DEFAULT_DRILL_DURATION } from "@/lib/drill-constants";
 import { FadeIn } from "@/components/motion/fade-in";
 
 interface Subject {

@@ -15,9 +15,18 @@
 import { prisma } from "@/lib/prisma";
 import { pickRandom, shuffleOptions } from "@/lib/mock-exam";
 
-export const DRILL_DURATIONS = [30, 60, 90] as const;
-export type DrillDuration = (typeof DRILL_DURATIONS)[number];
-export const DEFAULT_DRILL_DURATION: DrillDuration = 60;
+// ক্লায়েন্ট-সেফ কনস্ট্যান্টগুলো `lib/drill-constants.ts` এ রাখা হয়েছে — এই
+// ফাইলটা prisma import করে, তাই ক্লায়েন্ট কম্পোনেন্ট এখান থেকে সরাসরি নিলে
+// পুরো সার্ভার-অনলি চেইন ব্রাউজার বান্ডলে ঢুকে যেত (`Can't resolve 'dns'`)।
+// বিদ্যমান import গুলো না ভাঙার জন্য সেখান থেকেই re-export করা হচ্ছে।
+export {
+  DRILL_DURATIONS,
+  DEFAULT_DRILL_DURATION,
+  isValidDrillDuration,
+} from "@/lib/drill-constants";
+export type { DrillDuration } from "@/lib/drill-constants";
+import { DRILL_DURATIONS, DEFAULT_DRILL_DURATION } from "@/lib/drill-constants";
+import type { DrillDuration } from "@/lib/drill-constants";
 
 // একবারে সর্বোচ্চ এতগুলো প্রশ্ন pool হিসেবে পাঠানো হয় (৯০ সেকেন্ডেও যথেষ্ট
 // থাকে যাতে দ্রুতগতির ইউজার প্রশ্ন ফুরিয়ে না ফেলে)
@@ -30,9 +39,7 @@ export const XP_PER_CORRECT_ANSWER = 5;
 export const SPEED_BONUS_XP = 10;
 export const SPEED_BONUS_ACCURACY_THRESHOLD = 70;
 
-export function isValidDrillDuration(value: unknown): value is DrillDuration {
-  return typeof value === "number" && (DRILL_DURATIONS as readonly number[]).includes(value);
-}
+// isValidDrillDuration উপরে `lib/drill-constants.ts` থেকে re-export করা হয়েছে।
 
 export interface DrillQuestion {
   id: string;
