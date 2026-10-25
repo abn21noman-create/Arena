@@ -18,8 +18,8 @@ fi
 echo "🔹 [1/5] Generating Prisma Client..."
 node scripts/generate-prisma.mjs
 
-echo "🔹 [2/5] Pushing Prisma Schema to Cloud Database..."
-npx prisma db push --skip-generate
+echo "🔹 [2/5] Applying Versioned Prisma Migrations to Cloud Database..."
+npx prisma migrate deploy
 
 echo "🔹 [3/5] Seeding Master Subjects, Chapters, and Topics..."
 npx tsx prisma/seed.ts || true

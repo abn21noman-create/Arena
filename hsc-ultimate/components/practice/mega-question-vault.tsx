@@ -1,28 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Database,
-  Sparkles,
-  Search,
-  CheckCircle2,
-  HelpCircle,
-  RotateCcw,
-  BookOpen,
-  Filter,
-  Eye,
-  EyeOff,
-  ChevronLeft,
-  ChevronRight,
-  Flame,
-  Award,
-  Zap,
-  Clock,
-  Layers,
-} from "lucide-react";
+import { Database, Search, CheckCircle2, HelpCircle, Eye, EyeOff, ChevronLeft, ChevronRight, Flame } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 import type { GeneratedMCQ } from "@/scripts/generate-20000-questions";
@@ -65,7 +47,7 @@ export function MegaQuestionVaultStudio() {
   const [selectedSubject, setSelectedSubject] = useState<string>("ALL");
   const [selectedBoard, setSelectedBoard] = useState<string>("ALL");
   const [selectedAdmission, setSelectedAdmission] = useState<string>("ALL");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("ALL");
+  const selectedDifficulty = "ALL";
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [limit] = useState<number>(20);

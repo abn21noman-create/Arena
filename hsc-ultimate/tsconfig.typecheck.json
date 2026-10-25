@@ -2,6 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "incremental": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "tsBuildInfoFile": ".cache/tsconfig.typecheck.tsbuildinfo"
   },
   "include": [

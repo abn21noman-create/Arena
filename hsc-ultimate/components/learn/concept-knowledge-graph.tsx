@@ -1,18 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  GitBranch,
-  Sparkles,
-  CheckCircle2,
-  AlertCircle,
-  Lock,
-  ArrowRight,
-  BookOpen,
-} from "lucide-react";
+import { GitBranch, CheckCircle2, AlertCircle } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 

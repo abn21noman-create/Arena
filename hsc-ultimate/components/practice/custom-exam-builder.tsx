@@ -3,21 +3,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  ArrowLeft,
-  Sparkles,
-  Sliders,
-  CheckCircle2,
-  Clock,
-  Target,
-  Play,
-  Layers,
-  BookOpen,
-} from "lucide-react";
+import { ArrowLeft, Sliders, Target, Play, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sfx } from "@/lib/sound-effects";
 import { toast } from "sonner";

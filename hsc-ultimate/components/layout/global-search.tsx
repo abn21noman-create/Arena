@@ -11,23 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import {
-  AlertCircle,
-  BookOpen,
-  Calculator,
-  Compass,
-  FileText,
-  HelpCircle,
-  Layers,
-  Loader2,
-  MessageSquare,
-  RotateCcw,
-  Search,
-  Sparkles,
-  Swords,
-  Timer,
-  Zap,
-} from "lucide-react";
+import { AlertCircle, BookOpen, Calculator, FileText, HelpCircle, Layers, Loader2, MessageSquare, RotateCcw, Search, Sparkles, Swords, Timer, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { openScientificCalculator } from "@/components/shared/scientific-calculator";
 import { openKeyboardShortcutsGuide } from "@/components/shared/keyboard-shortcuts-dialog";

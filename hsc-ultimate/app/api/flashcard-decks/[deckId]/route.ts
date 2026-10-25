@@ -25,7 +25,7 @@ import { prisma } from "@/lib/prisma";
 import { isValidOptionalBoolean } from "@/lib/boolean-validation";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ deckId: string }> }
 ) {
   const session = await auth();
@@ -98,7 +98,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ deckId: string }> }
 ) {
   const session = await auth();

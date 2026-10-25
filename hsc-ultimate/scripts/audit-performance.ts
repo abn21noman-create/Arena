@@ -2,7 +2,6 @@ import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { config } from "dotenv";
 import ts from "typescript";
-import { prisma } from "@/lib/prisma";
 import {
   classifyFindMany,
   collectPlanIndexes,
@@ -10,6 +9,9 @@ import {
 } from "@/lib/performance-audit";
 import { PROJECT_INVENTORY } from "@/lib/project-constants";
 
+if (process.env.NODE_ENV !== "production") {
+  config({ path: ".env.development.local", quiet: true });
+}
 config({ path: ".env.local", quiet: true });
 config({ path: ".env", quiet: true });
 
@@ -144,7 +146,12 @@ function nestedPlan(root: unknown) {
   return queryPlan[0] as Record<string, unknown>;
 }
 
-async function explain(name: string, sql: string, ...values: unknown[]) {
+async function explain(
+  prisma: Awaited<typeof import("@/lib/prisma")>["prisma"],
+  name: string,
+  sql: string,
+  ...values: unknown[]
+) {
   const rows = await prisma.$queryRawUnsafe<unknown[]>(sql, ...values);
   const root = nestedPlan(rows);
   const plan = root?.Plan as Record<string, unknown> | undefined;
@@ -173,6 +180,8 @@ async function benchmark(operation: () => Promise<unknown>, samples = 5) {
 }
 
 async function main() {
+  const { prisma } = await import("@/lib/prisma");
+  try {
   const options = parseArgs(process.argv.slice(2));
   const staticAudit = staticFindManyAudit();
   const topic = await prisma.topic.findFirst({ select: { id: true } });
@@ -186,7 +195,7 @@ async function main() {
       missing_index: boolean;
     }>>(`
       SELECT c.conrelid::regclass::text AS table_name,
-             c.conname,
+             c.conname::text AS conname,
              pg_get_constraintdef(c.oid) AS definition,
              NOT EXISTS (
                SELECT 1 FROM pg_index i
@@ -201,7 +210,7 @@ async function main() {
       ORDER BY 1,2
     `),
     prisma.$queryRawUnsafe<Array<{ indexname: string }>>(`
-      SELECT indexname FROM pg_indexes
+      SELECT indexname::text AS indexname FROM pg_indexes
       WHERE schemaname='public'
       ORDER BY indexname
     `),
@@ -212,7 +221,7 @@ async function main() {
       idx_scan: bigint;
       total_bytes: bigint;
     }>>(`
-      SELECT relname AS table_name,
+      SELECT relname::text AS table_name,
              n_live_tup::bigint AS live_rows,
              seq_scan::bigint,
              idx_scan::bigint,
@@ -243,15 +252,18 @@ async function main() {
     `).catch(() => []),
     Promise.all([
       explain(
+        prisma,
         "questions-by-topic",
         'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT id FROM questions WHERE "topicId"=$1 LIMIT 25',
         topic.id
       ),
       explain(
+        prisma,
         "recent-audit",
         'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT id FROM audit_logs ORDER BY "createdAt" DESC LIMIT 20'
       ),
       explain(
+        prisma,
         "active-users-window",
         'EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT count(*) FROM users WHERE "lastActiveAt" >= now() - interval \'30 days\''
       ),
@@ -321,13 +333,12 @@ async function main() {
   console.log(`High-risk global findMany: ${staticAudit.highRisk.length}`);
   console.log(`Report: ${path.relative(process.cwd(), options.out)}`);
   if (options.strict && blockers.length > 0) process.exitCode = 1;
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .catch((error) => {
-    console.error("Performance audit failed:", error instanceof Error ? error.message : error);
-    process.exitCode = 1;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((error) => {
+  console.error("Performance audit failed:", error instanceof Error ? error.message : error);
+  process.exitCode = 1;
+});

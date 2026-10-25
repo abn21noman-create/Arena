@@ -72,7 +72,7 @@ export function ConfettiCanvas() {
     }
 
     let animationFrame: number;
-    let startTime = Date.now();
+    const startTime = Date.now();
 
     function render() {
       if (!ctx) return;

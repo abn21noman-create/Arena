@@ -1,7 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
 import { queryVault, generateRandomVaultMock } from "@/lib/vault-service";
 
 export async function GET(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json(
+      { error: "লগইন প্রয়োজন" },
+      { status: 401, headers: { "Cache-Control": "no-store" } }
+    );
+  }
+
   const { searchParams } = new URL(req.url);
   const mode = searchParams.get("mode");
 

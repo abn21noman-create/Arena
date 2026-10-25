@@ -1,18 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useState, useEffect, useCallback } from "react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Zap,
-  Timer,
-  CheckCircle2,
-  AlertCircle,
-  Trophy,
-  RotateCcw,
-  Sparkles,
-} from "lucide-react";
+import { Zap, Timer, CheckCircle2, Trophy, RotateCcw } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
@@ -61,28 +53,30 @@ export function MentalMathDrill() {
   const [isFinished, setIsFinished] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<number>(60); // 60s Blitz
 
+  const handleSubmit = useCallback(() => {
+    sfx.play("correct");
+    triggerConfetti();
+    setIsFinished(true);
+  }, []);
+
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (!isFinished && timeLeft > 0) {
-      interval = setInterval(() => setTimeLeft((t) => t - 1), 1000);
-    } else if (timeLeft === 0 && !isFinished) {
-      handleSubmit();
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isFinished, timeLeft]);
+    if (isFinished) return;
+    const interval = setInterval(() => {
+      setTimeLeft((t) => {
+        if (t <= 1) {
+          handleSubmit();
+          return 0;
+        }
+        return t - 1;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [isFinished, handleSubmit]);
 
   const handleSelect = (qId: number, optIdx: number) => {
     if (isFinished) return;
     sfx.play("pop");
     setAnswers((prev) => ({ ...prev, [qId]: optIdx }));
-  };
-
-  const handleSubmit = () => {
-    sfx.play("correct");
-    triggerConfetti();
-    setIsFinished(true);
   };
 
   const handleReset = () => {
@@ -93,12 +87,10 @@ export function MentalMathDrill() {
   };
 
   let correctCount = 0;
-  let wrongCount = 0;
   MENTAL_QUESTIONS.forEach((q) => {
     const userAns = answers[q.id];
-    if (userAns !== undefined) {
-      if (userAns === q.correctIdx) correctCount++;
-      else wrongCount++;
+    if (userAns !== undefined && userAns === q.correctIdx) {
+      correctCount++;
     }
   });
 

@@ -1,21 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  GraduationCap,
-  Sparkles,
-  Trophy,
-  CheckCircle2,
-  AlertTriangle,
-  Flame,
-  ArrowRight,
-  TrendingUp,
-} from "lucide-react";
+import { GraduationCap, Sparkles, TrendingUp } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
-import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
 
 interface UniversityTarget {

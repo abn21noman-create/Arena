@@ -28,7 +28,7 @@ import {
 } from "../lib/admission";
 import { parseFormulaEntries } from "../lib/formula-search";
 import { validateOcclusionBoxes } from "../lib/image-occlusion";
-import { PET_STAGE_ORDER, PET_STAGE_INFO, getNextStageProgress } from "../lib/study-pet";
+import { PET_STAGE_ORDER, getNextStageProgress } from "../lib/study-pet";
 import { makeRateLimitKey } from "../lib/rate-limit";
 import { MIN_FOCUS_MINUTES, MAX_FOCUS_MINUTES, isValidFocusDuration } from "../lib/focus-constants";
 

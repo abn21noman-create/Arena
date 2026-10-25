@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Network, Sparkles, Search, Layers, ChevronRight, Zap, Info, Compass } from "lucide-react";
+import { Network, ChevronRight } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 
@@ -156,7 +155,6 @@ const MINDMAP_DATA: Record<string, { title: string; nodes: MindmapNode[] }> = {
 export function ChapterMindmap() {
   const [selectedSubject, setSelectedSubject] = useState<string>("physics");
   const [activeNodeId, setActiveNodeId] = useState<string>("p1");
-  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const currentSubjectData = MINDMAP_DATA[selectedSubject] || MINDMAP_DATA.physics;
   const activeNode = currentSubjectData.nodes.find((n) => n.id === activeNodeId) || currentSubjectData.nodes[0];

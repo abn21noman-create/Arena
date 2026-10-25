@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calculator, Sparkles, Atom, Pi, Plus } from "lucide-react";
+import { Atom, Pi } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { toast } from "sonner";
 

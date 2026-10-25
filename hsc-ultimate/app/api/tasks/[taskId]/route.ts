@@ -162,7 +162,7 @@ export async function PATCH(
 // double-check সহ) — কখনো throw করে না।
 // ===================================================================
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ taskId: string }> }
 ) {
   const session = await auth();

@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Timer, Zap, Trophy, RotateCcw, Flame, CheckCircle2, Award } from "lucide-react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Timer, Zap, Trophy, RotateCcw, Flame, Award } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";

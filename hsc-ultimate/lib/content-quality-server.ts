@@ -69,7 +69,6 @@ function jsonOptions(value: unknown): string[] {
 }
 
 function addDuplicateRisk(
-  items: ContentQualityQueueItem[],
   code: "EXACT_DUPLICATE" | "CROSS_CONTEXT_DUPLICATE",
   groups: Map<string, ContentQualityQueueItem[]>
 ) {
@@ -393,8 +392,8 @@ export async function buildContentQualitySnapshot(input: {
     const globalKey = `${item.targetType}:${normalizeAcademicText(item.title)}`;
     globalTextGroups.set(globalKey, [...(globalTextGroups.get(globalKey) ?? []), item]);
   }
-  addDuplicateRisk(items, "EXACT_DUPLICATE", sameContextGroups);
-  addDuplicateRisk(items, "CROSS_CONTEXT_DUPLICATE", globalTextGroups);
+  addDuplicateRisk("EXACT_DUPLICATE", sameContextGroups);
+  addDuplicateRisk("CROSS_CONTEXT_DUPLICATE", globalTextGroups);
 
   const statusCounts = {
     approved: items.filter((item) => item.review?.status === "APPROVED" && !item.review.stale).length,

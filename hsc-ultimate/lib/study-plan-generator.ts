@@ -526,9 +526,6 @@ export async function generateRemainingChunks(studyPlanId: string) {
         // deleteMany() দিয়ে মুছে গেছে) — এটা genuine error না, তাই
         // silently থেমে যাওয়া হচ্ছে (কোনো FAILED status লেখার দরকার
         // নেই, কারণ লেখার মতো রেকর্ডই আর নেই)
-        console.log(
-          `Study Plan ব্যাকগ্রাউন্ড generation থামানো হলো (id=${plan.id}) — প্ল্যানটা ইতিমধ্যে ডিলিট/replace হয়ে গেছে`
-        );
         return;
       }
     }
@@ -547,35 +544,4 @@ export async function generateRemainingChunks(studyPlanId: string) {
       data: { generationStatus: "FAILED" },
     });
   }
-}
-
-/**
- * সিংগুলারিটি ইন্টারভেনশন (Singularity Intervention):
- * যদি কোনো ইউজারের পারফরম্যান্স হঠাৎ খারাপ হতে শুরু করে, তবে এই অটোনোমাস এজেন্ট 
- * ইউজারের বর্তমান স্টাডি প্ল্যান "হাইজ্যাক" করবে এবং তাকে রিভেরি মোডে পাঠাবে।
- */
-export async function runSingularityIntervention(userId: string) {
-  const weakTopics = await getWeakTopics(userId, 3);
-  
-  // যদি কোনো টপিকের একুরেসি ৩০% এর নিচে হয়, তবে সিংগুলারিটি ইন্টারভীন করবে
-  const criticalTopic = weakTopics.find(t => t.accuracyPct < 30);
-  
-  if (criticalTopic) {
-    console.log(`SINGULARITY: Intervening for user ${userId} on topic ${criticalTopic.topicName}`);
-    
-    // ১ দিনের একটি ইমার্জেন্সি প্ল্যান জেনারেট করো
-    await generateStudyPlan(userId, 1);
-    
-    await prisma.notification.create({
-      data: {
-        userId,
-        title: "⚡ SINGULARITY INTERVENTION",
-        body: `আমি দেখেছি তোমার "${criticalTopic.topicName}" এ অনেক সমস্যা হচ্ছে। আমি তোমার আজকের রুটিন পাল্টে দিয়েছি যাতে তুমি এই গ্যাপটা পূরণ করতে পারো।`,
-        link: "/planner"
-      }
-    });
-    
-    return true;
-  }
-  return false;
 }

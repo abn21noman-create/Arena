@@ -353,7 +353,7 @@ export function AnalyticsDashboard() {
                   label={(entry) => `${entry.name}`}
                   labelLine={false}
                 >
-                  {timeDistribution.map((entry, index) => (
+                  {timeDistribution.map((_, index) => (
                     <Cell key={index} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                   ))}
                 </Pie>

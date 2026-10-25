@@ -1,21 +1,10 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  FileText,
-  Upload,
-  Sparkles,
-  CheckCircle2,
-  AlertCircle,
-  HelpCircle,
-  RotateCcw,
-  BookOpen,
-  Camera,
-  Layers,
-} from "lucide-react";
+import { FileText, Upload, Sparkles, CheckCircle2, AlertCircle, Camera, Layers } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";

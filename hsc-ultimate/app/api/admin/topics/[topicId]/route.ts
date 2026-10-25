@@ -12,7 +12,7 @@ import { logAuditEvent } from "@/lib/audit-log";
 import { isValidOptionalBoolean } from "@/lib/boolean-validation";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ topicId: string }> }
 ) {
   const guard = await requireAdmin();

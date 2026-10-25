@@ -1,18 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Atom,
-  Rotate3d,
-  Sparkles,
-  Layers,
-  Info,
-  Maximize2,
-  Eye,
-} from "lucide-react";
+import { Atom, Rotate3d, Sparkles } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 
@@ -142,28 +134,7 @@ export function Molecular3DLab() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animRef = useRef<number | null>(null);
 
-  // Auto-rotate tick
-  useEffect(() => {
-    let lastTime = performance.now();
-    const render = (now: number) => {
-      const dt = (now - lastTime) / 1000;
-      lastTime = now;
-
-      if (isAutoRotate && !isDragging) {
-        setRotY((y) => (y + 25 * dt) % 360);
-      }
-
-      drawScene();
-      animRef.current = requestAnimationFrame(render);
-    };
-
-    animRef.current = requestAnimationFrame(render);
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-    };
-  });
-
-  const drawScene = () => {
+  const drawScene = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -268,7 +239,29 @@ export function Molecular3DLab() {
     });
 
     ctx.restore();
-  };
+  }, [rotX, rotY, selectedMolecule]);
+
+  // Redraw whenever rotation or molecule changes
+  useEffect(() => {
+    drawScene();
+  }, [drawScene]);
+
+  // Auto-rotate tick
+  useEffect(() => {
+    if (!isAutoRotate || isDragging) return;
+    let lastTime = performance.now();
+    const render = (now: number) => {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+      setRotY((y) => (y + 25 * dt) % 360);
+      animRef.current = requestAnimationFrame(render);
+    };
+
+    animRef.current = requestAnimationFrame(render);
+    return () => {
+      if (animRef.current) cancelAnimationFrame(animRef.current);
+    };
+  }, [isAutoRotate, isDragging]);
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDragging(true);

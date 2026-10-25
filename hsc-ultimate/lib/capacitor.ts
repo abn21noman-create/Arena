@@ -31,11 +31,9 @@ let initialized = false;
 export async function initCapacitor(): Promise<void> {
   if (initialized) return;
   if (!isNative()) {
-    console.log("[Capacitor] Running in web mode — native APIs unavailable");
     initialized = true;
     return;
   }
-  console.log(`[Capacitor] Initialized for platform: ${platform()}`);
 
   // Initialize StatusBar
   try {
@@ -57,9 +55,8 @@ export async function initCapacitor(): Promise<void> {
   // Listen for app state changes
   try {
     const { App } = await import("@capacitor/app");
-    App.addListener("appStateChange", ({ isActive }) => {
-      console.log(`[Capacitor] App ${isActive ? "active" : "background"}`);
-      // TODO: Pause/resume background sync, save state, etc.
+    App.addListener("appStateChange", () => {
+      // Native app lifecycle listener active
     });
 
     App.addListener("backButton", ({ canGoBack }) => {

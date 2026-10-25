@@ -4443,7 +4443,7 @@ multi-provider AI chain ও `lib/mistake-explainer.ts` পুনর্ব্য�
 ### প্রেক্ষাপট
 ব্যবহারকারী প্রথমে একটা নির্দিষ্ট Gmail (`abn21.noman@gmail.com`,
 আগে থেকেই Student হিসেবে রেজিস্টার করা ছিল) কে Admin বানাতে বলেন
-(পাসওয়ার্ড `@Abdullah1221`) — DB তে সরাসরি `role='ADMIN'` সেট করে +
+(পাসওয়ার্ড `[REDACTED]`) — DB তে সরাসরি `role='ADMIN'` সেট করে +
 bcrypt দিয়ে পাসওয়ার্ড হ্যাশ আপডেট করে করা হয়েছিল, লাইভ login+session
 +admin-route-access ভেরিফাই করা হয়েছিল। এরপর ব্যবহারকারী "admin panel
 er power aro barao" বলেন। জিজ্ঞাসা করে নিশ্চিত হওয়া গেছে ব্যবহারকারী
@@ -6921,7 +6921,7 @@ ap-southeast-2) এ persistent connection timeout হচ্ছে।
 ap-southeast-2) তৈরি করে connection string (Direct/Transaction
 Pooler/Session Pooler তিনটাই) শেয়ার করেছেন। Database password ভুলে
 যাওয়ায় Supabase Dashboard থেকে reset করে নতুন password
-(`@Abdullah1221122`) সেট করা হয়েছে।
+(`[REDACTED]`) সেট করা হয়েছে।
 
 **প্রথম কানেকশন প্রচেষ্টায়** "server closed the connection unexpectedly"
 এসেছিল উভয় পোর্টেই (৫৪৩২ ও ৬৫৪৩) — এটা network timeout না, বরং
@@ -6998,7 +6998,7 @@ Pooler (৫৪৩২) উভয়ই সফলভাবে কানেক্�
 রিভিউ করে বোঝা গেছে আগে ম্যানুয়ালি `/api/auth/register` দিয়ে তৈরি করে
 তারপর role ম্যানুয়ালি ADMIN করা হয়েছিল)। একই পদ্ধতি অনুসরণ করা হয়েছে:
 1. dev server চালিয়ে `POST /api/auth/register` দিয়ে
-   `abn21.noman@gmail.com` / `@Abdullah1221` অ্যাকাউন্ট তৈরি (established
+   `abn21.noman@gmail.com` / `[REDACTED]` অ্যাকাউন্ট তৈরি (established
    admin credentials, README.md এ documented)।
 2. psycopg2 raw SQL দিয়ে `UPDATE users SET role='ADMIN' WHERE
    email=...` চালিয়ে role promote করা হয়েছে, `RETURNING` দিয়ে সাথে

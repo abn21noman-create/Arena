@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Printer, CheckCircle2, Bookmark, HelpCircle } from "lucide-react";
+import { Bookmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sfx } from "@/lib/sound-effects";
 
@@ -31,7 +30,6 @@ interface OMRBubbleSheetProps {
 }
 
 const BUBBLE_LABELS = ["ক", "খ", "গ", "ঘ"];
-const BUBBLE_LABELS_EN = ["A", "B", "C", "D"];
 
 export function OMRBubbleSheetGrid({
   totalQuestions,

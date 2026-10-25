@@ -1,25 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  PenTool,
-  Square,
-  Circle,
-  Minus,
-  ArrowUpRight,
-  Eraser,
-  RotateCcw,
-  Download,
-  Mic,
-  MicOff,
-  Users,
-  Grid,
-  Sparkles,
-  Type,
-} from "lucide-react";
+import { PenTool, Square, Circle, Minus, ArrowUpRight, Eraser, RotateCcw, Download, Mic, MicOff, Users, Grid, Sparkles } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 
@@ -34,15 +19,15 @@ export function StudyWhiteboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<ToolType>("pen");
   const [color, setColor] = useState<string>("#3b82f6");
-  const [lineWidth, setLineWidth] = useState<number>(3);
+  const lineWidth = 3;
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
-  const [activePeers, setActivePeers] = useState<string[]>([
+  const activePeers = [
     "রাহিম (Admin)",
     "তানভীর (BUET Prep)",
     "নুসরাত (DMC Prep)",
-  ]);
+  ];
 
   // History stack for undo
   const [history, setHistory] = useState<ImageData[]>([]);

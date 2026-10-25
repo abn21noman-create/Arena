@@ -1,20 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Brain,
-  Sparkles,
-  BookOpen,
-  CheckCircle2,
-  HelpCircle,
-  RotateCcw,
-  Stethoscope,
-} from "lucide-react";
+import { Sparkles, Stethoscope } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
-import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
 
 interface MnemonicItem {

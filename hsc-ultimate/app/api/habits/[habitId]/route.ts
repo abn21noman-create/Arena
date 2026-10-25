@@ -92,7 +92,7 @@ export async function PATCH(
 }
 
 export async function DELETE(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ habitId: string }> }
 ) {
   const session = await auth();

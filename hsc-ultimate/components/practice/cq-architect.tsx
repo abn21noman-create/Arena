@@ -2,9 +2,8 @@
 
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { FileEdit, CheckCircle2, AlertTriangle, Sparkles, BookOpen, ChevronRight, Layers } from "lucide-react";
+import { FileEdit, CheckCircle2, AlertTriangle, Sparkles } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 

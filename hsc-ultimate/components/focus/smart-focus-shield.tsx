@@ -1,21 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Shield,
-  Play,
-  Pause,
-  RotateCcw,
-  Volume2,
-  VolumeX,
-  Sparkles,
-  Flame,
-  CheckCircle2,
-  AlertTriangle,
-} from "lucide-react";
+import { Shield, Play, Pause, RotateCcw, Volume2, Sparkles, AlertTriangle } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
@@ -25,7 +14,6 @@ export function SmartFocusShield() {
   const [secondsLeft, setSecondsLeft] = useState<number>(25 * 60);
   const [isActive, setIsActive] = useState<boolean>(false);
   const [ambientSound, setAmbientSound] = useState<string>("rain");
-  const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const [urgesBlocked, setUrgesBlocked] = useState<number>(0);
 
   useEffect(() => {

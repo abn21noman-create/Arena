@@ -60,7 +60,12 @@ if [ "$MEM_KB" -gt 0 ] && [ "$MEM_KB" -lt 3145728 ] && [ "$SWAP_KB" -lt 1048576 
   fi
 fi
 
-HEAP_MB=${HSC_BUILD_HEAP_MB:-1400}
+if [ "$MEM_KB" -ge 3686400 ]; then
+  DEFAULT_HEAP_MB=2400
+else
+  DEFAULT_HEAP_MB=1400
+fi
+HEAP_MB=${HSC_BUILD_HEAP_MB:-$DEFAULT_HEAP_MB}
 LOG=${TMPDIR:-/tmp}/hsc-ultimate-build-$$.log
 : > "$LOG"
 start=$(date +%s)

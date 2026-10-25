@@ -21,6 +21,18 @@ describe("Global API security baseline", () => {
     expect(isTrustedMutationOrigin(request, ["https://app.example"])).toBe(true);
   });
 
+  it("accepts same-origin browser mutations behind TLS-terminating reverse proxies", () => {
+    const request = new Request("http://0.0.0.0:3000/api/auth/register", {
+      method: "POST",
+      headers: {
+        host: "3000-sandbox.e2b.app",
+        "x-forwarded-proto": "https",
+        origin: "https://3000-sandbox.e2b.app",
+      },
+    });
+    expect(isTrustedMutationOrigin(request, [])).toBe(true);
+  });
+
   it("rejects cross-origin and malformed browser mutation origins", () => {
     const crossOrigin = new Request("https://app.example/api/tasks", {
       method: "DELETE",

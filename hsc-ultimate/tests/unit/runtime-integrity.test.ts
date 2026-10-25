@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { getFeatureFlagForPath } from "@/lib/feature-flag-routes";
+import { PROTECTED_PREFIXES } from "@/lib/protected-routes";
 import { isSessionRevoked } from "@/lib/session-integrity";
 
 describe("Runtime truth and session integrity", () => {
@@ -16,5 +19,12 @@ describe("Runtime truth and session integrity", () => {
     expect(getFeatureFlagForPath("/pdf-chat/doc")).toBe("pdf-chat");
     expect(getFeatureFlagForPath("/api/pdf-chat/doc/messages")).toBe("pdf-chat");
     expect(getFeatureFlagForPath("/api/analytics")).toBeNull();
+  });
+
+  it("keeps every protected route prefix covered by proxy.ts matcher", () => {
+    const proxySource = readFileSync(path.resolve(process.cwd(), "proxy.ts"), "utf8");
+    for (const prefix of PROTECTED_PREFIXES) {
+      expect(proxySource).toContain(`"${prefix}/:path*"`);
+    }
   });
 });

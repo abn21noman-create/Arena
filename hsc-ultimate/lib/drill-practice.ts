@@ -25,8 +25,6 @@ export {
   isValidDrillDuration,
 } from "@/lib/drill-constants";
 export type { DrillDuration } from "@/lib/drill-constants";
-import { DRILL_DURATIONS, DEFAULT_DRILL_DURATION } from "@/lib/drill-constants";
-import type { DrillDuration } from "@/lib/drill-constants";
 
 // একবারে সর্বোচ্চ এতগুলো প্রশ্ন pool হিসেবে পাঠানো হয় (৯০ সেকেন্ডেও যথেষ্ট
 // থাকে যাতে দ্রুতগতির ইউজার প্রশ্ন ফুরিয়ে না ফেলে)

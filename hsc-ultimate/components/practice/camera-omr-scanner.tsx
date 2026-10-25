@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Scan, Sparkles, CheckCircle2, AlertCircle, Upload, RotateCcw, Trophy, FileCheck } from "lucide-react";
+import { Camera, Scan, CheckCircle2, AlertCircle, RotateCcw, FileCheck } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";

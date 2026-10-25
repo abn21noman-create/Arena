@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Atom, Sparkles, Search, Layers, Zap, Info, Flame } from "lucide-react";
+import { Atom, Sparkles, Search } from "lucide-react";
 import { PERIODIC_ELEMENTS, type PeriodicElement } from "@/lib/periodic-table-data";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";

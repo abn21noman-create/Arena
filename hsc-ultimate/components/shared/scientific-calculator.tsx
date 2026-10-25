@@ -9,17 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Calculator,
-  Copy,
-  Check,
-  RotateCcw,
-  Delete,
-  Search,
-  Sparkles,
-  BookOpen,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Calculator, Copy, Check, RotateCcw, Delete, Search, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { sfx } from "@/lib/sound-effects";
 
@@ -289,7 +279,6 @@ export function ScientificCalculatorDialog() {
         throw new Error("Invalid characters");
       }
 
-      // eslint-disable-next-line no-new-func
       const result = new Function(`return (${sanitized});`)() as number;
       if (typeof result !== "number" || isNaN(result)) {
         throw new Error("Invalid result");

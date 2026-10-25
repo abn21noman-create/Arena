@@ -6,17 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import {
-  Calendar,
-  Clock,
-  Flame,
-  Target,
-  Sparkles,
-  ArrowRight,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Clock, Flame, Target, ShieldCheck, Zap } from "lucide-react";
 
 interface ExamCountdownQuotaProps {
   targetExamDate?: string; // ISO string e.g. "2026-11-01"

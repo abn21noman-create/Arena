@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Calculator, Sparkles, Search, BookOpen, Lightbulb, Zap } from "lucide-react";
-import { CALCULATOR_HACKS, type CalculatorHackItem } from "@/lib/calculator-hacks-data";
+import { Calculator, Sparkles, Search, Lightbulb, Zap } from "lucide-react";
+import { CALCULATOR_HACKS } from "@/lib/calculator-hacks-data";
 import { cn } from "@/lib/utils";
 import { sfx } from "@/lib/sound-effects";
 

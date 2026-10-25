@@ -16,13 +16,12 @@
 import bcrypt from "bcryptjs";
 import { calculateNextFsrsReview } from "../lib/fsrs";
 import { calculateLevel, getLevelProgress } from "../lib/gamification";
-import { getCurrentWeekStart, LEAGUE_TIER_ORDER } from "../lib/league";
+import { getCurrentWeekStart } from "../lib/league";
 import {
   CURRENT_AGE_ASSURANCE_VERSION,
   CURRENT_PRIVACY_VERSION,
   CURRENT_TERMS_VERSION,
 } from "../lib/privacy-compliance";
-import { shuffleOptions, calculatePercentage } from "../lib/mock-exam";
 
 let totalAssertions = 0;
 let passedAssertions = 0;

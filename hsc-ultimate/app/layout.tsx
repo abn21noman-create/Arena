@@ -203,6 +203,7 @@ export default function RootLayout({
   return (
     <html
       lang="bn"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
       className={`${inter.variable} ${notoSansBengali.variable} ${notoSansBengaliHeading.variable} ${geistMono.variable} ${balooDa2.variable} h-full antialiased`}
     >

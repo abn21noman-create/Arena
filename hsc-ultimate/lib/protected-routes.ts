@@ -49,4 +49,5 @@ export const PROTECTED_PREFIXES = [
   "/mistake-vault", // মিস্টেক ভল্ট — ভুল করা প্রশ্নের রিভিশন
   "/formula-search", // Formula Quick Search — সব বিষয়ের সূত্র এক জায়গা থেকে খোঁজা
   "/focus", // Consent-based Strict Focus / Android app blocker
+  "/lab", // ইন্টারেক্টিভ ভার্চুয়াল সায়েন্স ও গণিত ল্যাব
 ] as const;

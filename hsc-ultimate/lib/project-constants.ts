@@ -1,8 +1,8 @@
 export const PROJECT_INVENTORY = {
-  pages: 89,
-  apiRoutes: 213,
-  components: 179,
-  libraryFiles: 114,
+  pages: 135,
+  apiRoutes: 214,
+  components: 243,
+  libraryFiles: 123,
   prismaModels: 67,
   prismaMigrations: 33,
 } as const;

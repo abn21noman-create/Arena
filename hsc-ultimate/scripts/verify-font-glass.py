@@ -16,23 +16,29 @@ CSS ফাইল "পড়ে" নয় — চলন্ত ব্রাউজ
   ৭. আসল স্ক্রিনশট পিক্সেল থেকে টেক্সট↔কার্ড WCAG কনট্রাস্ট
 ===================================================================
 """
-import os, sys, json
+import os
+import sys
 sys.path.insert(0, os.path.dirname(__file__))
 from playwright.sync_api import sync_playwright
 import requests
 
-BASE = "http://localhost:3000"
-ROOT_SHOTS = "/home/user/hsc-ultimate/screenshots/after"
+BASE = os.environ.get("BASE_URL", "http://localhost:3000")
+ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_SHOTS = os.path.join(ROOT_DIR, "screenshots", "after")
 os.makedirs(ROOT_SHOTS, exist_ok=True)
 ARGS = ["--no-sandbox", "--disable-dev-shm-usage",
         "--disable-features=CDPScreenshotNewSurface"]
 
 
 def cookie():
+    email = os.environ.get("TEST_USER_EMAIL", "")
+    password = os.environ.get("TEST_USER_PASS", "")
     s = requests.Session()
+    if not email or not password:
+        return None, s
     csrf = s.get(f"{BASE}/api/auth/csrf", timeout=30).json()["csrfToken"]
     s.post(f"{BASE}/api/auth/callback/credentials",
-           data={"email": "abn21.noman@gmail.com", "password": "@Abdullah1221",
+           data={"email": email, "password": password,
                  "csrfToken": csrf, "json": "true"},
            timeout=90, allow_redirects=False)
     for n in ("authjs.session-token", "next-auth.session-token"):

@@ -4,10 +4,9 @@ import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Mic, MicOff, Volume2, Sparkles, Trophy, Award, CheckCircle2, RotateCcw, MessageSquare } from "lucide-react";
+import { Mic, Volume2, Sparkles, Trophy, CheckCircle2 } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
-import { cn } from "@/lib/utils";
 
 interface VivaQuestion {
   id: string;

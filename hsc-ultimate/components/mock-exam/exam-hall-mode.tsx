@@ -3,13 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  ShieldAlert,
-  Maximize2,
-  Minimize2,
-  AlertTriangle,
-  Lock,
-} from "lucide-react";
+import { ShieldAlert, Minimize2, Lock } from "lucide-react";
 import { toast } from "sonner";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";

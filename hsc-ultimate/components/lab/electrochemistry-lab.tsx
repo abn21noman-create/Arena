@@ -1,18 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  BatteryCharging,
-  Sparkles,
-  Zap,
-  Sliders,
-  RotateCcw,
-} from "lucide-react";
-import { sfx } from "@/lib/sound-effects";
-import { cn } from "@/lib/utils";
+import { BatteryCharging, Sliders } from "lucide-react";
 
 export function ElectrochemistryLab() {
   const [znConc, setZnConc] = useState<number>(0.1); // Molar [Zn2+]

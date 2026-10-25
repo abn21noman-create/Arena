@@ -16,18 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import {
-  ArrowLeft,
-  Loader2,
-  ChevronRight,
-  ChevronLeft,
-  Clock,
-  CheckCircle2,
-  Calculator,
-  FileSpreadsheet,
-  Bookmark,
-  Keyboard,
-} from "lucide-react";
+import { ArrowLeft, Loader2, ChevronRight, ChevronLeft, Clock, CheckCircle2, Calculator, FileSpreadsheet, Bookmark } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MathText } from "@/components/shared/math-text";
 import { VoiceInputButton } from "@/components/shared/voice-input-button";
@@ -37,7 +26,6 @@ import { MOCK_EXAM_CONFIG } from "@/lib/mock-exam";
 import { useMcqKeyboardNav } from "@/hooks/use-mcq-keyboard-nav";
 import { OMRSheetDialog } from "@/components/practice/omr-bubble-sheet";
 import { openScientificCalculator } from "@/components/shared/scientific-calculator";
-import { openKeyboardShortcutsGuide } from "@/components/shared/keyboard-shortcuts-dialog";
 import { sfx } from "@/lib/sound-effects";
 import { VoiceReadoutButton } from "@/components/shared/voice-readout-button";
 import { MathSymbolPalette } from "@/components/shared/math-symbol-palette";
@@ -516,7 +504,11 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
             disabled={submitting}
             onClick={() => {
               sfx.play("click");
-              isLastMcq ? handleMcqSubmit() : setMcqIndex((i) => i + 1);
+              if (isLastMcq) {
+                handleMcqSubmit();
+              } else {
+                setMcqIndex((i) => i + 1);
+              }
             }}
           >
             {submitting ? (
@@ -740,7 +732,11 @@ export function MockExamRunner({ attemptId }: { attemptId: string }) {
           disabled={submitting}
           onClick={() => {
             sfx.play("click");
-            isLastCq ? handleCqSubmit() : setCqIndex((i) => i + 1);
+            if (isLastCq) {
+              handleCqSubmit();
+            } else {
+              setCqIndex((i) => i + 1);
+            }
           }}
         >
           {submitting ? (

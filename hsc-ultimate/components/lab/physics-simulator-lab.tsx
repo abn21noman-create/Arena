@@ -4,9 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Play, RotateCcw, Sparkles, Orbit, Compass, Eye, Zap, Flame, Compass as CompassIcon } from "lucide-react";
+import { Play, RotateCcw, Orbit, Zap } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
-import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
 
 type SimType = "projectile" | "pendulum" | "optics";
@@ -22,12 +21,12 @@ export function PhysicsSimulatorLab() {
   // Pendulum states
   const [length, setLength] = useState<number>(1.5); // meters
   const [initialAngle, setInitialAngle] = useState<number>(30); // degrees
-  const [mass, setMass] = useState<number>(2); // kg
+  const mass = 2; // kg
 
   // Lens states
   const [focalLength, setFocalLength] = useState<number>(100); // px
   const [objectDist, setObjectDist] = useState<number>(220); // px
-  const [objectHeight, setObjectHeight] = useState<number>(50); // px
+  const objectHeight = 50; // px
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);
