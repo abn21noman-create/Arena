@@ -3,7 +3,6 @@
   "framework": "nextjs",
   "buildCommand": "node scripts/generate-prisma.mjs && next build --webpack",
   "installCommand": "npm install --no-audit --no-fund",
-  "regions": ["sin1"],
   "cleanUrls": true,
   "headers": [
     {
