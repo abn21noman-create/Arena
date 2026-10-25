@@ -4533,8 +4533,7 @@ UI/UX Polish — Loading Skeletons সম্প্রসারণ এ যা য
 - ✅ **`.env`/`.env.local` আপডেট**: `DATABASE_URL` (pooled, pgbouncer=true)
   ও `DIRECT_URL` (session mode, migration এর জন্য) দুটোই নতুন হোস্ট
   (`aws-0-ap-northeast-1.pooler.supabase.com`) ও নতুন project-ref
-  (`dsgbfqczysgivlpcksry`) দিয়ে আপডেট করা হয়েছে, একই password
-  (`@Abdullah1221122`, URL-encoded `%40Abdullah1221122`)।
+  (`dsgbfqczysgivlpcksry`) দিয়ে আপডেট করা হয়েছে (`[REDACTED]`)।
 - ✅ **pgvector extension enable**: নতুন (খালি) ডেটাবেসে
   `CREATE EXTENSION IF NOT EXISTS vector;` চালিয়ে pgvector 0.8.2
   ইনস্টল/ভেরিফাই করা হয়েছে (PDF Chat RAG ফিচারের জন্য আবশ্যক)।
@@ -4557,7 +4556,7 @@ UI/UX Polish — Loading Skeletons সম্প্রসারণ এ যা য
 - ✅ **Admin অ্যাকাউন্ট পুনরায় তৈরি**: কোনো dedicated admin-seed script
   না থাকায় (আগে ম্যানুয়ালি register+role-promote করা হয়েছিল বলে মনে
   হচ্ছে) `/api/auth/register` endpoint দিয়ে
-  `abn21.noman@gmail.com`/`@Abdullah1221` অ্যাকাউন্ট তৈরি করে, তারপর
+  `abn21.noman@gmail.com` (`[REDACTED]`) অ্যাকাউন্ট তৈরি করে, তারপর
   psycopg2 raw SQL দিয়ে `UPDATE users SET role='ADMIN'` চালিয়ে
   established admin credentials পুনরুদ্ধার করা হয়েছে।
 - ✅ **লাইভ ভেরিফিকেশন**: dev server চালিয়ে নতুন admin অ্যাকাউন্ট দিয়ে

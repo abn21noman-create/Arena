@@ -4,9 +4,8 @@ import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Highlighter, Sparkles, Bookmark, StickyNote, Plus, Trash2, CheckCircle2 } from "lucide-react";
+import { BookOpen, StickyNote, Plus } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
-import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
 
 interface HighlightItem {

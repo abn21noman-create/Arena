@@ -22,9 +22,7 @@
 """
 import os
 import sys
-import time
 import uuid
-import json
 import requests
 
 from lib.live_test_support import database, write_report

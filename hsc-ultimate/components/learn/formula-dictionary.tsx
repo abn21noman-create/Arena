@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Copy, Check, Sparkles, BookOpen, Atom, Sigma, FlaskConical } from "lucide-react";
+import { Search, Copy, Check, Sparkles, BookOpen } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 

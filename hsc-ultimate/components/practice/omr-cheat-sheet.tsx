@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Printer, CheckCircle2, AlertCircle, Timer, RotateCcw, Trophy, Sparkles } from "lucide-react";
@@ -32,11 +32,14 @@ export function OMRCheatSheet() {
     };
   }, [isSubmitted]);
 
-  const handleBubbleClick = (idx: number, opt: string) => {
-    if (isSubmitted) return;
-    sfx.play("pop");
-    setFilledAnswers((prev) => ({ ...prev, [idx]: opt }));
-  };
+  const handleBubbleClick = useCallback(
+    (idx: number, opt: string) => {
+      if (isSubmitted) return;
+      sfx.play("pop");
+      setFilledAnswers((prev) => ({ ...prev, [idx]: opt }));
+    },
+    [isSubmitted]
+  );
 
   // Keyboard listener for PC users
   useEffect(() => {
@@ -67,7 +70,7 @@ export function OMRCheatSheet() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [filledAnswers, isSubmitted, activeTab]);
+  }, [filledAnswers, isSubmitted, activeTab, handleBubbleClick]);
 
   const handleSubmitOMR = () => {
     sfx.play("correct");

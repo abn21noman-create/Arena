@@ -116,9 +116,19 @@ export async function GET() {
   }
 
   // 2. Environment variables check
-  const missingEnvVars = REQUIRED_ENV_VARS.filter(
-    (key) => !process.env[key] || process.env[key]?.length === 0
-  );
+  const missingEnvVars = REQUIRED_ENV_VARS.filter((key) => {
+    if (key === "NEXTAUTH_URL") {
+      return (
+        !process.env.NEXTAUTH_URL &&
+        !process.env.AUTH_URL &&
+        !(process.env.NODE_ENV !== "production" && process.env.AUTH_TRUST_HOST === "true")
+      );
+    }
+    if (key === "NEXTAUTH_SECRET") {
+      return !process.env.NEXTAUTH_SECRET && !process.env.AUTH_SECRET;
+    }
+    return !process.env[key] || process.env[key]?.length === 0;
+  });
   if (missingEnvVars.length > 0) {
     checks.environment = {
       status: "missing",

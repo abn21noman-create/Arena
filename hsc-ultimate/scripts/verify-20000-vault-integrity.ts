@@ -11,12 +11,10 @@
  * ===================================================================
  */
 
-import * as fs from "fs";
-import * as path from "path";
 import { loadVault } from "../lib/vault-service";
 
 let totalChecked = 0;
-let errors: string[] = [];
+const errors: string[] = [];
 
 console.log("═══════════════════════════════════════════════════════════════");
 console.log("🔬 20,000 MCQ VAULT EXHAUSTIVE DEEP AUDIT & SANITY TEST");

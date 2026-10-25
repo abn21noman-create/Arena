@@ -18,7 +18,6 @@ test-live-e2e.py শুধু একটা happy-path ফ্লো দেখে�
 """
 import os
 import sys
-import json
 import time
 import uuid
 import subprocess

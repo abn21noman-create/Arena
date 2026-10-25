@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { toggleHabitToday } from "@/lib/habit-tracker";
 
 export async function POST(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ habitId: string }> }
 ) {
   const session = await auth();

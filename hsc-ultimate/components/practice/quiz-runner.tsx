@@ -13,17 +13,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import {
-  ArrowLeft,
-  Loader2,
-  ChevronRight,
-  Clock,
-  Calculator,
-  Bookmark,
-  FileSpreadsheet,
-  Keyboard,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, Loader2, ChevronRight, Clock, Calculator, Bookmark, FileSpreadsheet, Keyboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { showNewBadgeToasts } from "@/lib/badge-toast";
 import { MathText } from "@/components/shared/math-text";

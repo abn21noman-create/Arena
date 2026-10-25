@@ -2,11 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Atom, Sparkles, Zap, RotateCcw, CheckCircle2 } from "lucide-react";
+import { Atom, Sparkles } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
-import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
 
 interface SpectralSeries {

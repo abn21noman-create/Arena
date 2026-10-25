@@ -19,36 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { GlassCard } from "@/components/ui/glass-card";
 import { AuroraBackground } from "@/components/ui/aurora-background";
-import {
-  Brain,
-  BookOpen,
-  Trophy,
-  CalendarClock,
-  Layers,
-  ArrowRight,
-  ShieldCheck,
-  Target,
-  MessageCircle,
-  Zap,
-  Check,
-  Sparkle,
-  Sparkles,
-  Users,
-  Flame,
-  Crown,
-  BookMarked,
-  BrainCircuit,
-  LineChart,
-  Database,
-  Atom,
-  FlaskConical,
-  Binary,
-  Compass,
-  Cpu,
-  ChevronRight,
-  Play,
-  Lightbulb,
-} from "lucide-react";
+import { Brain, BookOpen, Trophy, CalendarClock, Layers, ArrowRight, ShieldCheck, Target, MessageCircle, Zap, Check, Sparkles, Users, Flame, Crown, BookMarked, BrainCircuit, LineChart, Database, Atom, FlaskConical, Binary, Compass, Cpu, ChevronRight } from "lucide-react";
 
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 16 },

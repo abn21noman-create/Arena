@@ -31,7 +31,7 @@ import {
 } from "../lib/admission";
 import { getCurrentWeekStart, LEAGUE_TIER_ORDER, LEAGUE_TIER_INFO } from "../lib/league";
 import { sfx } from "../lib/sound-effects";
-import { getCachedPracticeSets, savePracticeSetOffline } from "../lib/offline-practice-store";
+import { getCachedPracticeSets } from "../lib/offline-practice-store";
 import { sanitizeTextForSpeech } from "../lib/voice-reader";
 import { getStreakFreezeTokens, addStreakFreezeToken } from "../lib/streak-freeze";
 import {

@@ -1,8 +1,11 @@
 import type { NextRequest } from "next/server";
 import { handlers } from "@/lib/auth";
 import { enforceRateLimit, makeRateLimitKey } from "@/lib/rate-limit";
+import { adaptPreviewCookies } from "@/lib/request-security";
 
-export const GET = handlers.GET;
+export async function GET(request: NextRequest) {
+  return adaptPreviewCookies(request, await handlers.GET(request));
+}
 
 export async function POST(request: NextRequest) {
   const pathname = new URL(request.url).pathname;
@@ -14,5 +17,5 @@ export async function POST(request: NextRequest) {
     );
     if (limited) return limited;
   }
-  return handlers.POST(request);
+  return adaptPreviewCookies(request, await handlers.POST(request));
 }

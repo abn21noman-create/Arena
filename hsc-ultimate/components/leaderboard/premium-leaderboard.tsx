@@ -6,8 +6,7 @@
 import { useState, useMemo } from "react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Crown, Flame, Sparkles, School, Building2, Filter } from "lucide-react";
+import { Crown, Flame, Sparkles, School, Building2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sfx } from "@/lib/sound-effects";
 

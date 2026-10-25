@@ -14,7 +14,7 @@ import { prisma } from "@/lib/prisma";
 import { moderateText } from "@/lib/content-moderation";
 
 export async function POST(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ postId: string }> }
 ) {
   const guard = await requireAdmin();

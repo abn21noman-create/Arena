@@ -9,7 +9,7 @@ import { createNotification } from "@/lib/notifications";
 import { awardXp } from "@/lib/league";
 
 export async function PATCH(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ replyId: string }> }
 ) {
   const session = await auth();

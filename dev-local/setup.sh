@@ -7,14 +7,14 @@
 # native engine) is unavailable. This script rebuilds a working local
 # stack from scratch:
 #
-#   1. restore .env files from the committed workspace zip (if missing)
+#   1. ensure .env / .env.local exist (never overwrites existing keys)
 #   2. npm ci                              (installs deps; Prisma client is
 #                                           generated via WASM — see
 #                                           scripts/generate-prisma.mjs)
 #   3. real PostgreSQL 17 from npm         (@embedded-postgres/linux-x64
 #                                           ships the actual binaries)
 #   4. apply migrations + repair known drift
-#   5. seed the 13 subjects / 689 MCQ / 64 CQ catalog
+#   5. seed the 13 subjects / 697 MCQ / 64 CQ catalog
 #
 # Safe to re-run at any time: every step checks before acting, and it
 # never overwrites an existing .env.local (your keys stay put).
@@ -49,29 +49,33 @@ for f in .env .env.local .env.example .env.local.example; do
 done
 
 if [ "$missing_env" -eq 1 ]; then
-  ZIP=$(ls "$ARENA_ROOT"/workspace-*.zip 2>/dev/null | head -1)
-  if [ -z "$ZIP" ]; then
-    echo "  ❌ workspace zip পাওয়া যায়নি — .env ফাইল restore করা যাবে না"
-    exit 1
+  [ -f "$REPO/.env" ] || [ ! -f "$REPO/.env.example" ] || cp "$REPO/.env.example" "$REPO/.env"
+  if [ ! -f "$REPO/.env.local" ]; then
+    cat > "$REPO/.env.local" <<FALLBACK_EOF
+DATABASE_URL="$LOCAL_URL"
+DIRECT_URL="$LOCAL_URL"
+NEXTAUTH_SECRET="local-sandbox-dev-secret-at-least-32-chars-long"
+NEXTAUTH_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+FOCUS_SCHEDULER_MODE="lazy"
+RATE_LIMIT_BACKEND="memory"
+FALLBACK_EOF
   fi
-  # -j: no directory, -n: never overwrite existing files
-  unzip -o -j -n "$ZIP" \
-    'hsc-ultimate/.env' 'hsc-ultimate/.env.local' \
-    'hsc-ultimate/.env.example' 'hsc-ultimate/.env.local.example' \
-    -d "$REPO/" >/dev/null 2>&1
-  ok "zip থেকে env ফাইল restore করা হয়েছে"
+  ok "লোকাল ডেভেলপমেন্টের জন্য ডিফল্ট env ফাইল নিশ্চিত করা হয়েছে"
 else
   ok "env ফাইল আগে থেকেই আছে (হাত দেওয়া হলো না)"
 fi
 
-# Dev-only DB override — keeps the real Supabase credentials untouched.
+# Dev-only DB & host override — keeps the real Supabase credentials untouched.
 cat > "$REPO/.env.development.local" <<EOF
 # স্যান্ডবক্স-লোকাল ওভাররাইড (Next.js dev মোডে .env.local এর চেয়ে অগ্রগণ্য)
 # মুছে ফেললেই Supabase-এ ফিরে যাবে।
 DATABASE_URL="$LOCAL_URL"
 DIRECT_URL="$LOCAL_URL"
+NEXTAUTH_URL=""
+AUTH_TRUST_HOST="true"
 EOF
-ok ".env.development.local → লোকাল PostgreSQL"
+ok ".env.development.local → লোকাল PostgreSQL + dynamic preview host"
 
 # ------------------------------------------------------------------
 step "2/6  npm dependencies"

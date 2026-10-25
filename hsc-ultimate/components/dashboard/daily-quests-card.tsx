@@ -5,7 +5,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Flame, Sparkles, CheckCircle2, Gift, Zap, ShieldCheck } from "lucide-react";
+import { Sparkles, CheckCircle2, Gift, Zap } from "lucide-react";
 import { getDailyQuests, type DailyQuest } from "@/lib/daily-quests";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { sfx } from "@/lib/sound-effects";
@@ -13,18 +13,16 @@ import { cn } from "@/lib/utils";
 
 export function DailyQuestsCard() {
   const [quests, setQuests] = useState<DailyQuest[]>(() => getDailyQuests());
-  const [xpBoostActive, setXpBoostActive] = useState<boolean>(true);
-  const [boostMinutesRemaining, setBoostMinutesRemaining] = useState<number>(14);
+  const xpBoostActive = true;
+  const boostMinutesRemaining = 14;
 
-  const handleClaim = (questId: string, xpReward: number) => {
+  const handleClaim = (questId: string) => {
     sfx.play("reward_claim");
     triggerConfetti();
     setQuests((prev) =>
       prev.map((q) => (q.id === questId ? { ...q, claimed: true } : q))
     );
   };
-
-  const allCompleted = quests.every((q) => q.completed);
 
   return (
     <Card className="border shadow-xs bg-card relative overflow-hidden">
@@ -89,7 +87,7 @@ export function DailyQuestsCard() {
                   <Button
                     size="sm"
                     className="h-7 text-xs font-bold gap-1 bg-amber-500 hover:bg-amber-600 text-white shadow-xs animate-bounce"
-                    onClick={() => handleClaim(quest.id, quest.xpReward)}
+                    onClick={() => handleClaim(quest.id)}
                   >
                     <Gift className="h-3 w-3" />
                     +{quest.xpReward} XP নিন

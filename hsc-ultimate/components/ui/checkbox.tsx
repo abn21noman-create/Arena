@@ -8,7 +8,6 @@
 // ফাইলের একই প্যাটার্ন অনুসরণ করে (base-ui primitive + `cn()` দিয়ে
 // Tailwind ক্লাস মার্জ, `data-slot` attribute)।
 // ===================================================================
-import * as React from "react"
 import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
 import { CheckIcon } from "lucide-react"
 

@@ -49,6 +49,11 @@ const MOTIVATIONAL_QUOTES = [
   "“বিজ্ঞান কোনো নির্দিষ্ট সত্যের নাম নয়, বিজ্ঞান হলো জানার এক নিরন্তর সাধনা।” — আলবার্ট আইনস্টাইন",
 ];
 
+function getDailyMotivationalQuote(): string {
+  const dayOfYear = Math.floor(new Date().getTime() / (1000 * 60 * 60 * 24));
+  return MOTIVATIONAL_QUOTES[dayOfYear % MOTIVATIONAL_QUOTES.length];
+}
+
 export function DashboardCommandHero({
   userName,
   hscBatch,
@@ -62,8 +67,7 @@ export function DashboardCommandHero({
 }: DashboardCommandHeroProps) {
   const firstName = userName.trim().split(/\s+/)[0] || "শিক্ষার্থী";
   const greeting = getTimeOfDayGreeting();
-  const dayOfYear = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-  const dailyQuote = MOTIVATIONAL_QUOTES[dayOfYear % MOTIVATIONAL_QUOTES.length];
+  const dailyQuote = getDailyMotivationalQuote();
 
   const today = new Date().toLocaleDateString("bn-BD", {
     timeZone: "Asia/Dhaka",

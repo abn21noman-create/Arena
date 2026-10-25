@@ -57,7 +57,6 @@ export async function GET(req: NextRequest) {
           );
         } catch {
           // Client disconnected
-          console.log("[SSE] Client disconnected");
         }
       };
 

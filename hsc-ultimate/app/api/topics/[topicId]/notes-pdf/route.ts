@@ -13,7 +13,7 @@ import { prisma } from "@/lib/prisma";
 import { TopicNotesDocument, type TopicNotesPdfData } from "@/lib/topic-notes-pdf";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ topicId: string }> }
 ) {
   const session = await auth();

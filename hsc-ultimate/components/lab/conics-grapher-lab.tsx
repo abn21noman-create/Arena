@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Sigma, Sparkles, RotateCcw, Zap, Eye, CheckCircle2 } from "lucide-react";
+import { Sigma, Zap } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 
@@ -16,7 +15,7 @@ export function ConicsGrapherLab() {
   // Parabola (y - k)^2 = 4a(x - h)
   const [paramA, setParamA] = useState<number>(2);
   const [offsetX, setOffsetX] = useState<number>(0);
-  const [offsetY, setOffsetY] = useState<number>(0);
+  const offsetY = 0;
 
   // Ellipse & Hyperbola: x^2/a^2 +- y^2/b^2 = 1
   const [ellipseA, setEllipseA] = useState<number>(4);
@@ -26,7 +25,7 @@ export function ConicsGrapherLab() {
 
   // Computed metrics
   // For Parabola y^2 = 4ax
-  const parabolaFocus = { x: offsetX + paramA, y: offsetY };
+  const parabolaFocus = useMemo(() => ({ x: offsetX + paramA, y: offsetY }), [offsetX, paramA, offsetY]);
   const parabolaDirectrix = offsetX - paramA;
   const latusRectum = Math.abs(4 * paramA);
 

@@ -9,7 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { ADMISSION_EXAM_CONFIGS, calculateAdmissionScore } from "@/lib/admission";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ attemptId: string }> }
 ) {
   const session = await auth();

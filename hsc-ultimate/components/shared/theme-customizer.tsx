@@ -27,7 +27,7 @@ import { sfx } from "@/lib/sound-effects";
 import { toast } from "sonner";
 
 export function ThemeCustomizerButton() {
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentAccent, setCurrentAccent] = useState<AccentColorId>("default");
   const [open, setOpen] = useState(false);

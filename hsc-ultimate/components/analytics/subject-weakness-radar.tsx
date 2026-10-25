@@ -5,15 +5,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  TrendingUp,
-  ArrowRight,
-  Sparkles,
-  Zap,
-  Target,
-} from "lucide-react";
+import { AlertTriangle, ArrowRight, Sparkles, Zap, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface SubjectMasteryData {

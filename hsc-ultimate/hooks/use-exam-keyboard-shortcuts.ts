@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useCallback } from "react";
-import { openScientificCalculator } from "@/components/shared/scientific-calculator";
 import { openKeyboardShortcutsGuide } from "@/components/shared/keyboard-shortcuts-dialog";
 import { sfx } from "@/lib/sound-effects";
 

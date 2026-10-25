@@ -9,7 +9,7 @@
 // ===================================================================
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
-import { ArrowLeft, Calculator, Loader2, Search, Sparkles, BookOpen } from "lucide-react";
+import { ArrowLeft, Calculator, Loader2, Search } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

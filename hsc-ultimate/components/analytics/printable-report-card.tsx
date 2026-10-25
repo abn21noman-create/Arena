@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Printer, Download, Award, CheckCircle2, FileText } from "lucide-react";
+import { Printer, Award } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 
 interface PrintableReportCardProps {
@@ -28,7 +28,6 @@ export function PrintableReportCardDialog({
   examBatch = "HSC 2026",
   predictedGpa = "5.00",
   totalSolved = 840,
-  overallAccuracy = 86,
 }: PrintableReportCardProps) {
   const [open, setOpen] = useState(false);
 

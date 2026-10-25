@@ -4,15 +4,7 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Sparkles,
-  ArrowRight,
-  Brain,
-  Zap,
-  Target,
-  BookOpen,
-  Volume2,
-} from "lucide-react";
+import { Sparkles, ArrowRight, Brain } from "lucide-react";
 import { VoiceReadoutButton } from "@/components/shared/voice-readout-button";
 
 interface ActionFocusItem {

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Headphones, Play, Pause, Volume2, VolumeX, Sparkles, CloudRain, Waves, Coffee, Wind, Brain } from "lucide-react";
+import { Headphones, Play, Pause, Volume2, VolumeX, CloudRain, Waves, Coffee, Wind, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SoundTrack {
@@ -14,6 +14,22 @@ interface SoundTrack {
   icon: typeof CloudRain;
   type: "rain" | "waves" | "cafe" | "binaural" | "wind";
   description: string;
+}
+
+function fillNoiseBuffer(output: Float32Array, kind: "white" | "brown") {
+  if (kind === "white") {
+    for (let i = 0; i < output.length; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    return;
+  }
+  let lastOut = 0.0;
+  for (let i = 0; i < output.length; i++) {
+    const white = Math.random() * 2 - 1;
+    output[i] = (lastOut + 0.02 * white) / 1.02;
+    lastOut = output[i];
+    output[i] *= 3.5;
+  }
 }
 
 const SOUND_TRACKS: SoundTrack[] = [
@@ -99,9 +115,7 @@ export function AmbientAudioPlayer() {
       const output = noiseBuffer.getChannelData(0);
 
       if (track.type === "rain") {
-        for (let i = 0; i < bufferSize; i++) {
-          output[i] = Math.random() * 2 - 1;
-        }
+        fillNoiseBuffer(output, "white");
         const whiteNoise = ctx.createBufferSource();
         whiteNoise.buffer = noiseBuffer;
         whiteNoise.loop = true;
@@ -133,13 +147,7 @@ export function AmbientAudioPlayer() {
         oscL.start();
         oscR.start();
       } else if (track.type === "waves" || track.type === "cafe" || track.type === "wind") {
-        let lastOut = 0.0;
-        for (let i = 0; i < bufferSize; i++) {
-          const white = Math.random() * 2 - 1;
-          output[i] = (lastOut + (0.02 * white)) / 1.02;
-          lastOut = output[i];
-          output[i] *= 3.5;
-        }
+        fillNoiseBuffer(output, "brown");
         const brownNoise = ctx.createBufferSource();
         brownNoise.buffer = noiseBuffer;
         brownNoise.loop = true;

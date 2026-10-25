@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Target, Trophy, Sparkles, TrendingUp, AlertTriangle, CheckCircle2, GraduationCap, ChevronRight } from "lucide-react";
+import { Sparkles, GraduationCap } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
-import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";
 
 interface TargetUniversity {

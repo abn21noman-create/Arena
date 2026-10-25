@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Flame, ArrowRight, ArrowLeft, RotateCcw, Sparkles, Activity, CheckCircle2 } from "lucide-react";
+import { Flame, Activity } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 

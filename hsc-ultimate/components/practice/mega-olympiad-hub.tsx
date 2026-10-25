@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Calendar, Users, Award, Sparkles, Flame, CheckCircle2, MapPin, ChevronRight } from "lucide-react";
+import { Trophy, Calendar, Users, Award, Sparkles, Flame, CheckCircle2, MapPin } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { triggerConfetti } from "@/components/shared/confetti";
 import { cn } from "@/lib/utils";

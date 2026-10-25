@@ -16,7 +16,7 @@ import { prisma } from "@/lib/prisma";
 import { logAuditEvent } from "@/lib/audit-log";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ subjectId: string }> }
 ) {
   const guard = await requireAdmin();

@@ -36,7 +36,7 @@ import { prisma } from "@/lib/prisma";
 import { defaultSRSState } from "@/lib/spaced-repetition";
 
 export async function POST(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ deckId: string }> }
 ) {
   const session = await auth();

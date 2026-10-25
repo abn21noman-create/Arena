@@ -8,15 +8,15 @@
 
 | Metric | Count |
 |---|---|
-| **Total Pages (routes)** | **89** |
-| **API Routes (backend)** | **213** |
-| **React Components** | **178** |
-| **Library/Utility Files** | **113** |
+| **Total Pages (routes)** | **135** |
+| **API Routes (backend)** | **214** |
+| **React Components** | **243** |
+| **Library/Utility Files** | **123** |
 | **Prisma Database Models** | **67** |
 | **Prisma Migrations** | **33** |
-| **Seed Scripts** | **30+** (subjects + questions + CQ + badges) |
+| **Seed Scripts** | **40+** (subjects + questions + CQ + notes + badges) |
 | **Tech Stack** | Next.js 16 + React 19 + TypeScript + Prisma + Supabase PostgreSQL + Tailwind CSS |
-| **LOC** | ~50,000+ (excluding node_modules) |
+| **LOC** | ~120,000+ (excluding node_modules) |
 
 ---
 

@@ -2,15 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Orbit, Sparkles, Play, RotateCcw, Zap, Globe } from "lucide-react";
+import { Zap, Globe } from "lucide-react";
 import { sfx } from "@/lib/sound-effects";
 import { cn } from "@/lib/utils";
 
 export function SatelliteOrbitLab() {
   const [altitudeKm, setAltitudeKm] = useState<number>(35930); // Geostationary default
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const isPlaying = true;
 
   // Earth constants: R = 6.4 * 10^6 m, M = 6 * 10^24 kg, G = 6.673 * 10^-11
   const R_earth = 6.4e6; // 6400 km in meters

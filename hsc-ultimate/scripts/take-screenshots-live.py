@@ -34,8 +34,8 @@ import time
 import requests
 from playwright.sync_api import sync_playwright
 
-BASE = "http://localhost:3000"
-ROOT = "/home/user/hsc-ultimate"
+BASE = os.environ.get("BASE_URL", "http://localhost:3000")
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.environ.get("SHOT_DIR", f"{ROOT}/screenshots")
 
 ADMIN_EMAIL = os.environ.get("TEST_ADMIN_EMAIL", "")

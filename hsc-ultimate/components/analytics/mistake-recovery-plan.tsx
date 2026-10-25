@@ -6,16 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Calendar,
-  CheckCircle2,
-  Sparkles,
-  ArrowRight,
-  RotateCcw,
-  BookOpen,
-  Target,
-  Award,
-} from "lucide-react";
+import { Sparkles, ArrowRight, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sfx } from "@/lib/sound-effects";
 import { toast } from "sonner";

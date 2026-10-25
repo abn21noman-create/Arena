@@ -1,9 +1,11 @@
 import { auth } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest, type NextFetchEvent } from "next/server";
 import { PROTECTED_PREFIXES } from "@/lib/protected-routes";
 import { prisma } from "@/lib/prisma";
 import { getFeatureFlagForPath } from "@/lib/feature-flag-routes";
 import {
+  adaptPreviewCookies,
+  getPublicRequestOrigin,
   isTrustedMutationOrigin,
   requestBodyLimitResponse,
 } from "@/lib/request-security";
@@ -16,8 +18,9 @@ function clearSessionCookies(response: NextResponse) {
   return response;
 }
 
-export default auth(async (req) => {
+const innerProxy = auth(async (req) => {
   const pathname = req.nextUrl.pathname;
+  const publicOrigin = getPublicRequestOrigin(req) || req.nextUrl.origin;
   const isLoggedIn = Boolean(req.auth?.user?.id);
   const isAdminPage = pathname.startsWith("/admin");
   const isAdminApi = pathname.startsWith("/api/admin/");
@@ -47,7 +50,7 @@ export default auth(async (req) => {
   }
 
   if ((isProtectedRoute || isAdminPage) && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/login", publicOrigin));
   }
 
   // Every authenticated API/protected-page request validates the live account.
@@ -83,7 +86,7 @@ export default auth(async (req) => {
           )
         );
       }
-      const loginUrl = new URL("/login", req.nextUrl.origin);
+      const loginUrl = new URL("/login", publicOrigin);
       loginUrl.searchParams.set("session", "revoked");
       return clearSessionCookies(NextResponse.redirect(loginUrl));
     }
@@ -96,7 +99,7 @@ export default auth(async (req) => {
     );
   }
   if (isAdminPage && currentUser?.role !== "ADMIN") {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl.origin));
+    return NextResponse.redirect(new URL("/dashboard", publicOrigin));
   }
 
   // A disabled module must close its student API too; otherwise a hidden page
@@ -156,6 +159,15 @@ export default auth(async (req) => {
   return NextResponse.next();
 });
 
+export default async function proxy(req: NextRequest, event: NextFetchEvent) {
+  const handler = innerProxy as unknown as (
+    req: NextRequest,
+    event: NextFetchEvent
+  ) => Promise<Response | undefined>;
+  const response = await handler(req, event);
+  return response ? adaptPreviewCookies(req, response) : response;
+}
+
 export const config = {
   matcher: [
     "/api/:path*",
@@ -187,5 +199,6 @@ export const config = {
     "/mistake-vault/:path*",
     "/formula-search/:path*",
     "/focus/:path*",
+    "/lab/:path*",
   ],
 };

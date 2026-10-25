@@ -4,6 +4,8 @@
 import { prisma } from "@/lib/prisma";
 import { SubjectManager } from "@/components/admin/subject-manager";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminSubjectsPage() {
   const subjects = await prisma.subject.findMany({
     orderBy: { order: "asc" },

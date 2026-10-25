@@ -10,13 +10,17 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+const authSecret =
+  process.env.AUTH_SECRET ||
+  process.env.NEXTAUTH_SECRET ||
+  (process.env.NODE_ENV !== "production"
+    ? "hsc-ultimate-dev-only-jwt-secret-key-32-chars-min-2026"
+    : undefined);
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // Always trust host in preview/cloud/local environments to prevent UntrustedHost errors
   trustHost: true,
-  secret:
-    process.env.AUTH_SECRET ||
-    process.env.NEXTAUTH_SECRET ||
-    "hsc-ultimate-auth-jwt-secret-key-32-chars-long-min-2026",
+  secret: authSecret,
   session: {
     strategy: "jwt",
   },
