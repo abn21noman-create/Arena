@@ -7,7 +7,17 @@
 import { Resend } from "resend";
 import type { WeeklyDigestData } from "@/lib/weekly-digest";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Resend ক্লায়েন্ট lazy ভাবে তৈরি হয়: module load-এ `new Resend("")` করলে
+// key না থাকা অবস্থায় (লোকাল dev, বা build-time "Collecting page data")
+// সরাসরি throw করে আর পুরো build/route ভেঙে যায়।
+let resendClient: Resend | null = null;
+
+function getResend(): Resend | null {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return null;
+  resendClient ??= new Resend(apiKey);
+  return resendClient;
+}
 
 // প্রোডাকশনে নিজের ডোমেইন ভেরিফাই করে এই ঠিকানা বদলে দিতে হবে
 const FROM_ADDRESS = "HSC Ultimate <onboarding@resend.dev>";
@@ -25,7 +35,12 @@ export async function sendPasswordResetEmail(
   }
 
   try {
-    const { error } = await resend.emails.send({
+    const client = getResend();
+    if (!client) {
+      return { success: false, error: "ইমেইল সার্ভিস কনফিগার করা নেই" };
+    }
+
+    const { error } = await client.emails.send({
       from: FROM_ADDRESS,
       to: toEmail,
       subject: "HSC Ultimate — পাসওয়ার্ড রিসেট করো",
@@ -117,7 +132,12 @@ export async function sendWeeklyDigestEmail(
     `;
 
   try {
-    const { error } = await resend.emails.send({
+    const client = getResend();
+    if (!client) {
+      return { success: false, error: "ইমেইল সার্ভিস কনফিগার করা নেই" };
+    }
+
+    const { error } = await client.emails.send({
       from: FROM_ADDRESS,
       to: email,
       subject: hasAnyActivity
