@@ -28,6 +28,7 @@ export function PrintableReportCardDialog({
   examBatch = "HSC 2026",
   predictedGpa = "5.00",
   totalSolved = 840,
+  overallAccuracy = 86,
 }: PrintableReportCardProps) {
   const [open, setOpen] = useState(false);
 

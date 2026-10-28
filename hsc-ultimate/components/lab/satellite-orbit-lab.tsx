@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 
 export function SatelliteOrbitLab() {
   const [altitudeKm, setAltitudeKm] = useState<number>(35930); // Geostationary default
-  const isPlaying = true;
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
 
   // Earth constants: R = 6.4 * 10^6 m, M = 6 * 10^24 kg, G = 6.673 * 10^-11
   const R_earth = 6.4e6; // 6400 km in meters

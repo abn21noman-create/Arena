@@ -19,7 +19,7 @@ export function StudyWhiteboard() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [selectedTool, setSelectedTool] = useState<ToolType>("pen");
   const [color, setColor] = useState<string>("#3b82f6");
-  const lineWidth = 3;
+  const [lineWidth, setLineWidth] = useState<number>(3);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [isMuted, setIsMuted] = useState<boolean>(false);
@@ -298,6 +298,33 @@ export function StudyWhiteboard() {
                     color === c && "ring-2 ring-primary ring-offset-2 scale-110"
                   )}
                 />
+              ))}
+            </div>
+
+            {/* Stroke width */}
+            <div className="flex items-center gap-1 border-l pl-2">
+              {[2, 3, 6].map((width) => (
+                <button
+                  key={width}
+                  type="button"
+                  aria-label={`স্ট্রোক মোটা ${width}px`}
+                  aria-pressed={lineWidth === width}
+                  onClick={() => {
+                    sfx.play("pop");
+                    setLineWidth(width);
+                  }}
+                  className={cn(
+                    "flex h-8 w-8 items-center justify-center rounded-lg border transition",
+                    lineWidth === width
+                      ? "border-primary bg-primary/10"
+                      : "border-slate-700 hover:bg-muted/40"
+                  )}
+                >
+                  <span
+                    className="block rounded-full bg-foreground"
+                    style={{ height: width, width: 14 }}
+                  />
+                </button>
               ))}
             </div>
 

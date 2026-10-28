@@ -12,13 +12,13 @@ export function VectorMechanicsLab() {
 
   // Incline parameters
   const [angleDeg, setAngleDeg] = useState<number>(30);
-  const massKg = 5;
+  const [massKg, setMassKg] = useState<number>(5);
   const [mu, setMu] = useState<number>(0.2); // Friction coef
 
   // River parameters
-  const riverWidthM = 500;
-  const riverSpeed = 3; // m/s
-  const boatSpeed = 5; // m/s
+  const [riverWidthM, setRiverWidthM] = useState<number>(500);
+  const [riverSpeed, setRiverSpeed] = useState<number>(3); // m/s
+  const [boatSpeed, setBoatSpeed] = useState<number>(5); // m/s
   const [boatAngleDeg, setBoatAngleDeg] = useState<number>(120);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);

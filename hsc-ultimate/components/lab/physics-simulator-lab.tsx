@@ -21,12 +21,12 @@ export function PhysicsSimulatorLab() {
   // Pendulum states
   const [length, setLength] = useState<number>(1.5); // meters
   const [initialAngle, setInitialAngle] = useState<number>(30); // degrees
-  const mass = 2; // kg
+  const [mass, setMass] = useState<number>(2); // kg
 
   // Lens states
   const [focalLength, setFocalLength] = useState<number>(100); // px
   const [objectDist, setObjectDist] = useState<number>(220); // px
-  const objectHeight = 50; // px
+  const [objectHeight, setObjectHeight] = useState<number>(50); // px
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animFrameRef = useRef<number | null>(null);

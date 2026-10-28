@@ -54,7 +54,7 @@ export function MegaQuestionVaultStudio() {
   const [selectedSubject, setSelectedSubject] = useState<string>("ALL");
   const [selectedBoard, setSelectedBoard] = useState<string>("ALL");
   const [selectedAdmission, setSelectedAdmission] = useState<string>("ALL");
-  const selectedDifficulty = "ALL";
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [limit] = useState<number>(20);

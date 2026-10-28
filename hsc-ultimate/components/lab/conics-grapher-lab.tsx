@@ -15,7 +15,7 @@ export function ConicsGrapherLab() {
   // Parabola (y - k)^2 = 4a(x - h)
   const [paramA, setParamA] = useState<number>(2);
   const [offsetX, setOffsetX] = useState<number>(0);
-  const offsetY = 0;
+  const [offsetY, setOffsetY] = useState<number>(0);
 
   // Ellipse & Hyperbola: x^2/a^2 +- y^2/b^2 = 1
   const [ellipseA, setEllipseA] = useState<number>(4);
@@ -326,6 +326,21 @@ export function ConicsGrapherLab() {
                       max={4}
                       value={offsetX}
                       onChange={(e) => setOffsetX(Number(e.target.value))}
+                      className="w-full accent-primary"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs font-bold">
+                      <span>শীর্ষবিন্দু Y (k):</span>
+                      <span className="font-mono text-primary">{offsetY}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={-4}
+                      max={4}
+                      value={offsetY}
+                      onChange={(e) => setOffsetY(Number(e.target.value))}
                       className="w-full accent-primary"
                     />
                   </div>
