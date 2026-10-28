@@ -40,8 +40,13 @@ async function prepareDatabase() {
     return false;
   }
   const { Client } = await import("pg");
+  // `sslmode=require` in the URL makes pg-connection-string treat the mode as
+  // verify-full, which fails against Supabase's pooler certificate chain. Strip
+  // it and pass an explicit relaxed ssl object instead.
+  const url = new URL(connectionString);
+  url.searchParams.delete("sslmode");
   const client = new Client({
-    connectionString,
+    connectionString: url.toString(),
     ssl: /localhost|127\.0\.0\.1/.test(connectionString) ? false : { rejectUnauthorized: false },
   });
   await client.connect();
