@@ -12,7 +12,7 @@
 //
 // It is a no-op unless BOOTSTRAP_DB=1, never fails the build (a seed error is
 // logged and the next step continues), and should be removed together with the
-// env flags once the database is populated.
+// env flag once the database is populated.
 // ===================================================================
 import { spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
@@ -25,10 +25,47 @@ if (process.env.BOOTSTRAP_DB !== "1") {
   process.exit(0);
 }
 
+const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL;
+
+/**
+ * The baseline migration declares `embedding vector(1024)`; pgvector is not
+ * enabled by default on a fresh Supabase project, so the very first migration
+ * aborts with `type "vector" does not exist`. A failed migration also leaves a
+ * half-written row in `_prisma_migrations` that blocks every later attempt, so
+ * clean that up before retrying.
+ */
+async function prepareDatabase() {
+  if (!connectionString) {
+    console.error("[bootstrap-db] no DIRECT_URL/DATABASE_URL — skipping");
+    return false;
+  }
+  const { Client } = await import("pg");
+  const client = new Client({
+    connectionString,
+    ssl: /localhost|127\.0\.0\.1/.test(connectionString) ? false : { rejectUnauthorized: false },
+  });
+  await client.connect();
+  try {
+    await client.query("CREATE EXTENSION IF NOT EXISTS vector SCHEMA public");
+    console.log("[bootstrap-db] extension vector ready");
+    const cleared = await client.query(
+      "DELETE FROM _prisma_migrations WHERE finished_at IS NULL AND rolled_back_at IS NULL"
+    ).catch(() => ({ rowCount: 0 }));
+    if (cleared.rowCount) console.log(`[bootstrap-db] cleared ${cleared.rowCount} unfinished migration row(s)`);
+    return true;
+  } finally {
+    await client.end().catch(() => {});
+  }
+}
+
+try {
+  await prepareDatabase();
+} catch (error) {
+  console.error(`[bootstrap-db] prepare failed: ${error instanceof Error ? error.message : error}`);
+}
+
 const pkg = JSON.parse(readFileSync(path.join(rootDir, "package.json"), "utf8"));
-const scripts = Object.keys(pkg.scripts ?? {}).filter((name) =>
-  /^db:(seed|fix)/.test(name)
-);
+const scripts = Object.keys(pkg.scripts ?? {}).filter((name) => /^db:(seed|fix)/.test(name));
 
 const steps = [
   { label: "prisma migrate deploy", command: "node_modules/.bin/prisma", args: ["migrate", "deploy"] },
@@ -52,7 +89,13 @@ for (const [index, step] of steps.entries()) {
     console.log(`[bootstrap-db] ✔ ${step.label} (${seconds}s)`);
   } else {
     console.error(`[bootstrap-db] ✖ ${step.label} exit=${result.status} (${seconds}s) — continuing`);
-    failures.push(step.label);
+    failures.push(`${step.label} (exit ${result.status})`);
+  }
+  // A missing schema makes every later seed fail instantly; stop early instead
+  // of burning the build on 45 pointless runs.
+  if (index === 0 && result.status !== 0) {
+    console.error("[bootstrap-db] schema step failed — aborting remaining seeds");
+    break;
   }
 }
 
