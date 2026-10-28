@@ -5,6 +5,8 @@
 Learning Hub + AI Doubt Solver + Practice Engine + Flashcards + Planner + Gamification —
 সব একসাথে একটা প্ল্যাটফর্মে।
 
+**🌐 Live:** <https://hsc-ultimate.vercel.app>
+
 | | |
 |---|---|
 | 📘 **ফিচার প্ল্যান ও রিসার্চ** | [`docs/MASTER_PLAN.md`](./docs/MASTER_PLAN.md) — প্রজেক্টের "সংবিধান" |
