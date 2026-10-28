@@ -538,6 +538,22 @@ export function PhysicsSimulatorLab() {
                     />
                   </div>
 
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs font-bold">
+                      <span>ববের ভর (m):</span>
+                      <span className="font-mono text-primary">{mass.toFixed(1)} kg</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0.5}
+                      max={10}
+                      step={0.5}
+                      value={mass}
+                      onChange={(e) => setMass(Number(e.target.value))}
+                      className="w-full accent-primary"
+                    />
+                  </div>
+
                   {/* Period Output */}
                   <div className="rounded-xl border bg-muted/20 p-3 space-y-1 text-xs font-mono">
                     <div className="flex justify-between">
@@ -580,6 +596,22 @@ export function PhysicsSimulatorLab() {
                       max={320}
                       value={objectDist}
                       onChange={(e) => setObjectDist(Number(e.target.value))}
+                      className="w-full accent-primary"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs font-bold">
+                      <span>বস্তুর উচ্চতা (h₀):</span>
+                      <span className="font-mono text-primary">{objectHeight} px</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={20}
+                      max={110}
+                      step={5}
+                      value={objectHeight}
+                      onChange={(e) => setObjectHeight(Number(e.target.value))}
                       className="w-full accent-primary"
                     />
                   </div>

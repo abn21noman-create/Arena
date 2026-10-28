@@ -33,15 +33,6 @@ interface DashboardCommandHeroProps {
   } | null;
 }
 
-function getTimeOfDayGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return "শুভ সকাল ☀️";
-  if (hour >= 12 && hour < 16) return "শুভ দুপুর 🌤️";
-  if (hour >= 16 && hour < 19) return "শুভ বিকেল 🌇";
-  if (hour >= 19 && hour < 23) return "শুভ সন্ধ্যা 🌙";
-  return "শান্ত রাত 🌌";
-}
-
 const MOTIVATIONAL_QUOTES = [
   "“জ্ঞানই শক্তি, আর প্রতিদিনের ধারাবাহিকতাই সাফল্যের মূল চাবিকাঠি।” — জগদীশচন্দ্র বসু",
   "“আজকের কঠিন পরিশ্রমই তোমার আগামীর স্বপ্ন পূরণ করবে।” — এ পি জে আব্দুল কালাম",
@@ -49,9 +40,59 @@ const MOTIVATIONAL_QUOTES = [
   "“বিজ্ঞান কোনো নির্দিষ্ট সত্যের নাম নয়, বিজ্ঞান হলো জানার এক নিরন্তর সাধনা।” — আলবার্ট আইনস্টাইন",
 ];
 
-function getDailyMotivationalQuote(): string {
-  const dayOfYear = Math.floor(new Date().getTime() / (1000 * 60 * 60 * 24));
-  return MOTIVATIONAL_QUOTES[dayOfYear % MOTIVATIONAL_QUOTES.length];
+const DHAKA_TZ = "Asia/Dhaka";
+
+/**
+ * এক জায়গা থেকেই ঘড়ি পড়া হয়: বাঙালি শিক্ষার্থীর লোকাল টাইমজোন (Asia/Dhaka)
+ * ধরে অভিবাদন, আজকের তারিখ ও দিনের উদ্ধৃতি — সার্ভারের TZ (সাধারণত UTC) নয়।
+ */
+function getDhakaClock(now: Date = new Date()): {
+  greeting: string;
+  today: string;
+  dailyQuote: string;
+} {
+  const hour = Number(
+    new Intl.DateTimeFormat("en-GB", {
+      timeZone: DHAKA_TZ,
+      hour: "2-digit",
+      hour12: false,
+    }).format(now),
+  ) % 24;
+
+  const greeting =
+    hour >= 5 && hour < 12
+      ? "শুভ সকাল ☀️"
+      : hour >= 12 && hour < 16
+        ? "শুভ দুপুর 🌤️"
+        : hour >= 16 && hour < 19
+          ? "শুভ বিকেল 🌇"
+          : hour >= 19 && hour < 23
+            ? "শুভ সন্ধ্যা 🌙"
+            : "শান্ত রাত 🌌";
+
+  // দিবস-ভিত্তিক উদ্ধৃতি: প্রতি দিনে একটি, প্রতিটি দিনেই স্থির (stable)।
+  const dayKey = new Intl.DateTimeFormat("en-CA", {
+    timeZone: DHAKA_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(now);
+
+  let hash = 0;
+  for (const char of dayKey) {
+    hash = (hash * 31 + char.charCodeAt(0)) % 100_000;
+  }
+
+  return {
+    greeting,
+    today: now.toLocaleDateString("bn-BD", {
+      timeZone: DHAKA_TZ,
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    }),
+    dailyQuote: MOTIVATIONAL_QUOTES[hash % MOTIVATIONAL_QUOTES.length],
+  };
 }
 
 export function DashboardCommandHero({
@@ -66,15 +107,7 @@ export function DashboardCommandHero({
   nextMission,
 }: DashboardCommandHeroProps) {
   const firstName = userName.trim().split(/\s+/)[0] || "শিক্ষার্থী";
-  const greeting = getTimeOfDayGreeting();
-  const dailyQuote = getDailyMotivationalQuote();
-
-  const today = new Date().toLocaleDateString("bn-BD", {
-    timeZone: "Asia/Dhaka",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+  const { greeting, today, dailyQuote } = getDhakaClock();
 
   return (
     <GlassCard className="dashboard-command-hero overflow-hidden p-5 sm:p-7 lg:p-8" variant="gradient-border">

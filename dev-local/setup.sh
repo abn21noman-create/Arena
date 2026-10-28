@@ -7,14 +7,14 @@
 # native engine) is unavailable. This script rebuilds a working local
 # stack from scratch:
 #
-#   1. ensure .env / .env.local exist (never overwrites existing keys)
+#   1. restore .env files from the committed workspace zip (if missing)
 #   2. npm ci                              (installs deps; Prisma client is
 #                                           generated via WASM — see
 #                                           scripts/generate-prisma.mjs)
 #   3. real PostgreSQL 17 from npm         (@embedded-postgres/linux-x64
 #                                           ships the actual binaries)
 #   4. apply migrations + repair known drift
-#   5. seed the 13 subjects / 697 MCQ / 64 CQ catalog
+#   5. seed the 13 subjects / 689 MCQ / 64 CQ catalog
 #
 # Safe to re-run at any time: every step checks before acting, and it
 # never overwrites an existing .env.local (your keys stay put).
@@ -43,39 +43,50 @@ info() { printf '  •  %s\n' "$1"; }
 # ------------------------------------------------------------------
 step "1/6  env ফাইল"
 # ------------------------------------------------------------------
-missing_env=0
-for f in .env .env.local .env.example .env.local.example; do
-  [ -f "$REPO/$f" ] || missing_env=1
-done
+# একসময় স্যাংডবক্স ওয়ার্কস্পেসের সম্পূর্ণ zip (২১ MB, ভেতরে আসল API key
+# সহ .env.local) repo-তে commit করা ছিল — পাবলিক repo-তে secret লিক।
+# এখন সেটা সরানো হয়েছে; ডেভ env ফাইলগুলো .env.example থেকে তৈরি হয়।
+set_env() {
+  node -e '
+const fs = require("fs");
+const [file, key, value] = process.argv.slice(1);
+let text = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
+const line = key + "=" + JSON.stringify(value);
+const pattern = new RegExp("^" + key + "=.*$", "m");
+text = pattern.test(text) ? text.replace(pattern, line) : text.trimEnd() + "\n" + line + "\n";
+fs.writeFileSync(file, text);
+' "$1" "$2" "$3"
+}
 
-if [ "$missing_env" -eq 1 ]; then
-  [ -f "$REPO/.env" ] || [ ! -f "$REPO/.env.example" ] || cp "$REPO/.env.example" "$REPO/.env"
-  if [ ! -f "$REPO/.env.local" ]; then
-    cat > "$REPO/.env.local" <<FALLBACK_EOF
-DATABASE_URL="$LOCAL_URL"
-DIRECT_URL="$LOCAL_URL"
-NEXTAUTH_SECRET="local-sandbox-dev-secret-at-least-32-chars-long"
-NEXTAUTH_URL="http://localhost:3000"
-NEXT_PUBLIC_APP_URL="http://localhost:3000"
-FOCUS_SCHEDULER_MODE="lazy"
-RATE_LIMIT_BACKEND="memory"
-FALLBACK_EOF
-  fi
-  ok "লোকাল ডেভেলপমেন্টের জন্য ডিফল্ট env ফাইল নিশ্চিত করা হয়েছে"
+[ -f "$REPO/.env" ] || cp "$REPO/.env.example" "$REPO/.env"
+
+if [ ! -f "$REPO/.env.local" ]; then
+  cp "$REPO/.env.example" "$REPO/.env.local"
+  ok ".env.local তৈরি হয়েছে (.env.example থেকে)"
+
+  set_env "$REPO/.env.local" DATABASE_URL "$LOCAL_URL"
+  set_env "$REPO/.env.local" DIRECT_URL "$LOCAL_URL"
+  set_env "$REPO/.env.local" NEXTAUTH_SECRET "$(node -e 'console.log(require("crypto").randomBytes(32).toString("base64"))')"
+  set_env "$REPO/.env.local" AUTH_TRUST_HOST "true"
+  set_env "$REPO/.env.local" CRON_SECRET "$(node -e 'console.log(require("crypto").randomBytes(24).toString("hex"))')"
+  info "র‍্যান্ডম NEXTAUTH_SECRET ও CRON_SECRET বসানো হয়েছে (dev-only)"
+  info "AI / Resend / FCM key ফাঁকা — ওই ফিচারগুলো ছাড়াই বাকি সব চলবে"
 else
-  ok "env ফাইল আগে থেকেই আছে (হাত দেওয়া হলো না)"
+  ok ".env.local আগে থেকেই আছে (হাত দেওয়া হলো না)"
 fi
 
-# Dev-only DB & host override — keeps the real Supabase credentials untouched.
+# Local DB creds also live in .env (Next.js load করে), তাই দুটোতেই বসানো হচ্ছে
+set_env "$REPO/.env" DATABASE_URL "$LOCAL_URL"
+set_env "$REPO/.env" DIRECT_URL "$LOCAL_URL"
+
+# Dev-only DB override — keeps the real Supabase credentials untouched.
 cat > "$REPO/.env.development.local" <<EOF
 # স্যান্ডবক্স-লোকাল ওভাররাইড (Next.js dev মোডে .env.local এর চেয়ে অগ্রগণ্য)
 # মুছে ফেললেই Supabase-এ ফিরে যাবে।
 DATABASE_URL="$LOCAL_URL"
 DIRECT_URL="$LOCAL_URL"
-NEXTAUTH_URL=""
-AUTH_TRUST_HOST="true"
 EOF
-ok ".env.development.local → লোকাল PostgreSQL + dynamic preview host"
+ok ".env.development.local → লোকাল PostgreSQL"
 
 # ------------------------------------------------------------------
 step "2/6  npm dependencies"

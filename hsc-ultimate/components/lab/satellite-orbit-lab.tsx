@@ -158,9 +158,24 @@ export function SatelliteOrbitLab() {
                     altitudeKm === p.h ? "bg-primary text-primary-foreground shadow-xs" : "text-muted-foreground"
                   )}
                 >
-                  {p.label}
+                    {p.label}
                 </button>
               ))}
+              <button
+                type="button"
+                onClick={() => {
+                  sfx.play("click");
+                  setIsPlaying((prev) => !prev);
+                }}
+                className={cn(
+                  "rounded-lg border px-2.5 py-1 text-xs font-bold transition",
+                  isPlaying
+                    ? "border-primary/40 bg-primary/10 text-primary"
+                    : "border-transparent text-muted-foreground"
+                )}
+              >
+                {isPlaying ? "⏸ থামান" : "▶ চালান"}
+              </button>
             </div>
           </div>
         </CardHeader>

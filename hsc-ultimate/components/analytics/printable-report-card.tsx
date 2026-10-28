@@ -108,7 +108,9 @@ export function PrintableReportCardDialog({
               </div>
               <div>
                 <span className="text-muted-foreground block text-xs">অনুশীলিত প্রশ্ন</span>
-                <span className="font-mono font-bold text-foreground">{totalSolved} টি</span>
+                <span className="font-mono font-bold text-foreground">
+                  {totalSolved} টি · {overallAccuracy}% নির্ভুলতা
+                </span>
               </div>
               <div>
                 <span className="text-muted-foreground block text-xs">অনুমিত GPA</span>

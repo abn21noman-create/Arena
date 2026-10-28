@@ -302,6 +302,22 @@ export function VectorMechanicsLab() {
                   />
                 </div>
 
+                <div className="space-y-1">
+                  <div className="flex justify-between font-bold">
+                    <span>বস্তুর ভর (m):</span>
+                    <span className="font-mono text-primary">{massKg.toFixed(1)} kg</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={20}
+                    step={0.5}
+                    value={massKg}
+                    onChange={(e) => setMassKg(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                </div>
+
                 <div className="rounded-xl border bg-muted/20 p-3 space-y-1.5 font-mono text-2xs">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">অভিলম্ব প্রতিক্রিয়া (N = mg cosθ):</span>
@@ -330,6 +346,54 @@ export function VectorMechanicsLab() {
                     max={150}
                     value={boatAngleDeg}
                     onChange={(e) => setBoatAngleDeg(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between font-bold">
+                    <span>নদীর প্রস্থ (d):</span>
+                    <span className="font-mono text-primary">{riverWidthM} m</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={100}
+                    max={2000}
+                    step={50}
+                    value={riverWidthM}
+                    onChange={(e) => setRiverWidthM(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between font-bold">
+                    <span>স্রোতের বেগ (v_r):</span>
+                    <span className="font-mono text-primary">{riverSpeed.toFixed(1)} m/s</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={0}
+                    max={8}
+                    step={0.5}
+                    value={riverSpeed}
+                    onChange={(e) => setRiverSpeed(Number(e.target.value))}
+                    className="w-full accent-primary"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between font-bold">
+                    <span>নৌকার বেগ (v_b):</span>
+                    <span className="font-mono text-primary">{boatSpeed.toFixed(1)} m/s</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={1}
+                    max={12}
+                    step={0.5}
+                    value={boatSpeed}
+                    onChange={(e) => setBoatSpeed(Number(e.target.value))}
                     className="w-full accent-primary"
                   />
                 </div>

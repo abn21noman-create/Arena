@@ -43,6 +43,13 @@ const ADMISSION_LIST = [
   { code: "CKRUET", label: "কুয়েট/রুয়েট/চুয়েট" },
 ];
 
+const DIFFICULTY_LIST = [
+  { code: "ALL", label: "সকল কঠিনতা" },
+  { code: "EASY", label: "সহজ" },
+  { code: "MEDIUM", label: "মধ্যম" },
+  { code: "HARD", label: "কঠিন" },
+];
+
 export function MegaQuestionVaultStudio() {
   const [selectedSubject, setSelectedSubject] = useState<string>("ALL");
   const [selectedBoard, setSelectedBoard] = useState<string>("ALL");
@@ -184,7 +191,7 @@ export function MegaQuestionVaultStudio() {
       {/* Search & Sub-filters */}
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
         {/* Search Input */}
-        <div className="sm:col-span-6 relative">
+        <div className="sm:col-span-5 relative">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <input
             type="text"
@@ -196,6 +203,25 @@ export function MegaQuestionVaultStudio() {
             placeholder="প্রশ্ন, সূত্র, টপিক বা অধ্যায় দিয়ে সার্চ করুন (যেমন: ভেক্টর, কার্নো, দ্রাব্যতা, লিমিট)..."
             className="w-full pl-10 pr-4 py-2.5 rounded-2xl border bg-card text-xs font-medium outline-none focus:border-primary shadow-2xs"
           />
+        </div>
+
+        {/* Difficulty Filter */}
+        <div className="sm:col-span-2">
+          <select
+            value={selectedDifficulty}
+            onChange={(e) => {
+              setSelectedDifficulty(e.target.value);
+              setPage(1);
+            }}
+            aria-label="কঠিনতার মাত্রা"
+            className="w-full px-3 py-2.5 rounded-2xl border bg-card text-xs font-semibold outline-none focus:border-primary"
+          >
+            {DIFFICULTY_LIST.map((d) => (
+              <option key={d.code} value={d.code}>
+                {d.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Board Filter */}
@@ -217,7 +243,7 @@ export function MegaQuestionVaultStudio() {
         </div>
 
         {/* Admission Filter */}
-        <div className="sm:col-span-3">
+        <div className="sm:col-span-2">
           <select
             value={selectedAdmission}
             onChange={(e) => {
