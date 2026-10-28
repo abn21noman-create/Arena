@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev -H 0.0.0.0 -p 3000",
     "prisma:generate": "node scripts/generate-prisma.mjs",
-    "postinstall": "node scripts/generate-prisma.mjs && node scripts/bootstrap-db.mjs",
+    "postinstall": "node scripts/generate-prisma.mjs",
     "build": "sh scripts/safe-build.sh",
     "start": "next start",
     "lint": "node --max-old-space-size=1400 node_modules/eslint/bin/eslint.js --cache --cache-strategy content --cache-location .cache/eslint .",
