@@ -99,6 +99,7 @@ export default async function BadgesPage() {
               {isEarned ? (
                 <p className="text-xs text-amber-600 dark:text-amber-400 font-medium">
                   ✓ {new Date(earnedAt!).toLocaleDateString("bn-BD", {
+                    timeZone: "Asia/Dhaka",
                     day: "numeric",
                     month: "short",
                     year: "numeric",

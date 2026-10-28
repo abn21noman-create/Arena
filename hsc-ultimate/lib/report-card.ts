@@ -61,6 +61,7 @@ export async function getReportCardData(userId: string): Promise<ReportCardData 
       xp: user.xp,
     },
     generatedAt: new Date().toLocaleDateString("bn-BD", {
+      timeZone: "Asia/Dhaka",
       year: "numeric",
       month: "long",
       day: "numeric",

@@ -89,6 +89,7 @@ export function AdmissionHistory() {
                       </Badge>
                       <span className="text-xs text-muted-foreground">
                         {new Date(a.completedAt).toLocaleDateString("bn-BD", {
+                          timeZone: "Asia/Dhaka",
                           day: "numeric",
                           month: "short",
                           year: "numeric",

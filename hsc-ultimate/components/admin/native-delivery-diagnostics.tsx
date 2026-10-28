@@ -179,7 +179,7 @@ export function NativeDeliveryDiagnostics() {
                           </Badge>
                         </div>
                         <div className="mt-2 grid gap-1 text-xs text-muted-foreground sm:grid-cols-2">
-                          <p>Seen: {new Date(device.lastSeenAt).toLocaleString("bn-BD")}</p>
+                          <p>Seen: {new Date(device.lastSeenAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}</p>
                           <p>Receipt: {device.lastReceiptStatus || "none"}</p>
                           <p>Delivery: {device.latestDelivery?.status || "none"}</p>
                           <p>Error: {device.lastPushErrorCode || device.disabledReason || "none"}</p>

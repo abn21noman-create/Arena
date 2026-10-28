@@ -88,6 +88,7 @@ export function ActivityHeatmap({ data }: ActivityHeatmapProps) {
         {hovered && hovered.count >= 0 && (
           <span className="font-medium text-foreground">
             {new Date(hovered.date).toLocaleDateString("bn-BD", {
+              timeZone: "Asia/Dhaka",
               day: "numeric",
               month: "long",
               year: "numeric",

@@ -123,7 +123,7 @@ export function FocusAnalyticsDashboard({
                   </span>
                 </div>
                 {(chartDays.length <= 14 || index % 5 === 0) && (
-                  <span className="text-xs text-muted-foreground">{new Date(`${day.date}T00:00:00Z`).toLocaleDateString("bn-BD", { day: "numeric", month: "short" })}</span>
+                  <span className="text-xs text-muted-foreground">{new Date(`${day.date}T00:00:00Z`).toLocaleDateString("bn-BD", { timeZone: "Asia/Dhaka", day: "numeric", month: "short" })}</span>
                 )}
               </div>
             ))}
@@ -190,7 +190,7 @@ export function FocusAnalyticsDashboard({
               <tbody className="divide-y divide-border/60">
                 {analytics.recentSessions.map((focus) => (
                   <tr key={focus.id}>
-                    <td className="py-3"><p className="font-semibold">{focus.focusLabel || `${focus.durationMinutes} মিনিট Focus`}</p><p className="mt-0.5 text-xs text-muted-foreground">{new Date(focus.startedAt).toLocaleString("bn-BD")}</p></td>
+                    <td className="py-3"><p className="font-semibold">{focus.focusLabel || `${focus.durationMinutes} মিনিট Focus`}</p><p className="mt-0.5 text-xs text-muted-foreground">{new Date(focus.startedAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}</p></td>
                     <td className="py-3">{focus.subjectLabel}</td>
                     <td className="py-3"><Badge variant="outline">{focus.source}</Badge></td>
                     <td className="py-3"><Badge variant={focus.status === "COMPLETED" ? "default" : "outline"}>{focus.status}</Badge></td>

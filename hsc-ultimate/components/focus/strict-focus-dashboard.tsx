@@ -391,7 +391,7 @@ export function StrictFocusDashboard() {
                     {session.subjectCode ? ` · ${SUBJECT_NAMES[session.subjectCode] ?? session.subjectCode}` : ""}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {session.focusLabel ? `${session.focusLabel} · ` : ""}{new Date(session.startedAt).toLocaleString("bn-BD")}
+                    {session.focusLabel ? `${session.focusLabel} · ` : ""}{new Date(session.startedAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}
                   </p>
                 </div>
                 <Badge variant="outline">{session.status}</Badge>

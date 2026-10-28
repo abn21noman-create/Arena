@@ -523,7 +523,12 @@ export default function BroadcastPage() {
                         <span>📤 {c.sentCount}/{c.totalRecipients} delivered</span>
                         {c.readCount > 0 && <span>👁️ {c.readCount} read</span>}
                         {c.failedCount > 0 && <span className="text-red-500">❌ {c.failedCount} failed</span>}
-                        <span>📅 {new Date(c.createdAt).toLocaleString()}</span>
+                        <span>
+                          📅{" "}
+                          {new Date(c.createdAt).toLocaleString("bn-BD", {
+                            timeZone: "Asia/Dhaka",
+                          })}
+                        </span>
                       </div>
                     </div>
                   </div>

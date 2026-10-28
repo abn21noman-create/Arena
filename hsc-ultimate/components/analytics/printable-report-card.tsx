@@ -38,6 +38,7 @@ export function PrintableReportCardDialog({
   };
 
   const currentDate = new Date().toLocaleDateString("bn-BD", {
+    timeZone: "Asia/Dhaka",
     year: "numeric",
     month: "long",
     day: "numeric",

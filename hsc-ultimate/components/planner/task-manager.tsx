@@ -182,6 +182,7 @@ export function TaskManager({ initialTasks }: { initialTasks: Task[] }) {
               {task.dueDate && (
                 <p className="text-xs text-muted-foreground">
                   {new Date(task.dueDate).toLocaleDateString("bn-BD", {
+                    timeZone: "Asia/Dhaka",
                     day: "numeric",
                     month: "short",
                   })}

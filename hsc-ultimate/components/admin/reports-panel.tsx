@@ -383,6 +383,7 @@ export function ReportsPanel() {
                       <p className="text-xs text-muted-foreground mt-1.5">
                         রিপোর্ট করেছে: {r.user.name} ({r.user.email}) •{" "}
                         {new Date(r.createdAt).toLocaleDateString("bn-BD", {
+                          timeZone: "Asia/Dhaka",
                           day: "numeric",
                           month: "short",
                           year: "numeric",

@@ -121,7 +121,7 @@ export function SystemControlPanel() {
         </p>
         {settings?.updatedAt && (
           <p className="text-xs text-muted-foreground mt-1">
-            সর্বশেষ আপডেট: {new Date(settings.updatedAt).toLocaleString("bn-BD")}
+            সর্বশেষ আপডেট: {new Date(settings.updatedAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}
           </p>
         )}
       </div>

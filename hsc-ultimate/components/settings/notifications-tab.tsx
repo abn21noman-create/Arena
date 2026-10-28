@@ -19,6 +19,7 @@ function formatDate(iso: string | null): string {
   if (!iso) return "এখনো পাঠানো হয়নি";
   const date = new Date(iso);
   return date.toLocaleDateString("bn-BD", {
+    timeZone: "Asia/Dhaka",
     day: "numeric",
     month: "long",
     year: "numeric",

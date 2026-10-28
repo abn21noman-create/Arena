@@ -89,7 +89,7 @@ export function FocusSchedulesCard() {
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold">{schedule.focusLabel || `${schedule.durationMinutes} মিনিট Strict Focus`}</p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  {schedule.nextRunAt ? new Date(schedule.nextRunAt).toLocaleString("bn-BD") : "Paused"}
+                  {schedule.nextRunAt ? new Date(schedule.nextRunAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" }) : "Paused"}
                   {schedule.subjectCode ? ` · ${SUBJECT_NAMES[schedule.subjectCode] ?? schedule.subjectCode}` : ""}
                 </p>
                 <div className="mt-1.5 flex gap-1.5">

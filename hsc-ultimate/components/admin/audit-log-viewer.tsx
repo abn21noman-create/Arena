@@ -165,7 +165,7 @@ export function AuditLogViewer() {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground shrink-0 whitespace-nowrap">
-                  {new Date(log.createdAt).toLocaleString("bn-BD")}
+                  {new Date(log.createdAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}
                 </p>
               </div>
             </Card>

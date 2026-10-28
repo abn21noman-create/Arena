@@ -299,7 +299,7 @@ export function FocusControlPanel() {
                   <p className="text-xs text-muted-foreground">
                     {session.durationMinutes} মিনিট
                     {session.subjectCode ? ` · ${SUBJECT_NAMES[session.subjectCode] ?? session.subjectCode}` : ""}
-                    {session.focusLabel ? ` · ${session.focusLabel}` : ""} · শেষ {new Date(session.endsAt).toLocaleTimeString("bn-BD")}
+                    {session.focusLabel ? ` · ${session.focusLabel}` : ""} · শেষ {new Date(session.endsAt).toLocaleTimeString("bn-BD", { timeZone: "Asia/Dhaka" })}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">

@@ -172,7 +172,7 @@ export async function getProgressOverTime(userId: string): Promise<ProgressPoint
     const bucket = dayBuckets.get(key)!;
     const d = new Date(key);
     return {
-      date: d.toLocaleDateString("bn-BD", { day: "numeric", month: "short" }),
+      date: d.toLocaleDateString("bn-BD", { timeZone: "Asia/Dhaka", day: "numeric", month: "short" }),
       avgScorePct: bucket.totalMarks > 0 ? Math.round((bucket.totalScore / bucket.totalMarks) * 100) : 0,
       attemptCount: bucket.count,
     };
@@ -497,7 +497,7 @@ export async function getAnalyticsDashboardData(userId: string): Promise<Analyti
     const bucket = dayBuckets.get(key)!;
     const d = new Date(key);
     return {
-      date: d.toLocaleDateString("bn-BD", { day: "numeric", month: "short" }),
+      date: d.toLocaleDateString("bn-BD", { timeZone: "Asia/Dhaka", day: "numeric", month: "short" }),
       avgScorePct: bucket.totalMarks > 0 ? Math.round((bucket.totalScore / bucket.totalMarks) * 100) : 0,
       attemptCount: bucket.count,
     };

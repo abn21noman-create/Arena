@@ -354,7 +354,7 @@ export function SystemOperationsDashboard() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium">{event.action}</p>
                     <p className="truncate text-xs text-muted-foreground">
-                      {event.actor} · {event.targetType || "System"} · {new Date(event.createdAt).toLocaleString("bn-BD")}
+                      {event.actor} · {event.targetType || "System"} · {new Date(event.createdAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}
                     </p>
                   </div>
                 </div>

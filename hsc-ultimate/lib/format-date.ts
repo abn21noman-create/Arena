@@ -28,6 +28,7 @@ export function formatRelativeOrDate(
   }
 
   return date.toLocaleDateString("bn-BD", {
+    timeZone: "Asia/Dhaka",
     day: "numeric",
     month: options?.longMonth ? "long" : "short",
     year: "numeric",

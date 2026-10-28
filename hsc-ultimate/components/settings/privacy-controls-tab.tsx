@@ -123,7 +123,7 @@ export function PrivacyControlsTab({ initialAcceptance }: PrivacyControlsTabProp
         </dl>
         {acceptance?.acceptedAt && (
           <p className="mt-3 flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Clock3 className="h-3.5 w-3.5" /> সর্বশেষ record: {new Date(acceptance.acceptedAt).toLocaleString("bn-BD")} · {"source" in acceptance ? acceptance.source : "UNKNOWN"}
+            <Clock3 className="h-3.5 w-3.5" /> সর্বশেষ record: {new Date(acceptance.acceptedAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })} · {"source" in acceptance ? acceptance.source : "UNKNOWN"}
           </p>
         )}
 
@@ -197,7 +197,7 @@ export function PrivacyControlsTab({ initialAcceptance }: PrivacyControlsTabProp
                 </div>
                 {report.details && <p className="mt-1 text-muted-foreground">{report.details}</p>}
                 {report.resolutionNote && <p className="mt-2 rounded bg-muted p-2">Admin: {report.resolutionNote}</p>}
-                <p className="mt-1 text-muted-foreground">{new Date(report.createdAt).toLocaleString("bn-BD")}</p>
+                <p className="mt-1 text-muted-foreground">{new Date(report.createdAt).toLocaleString("bn-BD", { timeZone: "Asia/Dhaka" })}</p>
               </div>
             ))}
           </div>

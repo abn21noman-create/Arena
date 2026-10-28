@@ -43,6 +43,7 @@ export async function GET(
     notesMarkdown: topic.notesMarkdown,
     formulaSheet: topic.formulaSheet,
     generatedAt: new Date().toLocaleDateString("bn-BD", {
+      timeZone: "Asia/Dhaka",
       year: "numeric",
       month: "long",
       day: "numeric",

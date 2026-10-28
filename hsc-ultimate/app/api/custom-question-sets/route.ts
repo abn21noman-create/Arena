@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: sizeCheck.error }, { status: 400 });
   }
 
-  const finalTitle = title?.trim().slice(0, 100) || `${questionType} সেট - ${new Date().toLocaleDateString("bn-BD")}`;
+  const finalTitle = title?.trim().slice(0, 100) || `${questionType} সেট - ${new Date().toLocaleDateString("bn-BD", { timeZone: "Asia/Dhaka" })}`;
 
   // 🐛 বাগ ফিক্স (প্রোঅ্যাক্টিভ bug-hunt অডিটে আবিষ্কৃত, Study Group/Quiz
   // Battle/Habit এর একই capacity-bypass race condition ক্লাস): আগে
